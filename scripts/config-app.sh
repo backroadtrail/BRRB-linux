@@ -29,7 +29,7 @@ source "funct.sh"
 ##
 
 # BASE FIRST
-./bootstrap-base.sh
+./config-base.sh
 
 if is_pi4; then
 	echo "Configuring Pi 4 application instance."
