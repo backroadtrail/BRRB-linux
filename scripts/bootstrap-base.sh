@@ -33,7 +33,6 @@ if is_pi4; then
 	sudo apt-get update
 	sudo apt-get upgrade -y
 	set_display_overscan
-	install_lcd_driver
 	configure_lcd
 fi
 

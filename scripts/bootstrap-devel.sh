@@ -37,6 +37,8 @@ if is_pi4; then
 	echo "dev" | sudo tee /etc/hostname
 	#DEVEL TOOLS
 	sudo apt-get install shellcheck
+	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+	install_lcd_driver 
 fi
 
 if is_macos; then
