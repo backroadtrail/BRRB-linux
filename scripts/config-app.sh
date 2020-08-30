@@ -35,9 +35,8 @@ if is_pi4; then
 	echo "Configuring Pi 4 application instance."
 	#SET HOSTNAME
 	echo "app" | sudo tee /etc/hostname
-	# CLEANUP REPOS
+	# CLEANUP REPO
 	rm -rf "$HOME/backroad-raspberry"
-	rm -rf "$HOME/LCD-show"
 	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
 	install_lcd_driver 
 fi
