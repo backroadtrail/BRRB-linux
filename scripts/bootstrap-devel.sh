@@ -33,9 +33,15 @@ source "funct.sh"
 
 if is_pi4; then
 	echo "Bootstrapping Pi 4 development instance."
+	#SET HOSTNAME
+	sudo echo "dev" > /etc/hostname
+	#DEVEL TOOLS
+	sudo apt-get install shellcheck
 fi
 
 if is_macos; then
 	echo "Bootstrapping MacOS development instance."
+	#DEVEL TOOLS
+	brew install shellcheck
 fi
 
