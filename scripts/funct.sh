@@ -44,8 +44,8 @@ install_lcd_driver() {
 
 configure_lcd() {
 	if [ -f /boot/config.txt ]; then
-		sed "s/^(dtoverlay.*)$/#\1/g" < /boot/config.txt | \
-			sed "s/^(max_framebuffers.*)$/#\1/g" | \
+		sed 's/^\(dtoverlay.*\)$/#\1/g' < /boot/config.txt | \
+			sed 's/^\(max_framebuffers.*\)$/#\1/g' | \
 			sudo tee /tmp/config.txt
 		sudo mv -f /tmp/config.txt /boot/
 		echo "hdmi_group=2" | sudo tee -a /boot/config.txt
