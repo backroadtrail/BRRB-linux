@@ -36,7 +36,7 @@ if is_pi4; then
 	#SET HOSTNAME
 	echo "dev" | sudo tee /etc/hostname
 	#DEVEL TOOLS
-	sudo apt-get install shellcheck
+	sudo apt-get install shellcheck dcfldd gparted
 	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
 	install_lcd_driver 
 fi
