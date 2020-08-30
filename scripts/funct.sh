@@ -28,7 +28,7 @@ is_macos() {
 
 set_display_overscan() {
 	if [ -f /boot/config.txt ]; then
-		sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt > /tmp/config.txt
-		#mv /tmp/config.txt /boot/
+		sudo sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt > /tmp/config.txt
+		sudo mv -f /tmp/config.txt /boot/
 	fi
 }
