@@ -28,15 +28,22 @@ source "config.sh"
 source "funct.sh"
 ##
 
+# BASE FIRST
+./bootstrap-base.sh
+
 if is_pi4; then
-	echo "Bootstrapping Pi 4 base instance."
-	sudo apt-get update
-	sudo apt-get upgrade -y
-	set_display_overscan
-	configure_lcd
+	echo "Configuring Pi 4 development instance."
+	#SET HOSTNAME
+	echo "dev" | sudo tee /etc/hostname
+	#DEVEL TOOLS
+	sudo apt-get install shellcheck
+	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+	install_lcd_driver 
 fi
 
 if is_macos; then
-	echo "Bootstrapping MacOS base instance."
+	echo "Configuring MacOS development instance."
+	#DEVEL TOOLS
+	brew install shellcheck
 fi
 

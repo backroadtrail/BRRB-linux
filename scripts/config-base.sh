@@ -28,7 +28,15 @@ source "config.sh"
 source "funct.sh"
 ##
 
-./config-devel.sh 2>&1 | tee "$HOME/bootstrap.log"
+if is_pi4; then
+	echo "Configuring Pi 4 base instance."
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	set_display_overscan
+	configure_lcd
+fi
 
-
+if is_macos; then
+	echo "Configuring MacOS base instance."
+fi
 

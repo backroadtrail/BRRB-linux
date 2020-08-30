@@ -28,22 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# BASE FIRST
-./bootstrap-base.sh
+./config-app.sh 2>&1 | tee "$HOME/bootstrap.log"
 
-if is_pi4; then
-	echo "Bootstrapping Pi 4 application instance."
-	#SET HOSTNAME
-	sudo echo "app" > /etc/hostname
-	# CLEANUP REPOS
-	rm -rf "$HOME/backroad-raspberry"
-	rm -rf "$HOME/LCD-show"
-	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
-	install_lcd_driver 
-fi
-
-if is_macos; then
-	echo "Bootstrapping MacOS application instance."
-fi
 
 
