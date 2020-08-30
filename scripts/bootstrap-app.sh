@@ -33,6 +33,9 @@ source "funct.sh"
 
 if is_pi4; then
 	echo "Bootstrapping Pi 4 application instance."
+	# CLEANUP REPOS
+	rm -rf "$HOME/backroad-raspberry"
+	rm -rf "$HOME/LCD-show" 
 fi
 
 if is_macos; then

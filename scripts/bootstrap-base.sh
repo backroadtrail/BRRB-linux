@@ -30,6 +30,8 @@ source "funct.sh"
 
 if is_pi4; then
 	echo "Bootstrapping Pi 4 base instance."
+	sudo apt-get update
+	sudo apt-get upgrade -y
 	set_display_overscan
 	install_lcd_driver
 	configure_lcd
