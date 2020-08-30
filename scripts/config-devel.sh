@@ -36,7 +36,7 @@ if is_pi4; then
 	#SET HOSTNAME
 	echo "dev" | sudo tee /etc/hostname
 	#DEVEL TOOLS
-	sudo apt-get install -y shellcheck dcfldd gparted
+	sudo apt-get install -y shellcheck dcfldd gparted tmux mosh
 	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
 	install_lcd_driver 
 fi
