@@ -34,7 +34,7 @@ source "funct.sh"
 if is_pi4; then
 	echo "Bootstrapping Pi 4 development instance."
 	#SET HOSTNAME
-	sudo echo "dev" > /etc/hostname
+	echo "dev" | sudo tee /etc/hostname
 	#DEVEL TOOLS
 	sudo apt-get install shellcheck
 fi
