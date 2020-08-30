@@ -28,7 +28,30 @@ is_macos() {
 
 set_display_overscan() {
 	if [ -f /boot/config.txt ]; then
-		sudo sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt > /tmp/config.txt
+		sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
 		sudo mv -f /tmp/config.txt /boot/
 	fi
 }
+
+install_lcd_driver() {
+	cd "$HOME" || exit
+	sudo rm -rf LCD-show
+	git clone https://github.com/goodtft/LCD-show.git
+	chmod -R 755 LCD-show
+	cd LCD-show || exit
+	sudo ./MPI4008-show
+}
+
+configure_lcd() {
+	if [ -f /boot/config.txt ]; then
+		sed "s/^(dtoverlay.*)$/#\1/g" < /boot/config.txt | \
+			sed "s/^(max_framebuffers.*)$/#\1/g" | \
+			sudo tee /tmp/config.txt
+		sudo mv -f /tmp/config.txt /boot/
+		echo "hdmi_group=2" | sudo tee -a /boot/config.txt
+		echo "hdmi_mode=87" | sudo tee -a /boot/config.txt
+		echo "display_rotate=3"| sudo tee -a /boot/config.txt
+		echo "hdmi_cvt 480 800 60 6 0 0 0" | sudo tee -a /boot/config.txt
+	fi
+}
+

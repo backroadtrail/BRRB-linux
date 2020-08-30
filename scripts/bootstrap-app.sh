@@ -38,3 +38,5 @@ fi
 if is_macos; then
 	echo "Bootstrapping MacOS application instance."
 fi
+
+

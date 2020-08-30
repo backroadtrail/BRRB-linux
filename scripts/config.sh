@@ -20,3 +20,4 @@
 
 export BRR_APP_NAME="Backroad Raspberry"
 export BRR_APP_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
+

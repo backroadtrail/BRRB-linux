@@ -31,8 +31,11 @@ source "funct.sh"
 if is_pi4; then
 	echo "Bootstrapping Pi 4 base instance."
 	set_display_overscan
+	install_lcd_driver
+	configure_lcd
 fi
 
 if is_macos; then
 	echo "Bootstrapping MacOS base instance."
 fi
+
