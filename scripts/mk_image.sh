@@ -74,7 +74,8 @@ blocks="$(sudo resize2fs -M -p "$p2" 2>&1 | grep '(4k)' | sed 's/^.* \([0-9]\+\)
 echo "Blocks=$blocks"
 
 # RESIZE THE PARTITION
-kilobytes=$(( blocks * 4 ))
+# shellcheck disable=SC2003
+kilobytes="$(expr "$blocks" \* 4 )"
 echo "Kilobytes=$kilobytes"
 sudo fdisk "$disk" <<EOF
 d
@@ -93,7 +94,8 @@ end="$(sudo fdisk -l "$disk" | grep "$p2" | tr -s ' ' | cut -d ' ' -f3)"
 echo "End = $end"
 
 # THE NUMBER OF SECTORS TO COPY
-count=$(( end + 1 ))
+# shellcheck disable=SC2003
+count="$( expr "$end" + 1 )"
 echo "Count = $count"
 
 # COPY THE IMAGE
