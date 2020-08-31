@@ -38,11 +38,15 @@ if [  $# -ne 4 ]; then
 fi 
 
 # ARGUMENTS
-export disk="$1"
-export image_dir="$2"
-export image_base="backroad-raspberry-${3}-${4}"
+disk="$1"
+image_dir="$2"
+version="$3"
+type="$4"
+
+export image_base="backroad-raspberry-${version}-${type}"
 
 ./reset-root-expansion.sh
+./set-version.sh "$version" "$type"
 ./shrink-disk.sh "$disk"
 ./create-disk-image.sh "$disk" "$image_dir" "$image_base"
 

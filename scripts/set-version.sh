@@ -28,16 +28,37 @@ source "config.sh"
 source "funct.sh"
 ##
 
-if is_pi4; then
-	echo "Configuring Pi 4 base instance."
-	sudo apt-get update
-	sudo apt-get upgrade -y
-	sudo apt-get install -y matchbox-keyboard hfsplus hfsutils hfsprogs jq
-	set_display_overscan
-	configure_lcd
+usage(){
+    echo "Usage: $0 <version> <type> [<rootfs-mount-point>] "
+    exit 1
+}
+if [  $# -eq 3 ]; then
+	rootfs="$3"
+elif [  $# -eq 2 ]; then
+	rootfs=/media/pi/rootfs
+else
+	usage
+fi 
+
+version="$1"
+type="$2"
+
+# VALIDATE ROOTFS MOUNT
+if [ ! -d "$rootfs" ]; then
+    echo "The rootfs mount point does not exist: $rootfs"
+    usage
 fi
 
-if is_macos; then
-	echo "Configuring MacOS base instance."
-fi
+sudo tee "$rootfs/backroadtrail.json" << EOF
+{
+	"app": "backroad-raspberry",
+	"name": "Backroad Raspberry",
+	"version": "$version",
+	"type": "$type"
+}
+EOF
+
+echo "$type" | sudo tee "$rootfs/etc/hostname"
+
+
 
