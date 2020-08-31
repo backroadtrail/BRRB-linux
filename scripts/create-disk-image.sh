@@ -73,12 +73,7 @@ echo "Count = $count"
 
 # COPY THE IMAGE
 cd "$image_dir"
-sudo dcfldd bs=512 count="$count" if="$disk" of="${image_base}.img"
-sudo chown pi:pi "${image_base}.img"
+sudo dcfldd bs=512 count="$count" if="$disk" | gzip > "${image_base}.img.gz"
 
-# COMPRESS THE IMAGE AND CLEANUP
-zip "${image_base}.zip" "${image_base}.img"
-rm "${image_base}.img"
-
-echo "The new image is here: $$image_dir/${image_base}.zip"
+echo "The new image is here: $$image_dir/${image_base}.img.gz"
 
