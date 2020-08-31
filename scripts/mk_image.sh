@@ -71,7 +71,7 @@ sudo e2fsck -f -y -v -C 0 "$p2"
 
 # RESIZE THE FILESYSTEM
 blocks="$(sudo resize2fs -M -p "$p2" 2>&1 | grep '(4k)' | sed 's/^.* \([0-9]\+\).*[(]4k[)].*$/\1/g')"
-echo "Blocks=$blocks"
+echo "Blocks=|$blocks|"
 
 # RESIZE THE PARTITION
 # shellcheck disable=SC2003
