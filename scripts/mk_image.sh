@@ -35,7 +35,7 @@ usage(){
 
 export image_base_name=new_image
 
-if [  $# -eq 3 ]; then
+if [  $# -ne 3 ]; then
 	usage
 fi 
 
