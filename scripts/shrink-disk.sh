@@ -73,7 +73,7 @@ blocks="$(sudo resize2fs -M -p "$p2" 2>&1 | grep '(4k)' | head -1 | sed 's/^.* \
 echo "Blocks=$blocks"
 
 # RESIZE THE PARTITION
-(( kilobytes = ( blocks + 1) * 4 ))
+(( kilobytes = ( blocks + 1000) * 4 ))
 echo "Kilobytes=$kilobytes"
 sudo fdisk "$disk" <<EOF
 d
