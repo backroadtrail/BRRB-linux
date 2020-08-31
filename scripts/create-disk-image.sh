@@ -73,7 +73,7 @@ echo "Count = $count"
 
 # COPY THE IMAGE
 cd "$image_dir"
-sudo dcfldd bs=512 count="$count" if="$disk" | gzip | duso tee "${image_base}.img.gz" > /dev/null
+sudo dcfldd bs=512 count="$count" if="$disk" | gzip | sudo tee "${image_base}.img.gz" > /dev/null
 
 echo "The new image is here: $$image_dir/${image_base}.img.gz"
 
