@@ -55,3 +55,4 @@ configure_lcd() {
 	fi
 }
 
+
