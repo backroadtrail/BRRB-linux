@@ -58,6 +58,7 @@ configure_lcd() {
 umount_safe(){
 	if grep "$1" < /proc/mounts; then
 		umount "$1"
+		sleep 5
 	fi
 }
 
