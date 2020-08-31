@@ -33,11 +33,9 @@ usage(){
     exit 1
 }
 if [  $# -eq 1 ]; then
-	boot=/media/pi/boot
-elif [  $# -eq 2 ]; then
-	boot=/media/pi/boot
+	boot="$1"
 else
-	usage
+	boot=/media/pi/boot
 fi 
 
 # VALIDATE BOOT MOUNT
