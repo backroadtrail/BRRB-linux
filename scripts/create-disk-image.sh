@@ -60,6 +60,9 @@ if [ ! -b "$p2" ]; then
     usage
 fi
 
+umount_safe "$p1"
+umount_safe "$p2"
+
 # FIND THE END OF THE FILESYSTEM
 end="$(sudo fdisk -l "$disk" | grep "$p2" | head -1 | tr -s ' ' | cut -d ' ' -f3)"
 echo "End = $end"

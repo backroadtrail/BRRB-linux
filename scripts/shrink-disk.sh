@@ -58,6 +58,9 @@ if [ ! -b "$p2" ]; then
     usage
 fi
 
+umount_safe "$p1"
+umount_safe "$p2"
+
 # GET THE START OF PARTITION 2
 start="$(sudo fdisk -l "$disk" | grep "$p2" | head -1 | tr -s ' ' | cut -d ' ' -f2)"
 echo "Start = $start"

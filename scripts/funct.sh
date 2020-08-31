@@ -55,4 +55,10 @@ configure_lcd() {
 	fi
 }
 
+umount_safe(){
+	if cat /proc/mounts | grep "$1"; then
+		umount "$1"
+	fi
+}
+
 
