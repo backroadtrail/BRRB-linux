@@ -32,7 +32,7 @@ if is_pi4; then
 	echo "Configuring Pi 4 base instance."
 	sudo apt-get update
 	sudo apt-get upgrade -y
-	sudo apt-get install -y matchbox-keyboard
+	sudo apt-get install -y matchbox-keyboard hfsplus hfsutils hfsprogs
 	set_display_overscan
 	configure_lcd
 fi
