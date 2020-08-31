@@ -45,7 +45,7 @@ type="$4"
 
 export image_base="backroad-raspberry-${version}-${type}"
 
-./reset-root-expansion.sh
+#./reset-root-expansion.sh
 ./set-version.sh "$version" "$type"
 ./shrink-disk.sh "$disk"
 ./create-disk-image.sh "$disk" "$image_dir" "$image_base"
