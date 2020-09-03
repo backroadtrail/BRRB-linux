@@ -28,7 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# BASE FIRST
+# CONFIG BASE FIRST
 ./config-base.sh
 
 if is_pi4; then
@@ -37,6 +37,7 @@ if is_pi4; then
 	echo "dev" | sudo tee /etc/hostname
 	#DEVEL TOOLS
 	sudo apt-get install -y shellcheck dcfldd tmux mosh zip
+	sudo apt-get install -y g++ cmake
 	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
 	install_lcd_driver 
 fi

@@ -28,24 +28,4 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# BASE FIRST
-./config-base.sh
-
-if is_pi4; then
-    echo "Configuring Pi 4 application instance."
-    # SET HOSTNAME
-    echo "app" | sudo tee /etc/hostname
-    # INSTALL APPS
-    sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
-    sudo apt-get install -y chirp
-    # CLEANUP REPO
-    rm -rf "$HOME/backroad-raspberry"
-    # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
-    install_lcd_driver 
-fi
-
-if is_macos; then
-    echo "Configuring MacOS application instance."
-fi
-
 

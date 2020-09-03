@@ -62,4 +62,12 @@ umount_safe(){
 	fi
 }
 
+build_cmake(){
+	mkdir -p build
+	pushd build
+	cmake ..
+	make
+	popd 
+}
+
 
