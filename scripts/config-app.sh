@@ -38,8 +38,6 @@ if is_pi4; then
     # INSTALL APPS
     sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
     sudo apt-get install -y chirp
-    # CLEANUP REPO
-    rm -rf "$HOME/backroad-raspberry"
     # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
     install_lcd_driver 
 fi

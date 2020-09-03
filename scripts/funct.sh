@@ -64,10 +64,10 @@ umount_safe(){
 
 build_cmake(){
 	mkdir -p build
-	pushd build
+	pushd build || exit 1
 	cmake ..
 	make
-	popd 
+	popd || exit 1
 }
 
 

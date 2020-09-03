@@ -28,4 +28,11 @@ source "config.sh"
 source "funct.sh"
 ##
 
+# CLEANUP REPO
+rm -rf "HOME/LCD-show"
 
+# TEST C++
+cd "$HERE/../src/hello-world"
+build_cmake
+./build/hello-world
+rm -rf build

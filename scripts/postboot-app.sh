@@ -28,7 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-cd "$HERE/../src/hello-world"
-build_cmake
-./build/hello-world
+# CLEANUP REPOS
+rm -rf "$HOME/backroad-raspberry"
+rm -rf "HOME/LCD-show"
 
