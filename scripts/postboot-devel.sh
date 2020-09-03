@@ -28,12 +28,12 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# CLEANUP REPOS
-sudo rm -rf "$HOME/backroad-raspberry"
-sudo rm -rf "$HOME/LCD-show"
-
 # TEST C++
 cd "$HERE/../src/hello-world"
 build_cmake
 ./build/hello-world
 rm -rf build
+
+# REMOVE REPOS
+sudo rm -rf "$HOME/backroad-raspberry"
+sudo rm -rf "$HOME/LCD-show"

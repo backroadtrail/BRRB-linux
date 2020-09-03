@@ -28,7 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# CLEANUP REPOS
+# REMOVE REPOS
 sudo rm -rf "$HOME/backroad-raspberry"
 sudo rm -rf "$HOME/LCD-show"
 
