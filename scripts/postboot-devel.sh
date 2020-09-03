@@ -28,7 +28,8 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# CLEANUP REPO
+# CLEANUP REPOS
+sudo rm -rf "$HOME/backroad-raspberry"
 sudo rm -rf "$HOME/LCD-show"
 
 # TEST C++
