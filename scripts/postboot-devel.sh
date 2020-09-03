@@ -29,7 +29,7 @@ source "funct.sh"
 ##
 
 # CLEANUP REPO
-rm -rf "HOME/LCD-show"
+sudo rm -rf "HOME/LCD-show"
 
 # TEST C++
 cd "$HERE/../src/hello-world"

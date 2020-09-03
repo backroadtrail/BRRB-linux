@@ -29,6 +29,6 @@ source "funct.sh"
 ##
 
 # CLEANUP REPOS
-rm -rf "$HOME/backroad-raspberry"
-rm -rf "HOME/LCD-show"
+sudo rm -rf "$HOME/backroad-raspberry"
+sudo rm -rf "HOME/LCD-show"
 
