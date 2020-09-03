@@ -33,8 +33,10 @@ source "funct.sh"
 
 if is_pi4; then
 	echo "Configuring Pi 4 application instance."
-	#SET HOSTNAME
+	# SET HOSTNAME
 	echo "app" | sudo tee /etc/hostname
+	# AMATEUR RADIO APPS
+	sudo apt-get install -y chirp
 	# CLEANUP REPO
 	rm -rf "$HOME/backroad-raspberry"
 	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
