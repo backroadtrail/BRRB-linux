@@ -28,11 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-# TEST C++
-cd "$HERE/../src/hello-world"
-build_cmake
-./build/hello-world
-rm -rf build
+test_dev
 
 # REMOVE REPOS
 sudo rm -rf "$HOME/backroad-raspberry"

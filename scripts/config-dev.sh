@@ -28,9 +28,22 @@ source "config.sh"
 source "funct.sh"
 ##
 
-test_app
+# CONFIG BASE FIRST
+./config-base.sh
 
-# REMOVE REPOS
-sudo rm -rf "$HOME/backroad-raspberry"
-sudo rm -rf "$HOME/LCD-show"
+if is_pi4; then
+	echo "Configuring Pi 4 development instance."
+	#SET HOSTNAME
+	echo "dev" | sudo tee /etc/hostname
+	# APT-GET
+	apt_get_dev
+	# THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+	install_lcd_driver 
+fi
+
+if is_macos; then
+	echo "Configuring MacOS development instance."
+	#DEVEL TOOLS
+	brew install shellcheck
+fi
 

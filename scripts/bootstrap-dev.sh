@@ -28,7 +28,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-./config-devel.sh 2>&1 | tee "$HOME/bootstrap.log"
+./config-dev.sh 2>&1 | tee "$HOME/bootstrap.log"
 
 
 
