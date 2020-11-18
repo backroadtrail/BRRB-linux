@@ -76,7 +76,7 @@ apt_get_app(){
 }
 
 apt_get_dev(){
-	sudo apt-get install -y shellcheck dcfldd tmux mosh zip
+	sudo apt-get install -y shellcheck dcfldd tmux mosh zip rpi-imager
 	sudo apt-get install -y g++ cmake
 }
 
