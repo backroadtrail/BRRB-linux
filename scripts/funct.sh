@@ -22,10 +22,6 @@ is_pi4() {
 	[ "$(uname)" = 'Linux' ]
 }
 
-is_macos() {
-	[ "$(uname)" = 'Darwin' ]
-}
-
 set_display_overscan() {
 	if [ -f /boot/config.txt ]; then
 		sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
@@ -33,16 +29,17 @@ set_display_overscan() {
 	fi
 }
 
-install_lcd_driver() {
+install_miuzei_driver() {
 	cd "$HOME" || exit
 	sudo rm -rf LCD-show
-	git clone https://github.com/goodtft/LCD-show.git
+	#git clone https://github.com/goodtft/LCD-show.git
+	git clone https://github.com/backroadtrail/LCD-show.git
 	chmod -R 755 LCD-show
 	cd LCD-show || exit
 	sudo ./MPI4008-show
 }
 
-configure_lcd() {
+configure_miuzei() {
 	if [ -f /boot/config.txt ]; then
 		sed 's/^\(dtoverlay.*\)$/#\1/g' < /boot/config.txt | \
 			sed 's/^\(max_framebuffers.*\)$/#\1/g' | \

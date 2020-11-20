@@ -28,9 +28,51 @@ source "config.sh"
 source "funct.sh"
 ##
 
-test_app
+usage(){
+    echo "Usage: $0 <display>"
+    exit 1
+}
 
-# REMOVE REPOS
-sudo rm -rf "$HOME/backroad-raspberry"
-sudo rm -rf "$HOME/LCD-show"
+if [  $# -eq 1 ]; then
+	display="$1"
+else
+	usage
+fi 
+
+# HOSTNAME
+echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
+
+# SET METADATA
+sudo tee "/brrb.json" << EOF
+{
+	"display_name": "$BRRB_DISPLAY_NAME",
+	"display_descr": "BRRB_DISPLAY_DESC",
+	"hostname": "BRRB_HOSTNAME",
+	"version": "$BRRB_VERSION",
+	"display": "$display",
+}
+EOF
+
+# PACKAGES
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y matchbox-keyboard exfat-fuse exfat-utils jq
+apt_get_app
+apt_get_dev
+
+# DISPLAY
+case $display in
+
+  miuzei)
+	set_display_overscan
+	configure_miuzei
+	install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+    ;;
+
+  *)
+    echo "Unknown display: $display"
+    exit 1
+    ;;
+esac
+
 

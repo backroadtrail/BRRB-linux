@@ -29,7 +29,7 @@ source "funct.sh"
 ##
 
 usage(){
-    echo "Usage: $0 <disk-device> <image-directory> <version> <type>"
+    echo "Usage: $0 <disk-device> <image-directory>"
     exit 1
 }
 
@@ -40,12 +40,13 @@ fi
 # ARGUMENTS
 disk="$1"
 image_dir="$2"
-version="$3"
-type="$4"
 
-export image_base="backroad-raspberry-${version}-${type}"
+# METADATA
+version="$(jq /brrb.json)"
+display="$(jq /brrb.json)"
 
-./set-version.sh "$version" "$type"
+export image_base="backroad-raspberry-${version}-${display}"
+
 ./shrink-disk.sh "$disk"
 ./create-disk-image.sh "$disk" "$image_dir" "$image_base"
 

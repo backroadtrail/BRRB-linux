@@ -28,8 +28,18 @@ source "config.sh"
 source "funct.sh"
 ##
 
-test_dev
+usage(){
+    echo "Usage: $0 <display> "
+    exit 1
+}
 
-# REMOVE REPOS
-sudo rm -rf "$HOME/backroad-raspberry"
-sudo rm -rf "$HOME/LCD-show"
+if [  $# -eq 1 ]; then
+	display="$1"
+else
+	usage
+fi 
+
+./configure.sh "$display" 2>&1 | tee "$HOME/bootstrap.log"
+
+
+

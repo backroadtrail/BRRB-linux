@@ -28,7 +28,13 @@ source "config.sh"
 source "funct.sh"
 ##
 
-./config-dev.sh 2>&1 | tee "$HOME/bootstrap.log"
+test_app
+test_dev
 
+# REMOVE REPOS
+sudo rm -rf "$HOME/backroad-raspberry"
+sudo rm -rf "$HOME/LCD-show"
 
+# SHOW METADATA
+jq '.' /brrb.json
 
