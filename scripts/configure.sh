@@ -61,7 +61,7 @@ sudo apt-get install -y matchbox-keyboard exfat-fuse exfat-utils jq
 sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
 sudo apt-get install -y chirp
 sudo apt-get install -y shellcheck dcfldd tmux mosh zip rpi-imager
-sudo apt-get install -y g++ cmake nodejs
+sudo apt-get install -y g++ cmake sbcl nodejs
 
 # DISPLAY
 case $display in
