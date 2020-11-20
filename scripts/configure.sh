@@ -75,9 +75,11 @@ case $display in
 
     lepow)
         set_display_overscan
+        sudo reboot
         ;;
 
     hdmi)
+        sudo reboot
         ;;
 
     *)
