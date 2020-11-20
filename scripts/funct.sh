@@ -67,16 +67,6 @@ build_cmake(){
     popd || exit 1
 }
 
-apt_get_app(){
-    sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
-    sudo apt-get install -y chirp
-}
-
-apt_get_dev(){
-    sudo apt-get install -y shellcheck dcfldd tmux mosh zip rpi-imager
-    sudo apt-get install -y g++ cmake
-}
-
 test_app(){
     echo TBD
 }

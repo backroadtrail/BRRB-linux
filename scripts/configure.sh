@@ -56,10 +56,12 @@ EOF
 
 # PACKAGES
 sudo apt-get update
-sudo apt-get upgrade -y
+sudo apt-get full-upgrade -y
 sudo apt-get install -y matchbox-keyboard exfat-fuse exfat-utils jq
-apt_get_app
-apt_get_dev
+sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
+sudo apt-get install -y chirp
+sudo apt-get install -y shellcheck dcfldd tmux mosh zip rpi-imager
+sudo apt-get install -y g++ cmake nodejs
 
 # DISPLAY
 case $display in
