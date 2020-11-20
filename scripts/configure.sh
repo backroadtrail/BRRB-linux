@@ -47,10 +47,10 @@ echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 sudo tee "/brrb.json" << EOF
 {
     "display_name": "$BRRB_DISPLAY_NAME",
-    "display_descr": "BRRB_DISPLAY_DESC",
-    "hostname": "BRRB_HOSTNAME",
+    "display_descr": "$BRRB_DISPLAY_DESC",
+    "hostname": "$BRRB_HOSTNAME",
     "version": "$BRRB_VERSION",
-    "display": "$display",
+    "display": "$display"
 }
 EOF
 
