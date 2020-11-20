@@ -1,23 +1,17 @@
-# backroad-raspberry
+# Backroad Raspberry - Linux System
 Backroad Raspberry is a meshed smart node for off-grid vehicles.
 
-To bootstrap an Application Edition:
+To bootstrap a Raspberry PI 4 with a Miuzei touch LCD screen:
   * cd $HOME
-  * git clone https://github.com/backroadtrail/backroad-raspberry.git
-  * ./backroad-raspberry/scripts/bootstrap-app.sh (causes reboot)
-  * ./backroad-raspberry/scripts/postboot-app.sh
+  * git clone https://github.com/backroadtrail/BRRB-linux.git
+  * ./BRRB-linux/scripts/bootstrap.sh miuzei
+  * ./BRRB-linux/scripts/postboot.sh
 
-To bootstrap a Development Edition:
+To bootstrap a Raspberry PI 4 with with an external HDMI monitor:
   * cd $HOME
-  * git clone https://github.com/backroadtrail/backroad-raspberry.git
-  * ./backroad-raspberry/scripts/bootstrap-dev.sh (causes reboot)
-  * ./backroad-raspberry/scripts/postboot-devel.sh
-
- To bootstrap an All Edition:
-  * cd $HOME
-  * git clone https://github.com/backroadtrail/backroad-raspberry.git
-  * ./backroad-raspberry/scripts/bootstrap-all.sh (causes reboot)
-  * ./backroad-raspberry/scripts/postboot-all.sh
+  * git clone https://github.com/backroadtrail/BRRB-linux.git
+  * ./BRRB-linux/scripts/bootstrap.sh hdmi
+  * ./BRRB-linux/scripts/postboot.sh
 
 The log is placed here:
   * $HOME/bootstrap.log
