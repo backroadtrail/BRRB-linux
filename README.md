@@ -1,4 +1,4 @@
-# backroad-raspberry
+# Backroad Raspberry - Linux System
 Backroad Raspberry is a meshed smart node for off-grid vehicles.
 
 To bootstrap an Application Edition:
