@@ -42,10 +42,10 @@ disk="$1"
 image_dir="$2"
 
 # METADATA
-version="$(jq /brrb.json)"
-display="$(jq /brrb.json)"
+version="$(jq '.version' /brrb.json)"
+display="$(jq '.display' /brrb.json)"
 
-export image_base="backroad-raspberry-${version}-${display}"
+export image_base="brrb-${version}-${display}"
 
 ./shrink-disk.sh "$disk"
 ./create-disk-image.sh "$disk" "$image_dir" "$image_base"
