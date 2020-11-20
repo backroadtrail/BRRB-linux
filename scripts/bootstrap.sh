@@ -30,6 +30,7 @@ source "funct.sh"
 
 usage(){
     echo "Usage: $0 <display> "
+    echo "Where: display = ( miuzei | hdmi ) "
     exit 1
 }
 
