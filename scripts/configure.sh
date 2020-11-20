@@ -57,7 +57,7 @@ EOF
 # PACKAGES
 sudo apt-get update
 sudo apt-get full-upgrade -y
-sudo apt-get install -y matchbox-keyboard exfat-fuse exfat-utils jq
+sudo apt-get install -y exfat-fuse exfat-utils jq
 sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
 sudo apt-get install -y chirp
 sudo apt-get install -y shellcheck dcfldd tmux mosh zip rpi-imager
@@ -67,15 +67,13 @@ sudo apt-get install -y g++ cmake sbcl nodejs
 case $display in
 
     miuzei)
+        sudo apt-get install -y matchbox-keyboard
         set_display_overscan
         configure_miuzei
         install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
         ;;
 
     hdmi)
-        set_display_overscan
-        configure_miuzei
-        install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
         ;;
 
     *)
