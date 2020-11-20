@@ -30,7 +30,7 @@ source "funct.sh"
 
 usage(){
     echo "Usage: $0 <display> "
-    echo "Where: display = ( miuzei | hdmi ) "
+    echo "Where: display = ( miuzei | lepow | hdmi ) "
     exit 1
 }
 
@@ -71,6 +71,10 @@ case $display in
         set_display_overscan
         configure_miuzei
         install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+        ;;
+
+    lepow)
+        set_display_overscan
         ;;
 
     hdmi)
