@@ -35,9 +35,9 @@ usage(){
 }
 
 if [  $# -eq 1 ]; then
-	display="$1"
+    display="$1"
 else
-	usage
+    usage
 fi 
 
 ./configure.sh "$display" 2>&1 | tee "$HOME/bootstrap.log"

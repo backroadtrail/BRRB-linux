@@ -35,9 +35,9 @@ usage(){
 }
 
 if [  $# -eq 1 ]; then
-	display="$1"
+    display="$1"
 else
-	usage
+    usage
 fi 
 
 # HOSTNAME
@@ -46,11 +46,11 @@ echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 # SET METADATA
 sudo tee "/brrb.json" << EOF
 {
-	"display_name": "$BRRB_DISPLAY_NAME",
-	"display_descr": "BRRB_DISPLAY_DESC",
-	"hostname": "BRRB_HOSTNAME",
-	"version": "$BRRB_VERSION",
-	"display": "$display",
+    "display_name": "$BRRB_DISPLAY_NAME",
+    "display_descr": "BRRB_DISPLAY_DESC",
+    "hostname": "BRRB_HOSTNAME",
+    "version": "$BRRB_VERSION",
+    "display": "$display",
 }
 EOF
 
@@ -64,16 +64,22 @@ apt_get_dev
 # DISPLAY
 case $display in
 
-  miuzei)
-	set_display_overscan
-	configure_miuzei
-	install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
-    ;;
+    miuzei)
+        set_display_overscan
+        configure_miuzei
+        install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+        ;;
 
-  *)
-    echo "Unknown display: $display"
-    exit 1
-    ;;
+    hdmi)
+        set_display_overscan
+        configure_miuzei
+        install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
+        ;;
+
+    *)
+        echo "Unknown display: $display"
+        exit 1
+        ;;
 esac
 
 
