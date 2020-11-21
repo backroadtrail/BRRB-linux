@@ -32,7 +32,7 @@ test_app
 test_dev
 
 # REMOVE REPOS
-sudo rm -rf "$HOME/backroad-raspberry"
+sudo rm -rf "$HOME/BRRB-linux"
 sudo rm -rf "$HOME/LCD-show"
 
 # REMOVE LOGS
