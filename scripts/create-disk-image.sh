@@ -75,5 +75,5 @@ echo "Count = $count"
 cd "$image_dir"
 sudo dcfldd bs=512 count="$count" if="$disk" | gzip | sudo tee "${image_base}.img.gz" > /dev/null
 
-echo "The new image is here: $$image_dir/${image_base}.img.gz"
+echo "The new image is here: $image_dir/${image_base}.img.gz"
 
