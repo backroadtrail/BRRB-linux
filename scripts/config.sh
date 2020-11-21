@@ -18,6 +18,15 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-export BRR_APP_NAME="Backroad Raspberry"
-export BRR_APP_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
+export BRRB_VERSION_MAJOR="1"
+export BRRB_VERSION_MINOR="1"
+export BRRB_VERSION_PATCH="0"
 
+export BRRB_HOSTNAME="brrb"
+export BRRB_DISPLAY_NAME="Backroad Raspberry"
+export BRRB_DISPLAY_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
+
+#########################
+# EDIT ABOVE ONLY
+#########################
+export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATCH"

@@ -19,77 +19,64 @@
 ##
 
 is_pi4() {
-	[ "$(uname)" = 'Linux' ]
-}
-
-is_macos() {
-	[ "$(uname)" = 'Darwin' ]
+    [ "$(uname)" = 'Linux' ]
 }
 
 set_display_overscan() {
-	if [ -f /boot/config.txt ]; then
-		sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
-		sudo mv -f /tmp/config.txt /boot/
-	fi
+    if [ -f /boot/config.txt ]; then
+        sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
+        sudo mv -f /tmp/config.txt /boot/
+    fi
 }
 
-install_lcd_driver() {
-	cd "$HOME" || exit
-	sudo rm -rf LCD-show
-	git clone https://github.com/goodtft/LCD-show.git
-	chmod -R 755 LCD-show
-	cd LCD-show || exit
-	sudo ./MPI4008-show
+install_miuzei_driver() {
+    cd "$HOME" || exit
+    sudo rm -rf LCD-show
+    #git clone https://github.com/goodtft/LCD-show.git
+    git clone https://github.com/backroadtrail/LCD-show.git
+    chmod -R 755 LCD-show
+    cd LCD-show || exit
+    sudo ./MPI4008-show
 }
 
-configure_lcd() {
-	if [ -f /boot/config.txt ]; then
-		sed 's/^\(dtoverlay.*\)$/#\1/g' < /boot/config.txt | \
-			sed 's/^\(max_framebuffers.*\)$/#\1/g' | \
-			sudo tee /tmp/config.txt
-		sudo mv -f /tmp/config.txt /boot/
-		echo "hdmi_group=2" | sudo tee -a /boot/config.txt
-		echo "hdmi_mode=87" | sudo tee -a /boot/config.txt
-		echo "display_rotate=3"| sudo tee -a /boot/config.txt
-		echo "hdmi_cvt 480 800 60 6 0 0 0" | sudo tee -a /boot/config.txt
-	fi
+configure_miuzei() {
+    if [ -f /boot/config.txt ]; then
+        sed 's/^\(dtoverlay.*\)$/#\1/g' < /boot/config.txt | \
+            sed 's/^\(max_framebuffers.*\)$/#\1/g' | \
+            sudo tee /tmp/config.txt
+        sudo mv -f /tmp/config.txt /boot/
+        echo "hdmi_group=2" | sudo tee -a /boot/config.txt
+        echo "hdmi_mode=87" | sudo tee -a /boot/config.txt
+        echo "display_rotate=3"| sudo tee -a /boot/config.txt
+        echo "hdmi_cvt 480 800 60 6 0 0 0" | sudo tee -a /boot/config.txt
+    fi
 }
 
 umount_safe(){
-	if grep "$1" < /proc/mounts; then
-		umount "$1"
-		sleep 5
-	fi
+    if grep "$1" < /proc/mounts; then
+        umount "$1"
+        sleep 5
+    fi
 }
 
 build_cmake(){
-	mkdir -p build
-	pushd build || exit 1
-	cmake ..
-	make
-	popd || exit 1
-}
-
-apt_get_app(){
-	sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
-	sudo apt-get install -y chirp
-}
-
-apt_get_dev(){
-	sudo apt-get install -y shellcheck dcfldd tmux mosh zip
-	sudo apt-get install -y g++ cmake
+    mkdir -p build
+    pushd build || exit 1
+    cmake ..
+    make
+    popd || exit 1
 }
 
 test_app(){
-	echo TBD
+    echo TBD
 }
 
 test_dev(){
-	# TEST C++
-	cd "$HERE/../src/hello-world" || exit 1
-	build_cmake
-	./build/hello-world
-	rm -rf build
+    # TEST C++
+    cd "$HERE/../src/hello-world" || exit 1
+    build_cmake
+    ./build/hello-world
+    rm -rf build
 }
 
 

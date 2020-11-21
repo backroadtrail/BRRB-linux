@@ -28,7 +28,19 @@ source "config.sh"
 source "funct.sh"
 ##
 
-./config-dev.sh 2>&1 | tee "$HOME/bootstrap.log"
+usage(){
+    echo "Usage: $0 <display> "
+    echo "Where: display = ( miuzei | lepow | hdmi ) "
+    exit 1
+}
+
+if [  $# -eq 1 ]; then
+    display="$1"
+else
+    usage
+fi 
+
+./configure.sh "$display" 2>&1 | tee "$HOME/bootstrap.log"
 
 
 

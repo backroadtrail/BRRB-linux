@@ -34,7 +34,7 @@ usage(){
 }
 
 if [  $# -ne 1 ]; then
-	usage
+    usage
 fi 
 
 # ARGUMENTS
