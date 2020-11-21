@@ -35,6 +35,9 @@ test_dev
 sudo rm -rf "$HOME/backroad-raspberry"
 sudo rm -rf "$HOME/LCD-show"
 
+# REMOVE LOGS
+sudo rm -rf "$HOME/bootstrap.log"
+
 # SHOW METADATA
 jq '.' /brrb.json
 
