@@ -20,7 +20,7 @@
 
 export BRRB_VERSION_MAJOR="1"
 export BRRB_VERSION_MINOR="1"
-export BRRB_VERSION_PATCH="0"
+export BRRB_VERSION_PATCH="1"
 
 export BRRB_HOSTNAME="brrb"
 export BRRB_DISPLAY_NAME="Backroad Raspberry"
