@@ -117,7 +117,7 @@ config_home_development() { # ARGS: <user-name>
 
 # HAM RADIO PACKAGES
 install_ham(){
-    install_ham
+    install_workstation
     sudo apt-get install -y "${BRRB_HAM_PKGS[@]}"
     validate_ham
 }
