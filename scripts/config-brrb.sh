@@ -166,6 +166,11 @@ case $command in
         do_install "$@"    
         ;;    
 
+    validate)
+        shift
+        do_validate "$@"    
+        ;;    
+
     config-home)
         shift
         do_config_home "$@"      
