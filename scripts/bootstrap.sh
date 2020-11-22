@@ -40,7 +40,44 @@ else
     usage
 fi 
 
-./configure.sh "$display" 2>&1 | tee "$HOME/bootstrap.log"
+# SET METADATA
+sudo tee "/brrb.json" << EOF
+{
+    "display_name": "$BRRB_DISPLAY_NAME",
+    "display_descr": "$BRRB_DISPLAY_DESC",
+    "hostname": "$BRRB_HOSTNAME",
+    "version": "$BRRB_VERSION",
+    "display": "$display"
+}
+EOF
 
+# HOSTNAME
+echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
+
+install_base
+validate_base
+config_home_base pi
+
+# DISPLAY
+case $display in
+
+    miuzei)
+        install_miuzei_and_reboot        
+        ;;
+
+    lepow)
+        install_lepow
+        sudo reboot
+        ;;
+
+    hdmi)
+        sudo reboot
+        ;;
+
+    *)
+        echo "Unknown display: $display"
+        exit 1
+        ;;
+esac
 
 

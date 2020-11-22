@@ -28,15 +28,9 @@ source "config.sh"
 source "funct.sh"
 ##
 
-test_app
-test_dev
-
 # REMOVE REPOS
 sudo rm -rf "$HOME/BRRB-linux"
 sudo rm -rf "$HOME/LCD-show"
-
-# REMOVE LOGS
-sudo rm -rf "$HOME/bootstrap.log"
 
 # SHOW METADATA
 jq '.' /brrb.json
