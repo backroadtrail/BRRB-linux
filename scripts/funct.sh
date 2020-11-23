@@ -103,6 +103,7 @@ config_home_workstation() { # ARGS: <user-name>
 install_development(){
     install_workstation
     sudo apt-get install -y "${BRRB_DEVELOPMENT_PKGS[@]}"
+    install_vscode
     validate_development
 }
 
@@ -139,4 +140,11 @@ umount_safe(){
 run_user_script(){ # ARGS: <script> <user-name>
     sudo su "$2" -c "./user-scripts/$1"
 }
+
+install_vscode(){
+    wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
+    sudo apt-get install -y ./vscode.deb
+    rm vscode.deb
+}
+
 
