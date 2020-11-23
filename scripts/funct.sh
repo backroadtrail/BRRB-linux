@@ -59,7 +59,6 @@ install_lepow() {
     set_display_overscan
 }
 
-
 ## BASE SYSTEM PACKAGES
 install_base() {
     echo "install_base"
@@ -75,7 +74,7 @@ validate_base() {
 
 config_home_base() { # ARGS: <user-name>
     echo "config_home_base: $1"
-
+    run_user_script install-quicklisp.sh "$1"
 }
 
 # WORKSTATION PACKAGES
@@ -91,7 +90,7 @@ validate_workstation() {
 
 config_home_workstation() { # ARGS: <user-name>
     echo "config_home_workstation: $1"
-    create_ssh_keys "$1"
+    run_user_script generate_ssh_keys.sh "$1"
 
 }
 
@@ -145,31 +144,7 @@ build_cmake(){
     popd || exit 1
 }
 
-create_ssh_keys(){ # ARGS: <user-name>
-
-    home_dir="/home/$1"
-    
-    if [ ! -d "$home_dir" ]; then
-        echo "The home directory doesn't exist: $home_dir"
-        exit 1
-    fi
-
-    ssh_dir="$home_dir/.ssh"
-
-    if [ ! -d "$ssh_dir" ]; then
-        sudo mkdir "$ssh_dir"
-        sudo chown "$1:$1" "$ssh_dir"
-        sudo chmod 700 "$ssh_dir"
-    fi
-
-    if [ -f "$ssh_dir/id_rsa" ] || [ -f "$ssh_dir/id_rsa.pub" ]; then
-        echo "Skipping key generation because at l;east one of the keys exist!"
-    else
-        ssh-keygen -b 2048 -t rsa -f "$ssh_dir/id_rsa" -q -N ""
-        sudo chown "$1:$1" "$ssh_dir/id_rsa"
-        sudo chmod 600 "$ssh_dir/id_rsa"
-        sudo chown "$1:$1" "$ssh_dir/id_rsa.pub"
-        sudo chmod 600 "$ssh_dir/id_rsa.pub"
-    fi
+run_user_script(){ # ARGS: <script> <user-name>
+    sudo su "$2" -c "./user-scripts/$1"
 }
 
