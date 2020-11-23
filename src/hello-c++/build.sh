@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 mkdir -p build
-cd build
+pushd build || exit 1
 cmake ..
 make
-./hello-world
+./hello-c++
+popd || exit 1

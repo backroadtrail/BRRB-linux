@@ -70,6 +70,11 @@ install_base() {
 
 validate_base() {
     echo "validate_base"
+    src="$HERE/../src"
+    
+    ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
+
 }
 
 config_home_base() { # ARGS: <user-name>
@@ -103,11 +108,6 @@ install_development(){
 
 validate_development() {
     echo "validate_development"
-    # TEST C++
-    cd "$HERE/../src/hello-world" || exit 1
-    build_cmake
-    ./build/hello-world
-    rm -rf build
 }
 
 config_home_development() { # ARGS: <user-name>
@@ -134,14 +134,6 @@ umount_safe(){
         umount "$1"
         sleep 5
     fi
-}
-
-build_cmake(){
-    mkdir -p build
-    pushd build || exit 1
-    cmake ..
-    make
-    popd || exit 1
 }
 
 run_user_script(){ # ARGS: <script> <user-name>
