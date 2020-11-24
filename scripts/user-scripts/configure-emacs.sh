@@ -29,13 +29,18 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-cd "$HOME" || exit 1
+cd "$HOME"
+
+sbcl_path="$(which sbcl)"
 
 tee .emacs <<EOF >/dev/null
-(add-to-list 
+(add-to-list 'load-path "$BRRB_HOME/slime")
+(require 'slime-autoloads)
+(setq inferior-lisp-program "$sbcl_path")
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
 EOF
 
-echo "Configured Slime for '$USER'."
+echo "Configured Emacs for '$USER'."
 
 
 

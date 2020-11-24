@@ -29,7 +29,7 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-cd "$HOME" || exit 1
+cd "$HOME"
 
 create_ssh_config(){
 tee .ssh/config <<EOF >/dev/null

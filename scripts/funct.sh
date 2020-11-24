@@ -136,6 +136,7 @@ install_workstation(){
 }
 
 update_workstation() {
+    update_base
     echo "Update-workstation isn't implemented!"
 }
 
@@ -144,9 +145,9 @@ validate_workstation() {
 }
 
 config_home_workstation() { # ARGS: <user-name>
+    config_home_base "$1"
     echo "config_home_workstation: $1"
     run_user_script "$1" init_ssh_dir.sh 
-
 }
 
 # DEVELOPMENT PACKAGES
@@ -160,6 +161,7 @@ install_development(){
 }
 
 update_development() {
+    update_workstation
     echo "Update-development isn't implemented!"
 }
 
@@ -168,8 +170,9 @@ validate_development() {
 }
 
 config_home_development() { # ARGS: <user-name>
+    config_home_workstation "$1"
     echo "config_home_development: $1"
-    run_user_script "$1" configure-slime.sh 
+    run_user_script "$1" configure-emacs.sh 
 }
 
 # HAM RADIO PACKAGES
@@ -181,6 +184,7 @@ install_ham(){
 }
 
 update_ham() {
+    update_workstation
     echo "Update-ham isn't implemented!"
 }
 
@@ -189,6 +193,7 @@ validate_ham() {
 }
 
 config_home_ham() { # ARGS: <user-name>
+    config_home_workstation "$1"
     echo "config_home_ham: $1"
 }
 

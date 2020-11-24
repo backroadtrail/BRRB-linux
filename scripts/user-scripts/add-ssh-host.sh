@@ -29,7 +29,7 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-cd "$HOME" || exit 1
+cd "$HOME"
 
 usage(){
     echo "<server> [-send-key] [<remote-user> [<id-file>]]"

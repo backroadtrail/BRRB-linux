@@ -38,7 +38,7 @@ export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATC
 
 # RASPBERRY PI
 export BRRB_HOME_PI="/opt/brrb"
-export BRRB_METADATA_PI="$BRRB_HOME_PI/brrb.json"
+export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
 export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
 export BRRB_WORKSTATION_PKGS_PI=(pulseaudio pulseaudio-module-bluetooth tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
@@ -46,7 +46,7 @@ export BRRB_HAM_PKGS_PI=(chirp)
 
 # MACOS
 export BRRB_HOME_MAC="/opt/brrb"
-export BRRB_METADATA_MAC="$BRRB_HOME_MAC/brrb.json"
+export BRRB_METADATA_MAC="$BRRB_HOME_MAC/metadata.json"
 export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl node)
 export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck emacs f3)
