@@ -109,6 +109,8 @@ elif [ "$do_add_user" = true ]; then
     append_config_user "$host" "$user"
 fi
 
+echo "Added SSH configure-host entry for '$USER': $user@$host"
+
 
 
 

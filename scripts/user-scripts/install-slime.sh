@@ -30,38 +30,9 @@ source "funct.sh"
 
 cd "$HOME" || exit 1
 
-curl -O "https://beta.quicklisp.org/quicklisp.lisp"
-
-sbcl --load quicklisp.lisp << EOF
-(quicklisp-quickstart:install)
-(quit)
-EOF
-
-cat >> .sbclrc << EOF
-
-;;; The following lines added by ql:add-to-init-file:
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
 
 
-;;; The following lines added by ql:add-to-init-file:
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
-
-
-EOF
-
-rm quicklisp.lisp
-
-echo "Installed Quicklisp for '$USER'."
-
-
+echo "Installed Slime for '$USER'."
 
 
 

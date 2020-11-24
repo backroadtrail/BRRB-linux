@@ -54,3 +54,5 @@ else
     create_ssh_config
 fi
 
+echo "Initialized the .ssh directory for '$USER'."
+

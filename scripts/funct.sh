@@ -116,6 +116,7 @@ validate_development() {
 
 config_home_development() { # ARGS: <user-name>
     echo "config_home_development: $1"
+    run_user_script "$1" install-slime.sh 
 }
 
 # HAM RADIO PACKAGES
