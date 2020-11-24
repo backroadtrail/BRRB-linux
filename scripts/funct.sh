@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# funct.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.
@@ -74,6 +76,7 @@ validate_base() {
     
     ( cd "$src/hello-c" || exit 1;    ./build.sh; ./test.sh; ./clean.sh ) 
     ( cd "$src/hello-c++" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-lisp" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
 
 }
 

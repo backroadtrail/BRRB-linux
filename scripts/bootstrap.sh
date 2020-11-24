@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# bootstrap.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.

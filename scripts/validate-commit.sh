@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# validate-commit.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.

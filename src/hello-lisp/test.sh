@@ -1,4 +1,6 @@
-# CMakeLists.txt
+#!/usr/bin/env bash
+
+# test.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -17,11 +19,3 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
-
-
-
-cmake_minimum_required(VERSION 3.0)
-
-project(hello-c++)
-
-add_executable(hello-c++ hello-world.cpp)

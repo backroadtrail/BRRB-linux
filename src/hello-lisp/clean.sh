@@ -1,4 +1,6 @@
-# CMakeLists.txt
+#!/usr/bin/env bash
+
+# clean.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -19,9 +21,3 @@
 ##
 
 
-
-cmake_minimum_required(VERSION 3.0)
-
-project(hello-c++)
-
-add_executable(hello-c++ hello-world.cpp)
