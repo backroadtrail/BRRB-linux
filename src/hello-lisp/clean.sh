@@ -31,4 +31,4 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-(cd "$HOME/quicklisp/local-projects"; rm hello-lisp)
+(cd "$HOME/quicklisp/local-projects"; rm -f hello-lisp)

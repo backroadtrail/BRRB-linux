@@ -37,6 +37,3 @@ mkdir build
 cd build
 cmake ..
 make
-./hello-c
-cd ..
-rm -rf build

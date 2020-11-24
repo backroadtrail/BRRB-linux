@@ -31,6 +31,4 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-pushd build || exit 1
-./hello-c++
-popd || exit 1
+./build/hello-c++

@@ -87,7 +87,7 @@ sudo tee "$BRRB_METADATA" << EOF
     "name": "$BRRB_NAME",
     "descr": "$BRRB_DESC",
     "hostname": "$BRRB_HOSTNAME",
-    "version": "$BRRB_VERSION",
+    "version": "$BRRB_VERSION"
 }
 EOF
 
@@ -126,7 +126,7 @@ install_workstation(){
     install_base
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     validate_workstation
-    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
+    sudo jq ".workstation.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
 }
 
 update_workstation() {
