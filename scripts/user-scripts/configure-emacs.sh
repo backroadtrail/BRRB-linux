@@ -31,6 +31,12 @@ cd "$HERE"
 
 cd "$HOME"
 
+if [ -f .emacs ]; then
+	echo "The file '~/.emacs' exists, skipping configuration !!!"
+	exit 0
+fi
+
+
 sbcl_path="$(which sbcl)"
 
 tee .emacs <<EOF >/dev/null

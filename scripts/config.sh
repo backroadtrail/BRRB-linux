@@ -20,6 +20,11 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+# BASH BOILERPLATE
+set -euo pipefail
+IFS=$'\n\t'
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
 export BRRB_VERSION_MAJOR="1"
 export BRRB_VERSION_MINOR="1"
 export BRRB_VERSION_PATCH="1"

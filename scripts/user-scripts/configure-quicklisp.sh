@@ -31,6 +31,11 @@ cd "$HERE"
 
 cd "$HOME"
 
+if [ -d quicklisp ]; then
+	echo "The directory '~/quicklisp exists', skipping configuration !!!"
+	exit 0
+fi
+
 curl -O "https://beta.quicklisp.org/quicklisp.lisp"
 
 sbcl --load quicklisp.lisp << EOF

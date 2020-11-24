@@ -20,6 +20,11 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+# BASH BOILERPLATE
+set -euo pipefail
+IFS=$'\n\t'
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
 # NORMALIZED FUNCTIONS
 if is_mac ;then
     install_pkgs(){
@@ -50,12 +55,12 @@ set_display_overscan() {
 }
 
 install_miuzei_driver() {
-    cd "$HOME" || exit
+    cd "$HOME"
     sudo rm -rf LCD-show
     #git clone https://github.com/goodtft/LCD-show.git
     git clone https://github.com/backroadtrail/LCD-show.git
     chmod -R 755 LCD-show
-    cd LCD-show || exit
+    cd LCD-show
     sudo ./MPI4008-show
 }
 
@@ -116,9 +121,9 @@ validate_base() {
     echo "validate_base"
     src="$HERE/../src"
     
-    ( cd "$src/hello-c" || exit 1;    ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-c++" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-lisp" || exit 1;  ./build.sh; ./test.lisp; ./clean.sh ) 
+    ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-lisp";  ./build.sh; ./test.lisp; ./clean.sh ) 
 
 }
 
@@ -228,9 +233,14 @@ install_vscode(){
 }
 
 install_slime(){
-    pushd "$BRRB_HOME" || exit 1
-    sudo git clone "https://github.com/slime/slime.git" 
-    popd || exit 1
+    pushd "$BRRB_HOME"
+    if [ -d slime ]; then
+        cd slime
+        sudo git pull
+    else
+        sudo git clone "https://github.com/slime/slime.git"
+    fi 
+    popd
 }
 
 
