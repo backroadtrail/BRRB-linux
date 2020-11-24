@@ -31,8 +31,8 @@ source "funct.sh"
 ##
 
 usage(){
-    echo "Usage: $0 <display> "
-    echo "Where: display = ( miuzei | lepow | hdmi ) "
+    echo "Usage: $0 <display>"
+    echo "Where: display = ( miuzei | lepow | hdmi )"
     exit 1
 }
 
@@ -42,6 +42,10 @@ else
     usage
 fi 
 
+if ! is_pi; then
+    echo "Bootstrap only works for Raspberry Pi OS !!!"
+    exit 1
+fi
 # SET METADATA
 sudo tee "/brrb.json" << EOF
 {
@@ -57,7 +61,7 @@ EOF
 echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 
 install_base
-validate_base
+sudo jq ".display = \"$display\""
 config_home_base pi
 
 # DISPLAY

@@ -42,6 +42,11 @@ usage_install(){
     exit 1
 }
 
+usage_update(){
+    echo "Usage: update (base | workstation | development | ham)"
+    exit 1
+}
+
 usage_validate(){
     echo "Usage: validate (base | workstation | development | ham)"
     exit 1
@@ -87,6 +92,40 @@ do_install(){
         *)
             echo "Invalid argument: $1"
             usage_install
+            ;;
+    esac
+}
+
+do_update(){
+    if [  $# -eq 1 ]; then
+        echo INSTALL "$@"
+    else
+        echo "Invalid number of arguments !!!"
+        usage_update
+    fi 
+
+
+    case $1 in
+
+        base)
+            update_base        
+            ;;
+
+        workstation)
+            update_workstation        
+            ;;
+
+        development)
+            update_development
+            ;;
+
+        ham)
+            update_ham
+            ;;
+
+        *)
+            echo "Invalid argument: $1"
+            usage_update
             ;;
     esac
 }
@@ -183,6 +222,11 @@ case $command in
     install)
         shift
         do_install "$@"    
+        ;;
+
+    update)
+        shift
+        do_update "$@"    
         ;;    
 
     validate)

@@ -35,6 +35,11 @@ usage(){
     exit 1
 }
 
+if ! is_pi; then
+    echo "Create Disk Image only works for Raspberry Pi OS !!!"
+    exit 1
+fi
+
 if [  $# -ne 3 ]; then
     usage
 fi 

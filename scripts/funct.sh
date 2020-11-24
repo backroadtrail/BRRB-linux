@@ -20,6 +20,23 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+# NORMALIZED FUNCTIONS
+if is_mac ;then
+    install_pkgs(){
+        brew update
+        brew install -y "$@"
+    }
+elif is_pi ;then
+    install_pkgs(){
+        sudo apt-get update
+        sudo apt-get full-upgrade -y
+        sudo apt-get install -y "$@"
+    }
+else
+    echo "Unknown OS '$(uname)' for function normalization !!!"
+    exit 1
+fi
+
 set_display_overscan() {
     if [ -f /boot/config.txt ]; then
         sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
@@ -51,7 +68,7 @@ configure_miuzei() {
 }
 
 install_miuzei_and_reboot() {
-    sudo apt-get install -y matchbox-keyboard
+    install_pkgs matchbox-keyboard
     set_display_overscan
     configure_miuzei
     install_miuzei_driver # THIS HAS TO  BE LAST BECAUSE IT REBOOTS
@@ -61,13 +78,31 @@ install_lepow() {
     set_display_overscan
 }
 
+create_metadata_file(){
+if [ ! -f "$BRRB_METADATA_FILE" ]; then
+
+sudo tee "$BRRB_METADATA_FILE" << EOF
+{
+    "name": "$BRRB_NAME",
+    "descr": "$BRRB_DESC",
+    "hostname": "$BRRB_HOSTNAME",
+    "version": "$BRRB_VERSION",
+}
+EOF
+
+fi
+}
+
 ## BASE SYSTEM PACKAGES
 install_base() {
     echo "install_base"
-    sudo apt-get update
-    sudo apt-get full-upgrade -y
-    sudo apt-get install -y "${BRRB_BASE_PKGS[@]}"
+    install_pkgs "${BRRB_BASE_PKGS[@]}"
     validate_base
+    create_metadata_file   
+}
+
+update_base() {
+    echo "Update Base isn't implemented!"
 }
 
 validate_base() {
@@ -88,8 +123,13 @@ config_home_base() { # ARGS: <user-name>
 # WORKSTATION PACKAGES
 install_workstation(){
     install_base
-    sudo apt-get install -y "${BRRB_WORKSTATION_PKGS[@]}"
+    install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     validate_workstation
+    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+}
+
+update_workstation() {
+    echo "Update Workstation isn't implemented!"
 }
 
 validate_workstation() {
@@ -105,9 +145,14 @@ config_home_workstation() { # ARGS: <user-name>
 # DEVELOPMENT PACKAGES
 install_development(){
     install_workstation
-    sudo apt-get install -y "${BRRB_DEVELOPMENT_PKGS[@]}"
+    install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     install_vscode
     validate_development
+    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+}
+
+update_development() {
+    echo "Update Development isn't implemented!"
 }
 
 validate_development() {
@@ -122,8 +167,13 @@ config_home_development() { # ARGS: <user-name>
 # HAM RADIO PACKAGES
 install_ham(){
     install_workstation
-    sudo apt-get install -y "${BRRB_HAM_PKGS[@]}"
+    install_pkgs "${BRRB_HAM_PKGS[@]}"
     validate_ham
+    sudo jq ".ham.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+}
+
+update_ham() {
+    echo "Update Ham isn't implemented!"
 }
 
 validate_ham() {
@@ -150,9 +200,18 @@ run_user_script(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
 }
 
 install_vscode(){
-    wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
-    sudo apt-get install -y ./vscode.deb
-    rm vscode.deb
+    if is_mac; then
+        brew update
+        brew tap homebrew/cask
+        brew cask install visual-studio-code
+    elif is_mac; then
+        wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
+        install_pkgs ./vscode.deb
+        rm vscode.deb
+    else
+        echo "Unknown OS '$(uname)' for install_vscode !!!"
+        exit 1
+    fi
 }
 
 

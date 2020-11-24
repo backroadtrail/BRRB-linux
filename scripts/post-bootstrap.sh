@@ -30,6 +30,12 @@ source "config.sh"
 source "funct.sh"
 ##
 
+if ! is_pi; then
+    echo "Post Bootstrap only works for Raspberry Pi OS !!!"
+    exit 1
+fi
+
+
 # REMOVE REPOS
 sudo rm -rf "$HOME/BRRB-linux"
 sudo rm -rf "$HOME/LCD-show"

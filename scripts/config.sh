@@ -24,16 +24,59 @@ export BRRB_VERSION_MAJOR="1"
 export BRRB_VERSION_MINOR="1"
 export BRRB_VERSION_PATCH="1"
 
-export BRRB_HOSTNAME="brrb"
-export BRRB_DISPLAY_NAME="Backroad Raspberry"
-export BRRB_DISPLAY_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
+#############################
 
-#########################
-# EDIT ABOVE ONLY
-#########################
+export BRRB_HOSTNAME="brrb"
+export BRRB_NAME="Backroad Raspberry"
+export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
+
+#############################
+# DANGER ZONE BELOW
+#############################
+
 export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATCH"
 
-export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
-export BRRB_WORKSTATION_PKGS=(pulseaudio pulseaudio-module-bluetooth tmux mosh)
-export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs)
-export BRRB_HAM_PKGS=(chirp)
+# RASPBERRY PI
+export BRRB_METADATA_FILE_PI="/brrb.json"
+export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
+export BRRB_WORKSTATION_PKGS_PI=(pulseaudio pulseaudio-module-bluetooth tmux mosh)
+export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs)
+export BRRB_HAM_PKGS_PI=(chirp)
+
+# MACOS
+export BRRB_METADATA_FILE_MAC="/brrb.json"
+export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl nodejs)
+export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
+export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck rpi-imager emacs)
+export BRRB_HAM_PKGS_MAC=(chirp)
+
+# NORMALIZATION TESTS
+is_mac(){
+    [ "$(uname)" = 'Darwin' ]
+}
+is_pi(){
+    [ "$(uname)" = 'Linux' ]
+}
+
+# NORMALIZED CONSTANTS
+if is_mac ;then
+	export BRRB_METADATA_FILE=("${BRRB_METADATA_FILE_MAC[@]}")
+	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")
+	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MAC[@]}")
+	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MAC[@]}")
+	export BRRB_HAM_PKGS=("${BRRB_HAM_PKGS_MAC[@]}")
+elif is_pi ;then
+	export BRRB_METADATA_FILE=("${BRRB_METADATA_FILE_PI[@]}")
+	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_PI[@]}")
+	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")
+	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_PI[@]}")
+	export BRRB_HAM_PKGS=("${BRRB_HAM_PKGS_PI[@]}")
+else
+	echo "Unknown OS '$(uname)' for constant normalization !!!"
+	exit 1
+fi
+
+
+
+
+
