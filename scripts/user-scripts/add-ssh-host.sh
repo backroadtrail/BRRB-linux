@@ -89,6 +89,16 @@ fi
 
 # SEND PUBLIC KEY
 if [ "$do_send_key" = true ]; then
+    if [ ! -f "$id.pub" ]; then
+        echo "The public key doesn't exist: $id.pub"
+        echo -n "Would you like to create it? (y/n): "
+        read -r resp
+        if [ "$resp" = "y" ]; then
+            ssh-keygen -y -f "$id" >"$id.pub"
+            chmod 644 "$id.pub"
+        fi
+
+    fi
     ssh-copy-id -i "$id" "$user@$host"
 fi
 
