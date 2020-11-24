@@ -28,6 +28,7 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$HERE/../../scripts"
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
 pushd build || exit 1

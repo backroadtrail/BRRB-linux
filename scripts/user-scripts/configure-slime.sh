@@ -26,6 +26,7 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
 cd "$HOME" || exit 1

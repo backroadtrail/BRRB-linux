@@ -28,11 +28,14 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$HERE/../../scripts"
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
+rm -rf build
 mkdir build
-pushd build
+cd build
 cmake ..
 make
 ./hello-c++
-popd
+cd ..
+rm -rf build
