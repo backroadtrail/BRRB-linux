@@ -31,7 +31,7 @@ source "funct.sh"
 ##
 
 
-usage(){
+usage_config_brrb(){
     echo "Usage: $0 <command> [arg1 [arg2] ... ]"
     echo "Where: command = (install | validate | config-home)"
     exit 1
@@ -56,8 +56,6 @@ usage_config_home_add_remote_ssh(){
     echo "Usage: $0 config-home add-remote-ssh <server> [-send-key] [<id-file> [<remote-user-name>]] "
     exit 1
 }
-
-usage_config_home_add_remote_ssh
 
 do_install(){
     if [  $# -eq 1 ]; then
@@ -177,7 +175,7 @@ if [  $# -ge 1 ]; then
     command="$1"
 else
     echo "Invalid number of arguments !!!"
-    usage
+    usage_config_brrb
 fi 
 
 case $command in
@@ -199,7 +197,7 @@ case $command in
 
     *)
         echo "Invalid command: $command"
-        usage
+        usage_config_brrb
         ;;
 esac
 
