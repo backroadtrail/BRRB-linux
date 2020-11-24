@@ -38,7 +38,7 @@ sbcl --load quicklisp.lisp << EOF
 (quit)
 EOF
 
-cat >> .sbclrc << EOF
+tee .sbclrc <<EOF >/dev/null
 
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
@@ -54,8 +54,7 @@ cat >> .sbclrc << EOF
                                        (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
-
-
+    
 EOF
 
 rm quicklisp.lisp

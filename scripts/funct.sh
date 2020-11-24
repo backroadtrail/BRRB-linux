@@ -37,9 +37,14 @@ else
     exit 1
 fi
 
+set_metadatum(){ # ARGS: <datum> <value>
+    jq "$1 = \"$2\"" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
+    sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
+}
+
 set_display_overscan() {
     if [ -f /boot/config.txt ]; then
-        sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt
+        sed "s/^.*disable_overscan.*$/disable_overscan=1/g" < /boot/config.txt | sudo tee /tmp/config.txt >/dev/null
         sudo mv -f /tmp/config.txt /boot/
     fi
 }
@@ -82,7 +87,7 @@ create_metadata_file(){
 if [ ! -f "$BRRB_METADATA" ]; then
 
 sudo mkdir -p "$BRRB_HOME"
-sudo tee "$BRRB_METADATA" << EOF
+sudo tee "$BRRB_METADATA" <<EOF >/dev/null
 {
     "name": "$BRRB_NAME",
     "descr": "$BRRB_DESC",
@@ -99,7 +104,8 @@ install_base() {
     echo "install_base"
     install_pkgs "${BRRB_BASE_PKGS[@]}"
     validate_base
-    create_metadata_file   
+    create_metadata_file
+    set_metadatum .base.version "$BRRB_VERSION"  
 }
 
 update_base() {
@@ -126,7 +132,7 @@ install_workstation(){
     install_base
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     validate_workstation
-    sudo jq ".workstation.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
+    set_metadatum .workstation.version "$BRRB_VERSION"  
 }
 
 update_workstation() {
@@ -150,7 +156,7 @@ install_development(){
     install_vscode
     install_slime
     validate_development
-    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
+    set_metadatum .development.version "$BRRB_VERSION"  
 }
 
 update_development() {
@@ -171,7 +177,7 @@ install_ham(){
     install_workstation
     install_pkgs "${BRRB_HAM_PKGS[@]}"
     validate_ham
-    sudo jq ".ham.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
+    set_metadatum .ham.version "$BRRB_VERSION"  
 }
 
 update_ham() {
@@ -217,9 +223,9 @@ install_vscode(){
 }
 
 install_slime(){
-    pushdir "$BRRB_HOME"
+    pushd "$BRRB_HOME" || exit 1
     sudo git clone "https://github.com/slime/slime.git" 
-    popdir
+    popd || exit 1
 }
 
 

@@ -47,9 +47,9 @@ export BRRB_HAM_PKGS_PI=(chirp)
 # MACOS
 export BRRB_HOME_MAC="/opt/brrb"
 export BRRB_METADATA_MAC="$BRRB_HOME_MAC/brrb.json"
-export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl nodejs)
+export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl node)
 export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
-export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck rpi-imager emacs)
+export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck emacs)
 export BRRB_HAM_PKGS_MAC=(chirp)
 
 # NORMALIZATION TESTS

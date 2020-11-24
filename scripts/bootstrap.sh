@@ -51,7 +51,7 @@ fi
 echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 
 install_base
-sudo jq ".display = \"$display\"" "$BRRB_METADATA"
+set_metadatum .display "$display"  
 config_home_base pi
 
 # DISPLAY

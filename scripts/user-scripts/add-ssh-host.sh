@@ -38,7 +38,7 @@ usage(){
 }
 
 append_config_user(){ # ARGS: <host> <remote-user>
-cat >> ".ssh/config" <<EOF
+tee ".ssh/config" <<EOF >/dev/null
 Host $1
      User $2
 
@@ -46,7 +46,7 @@ EOF
 }
 
 append_config_user_id(){ # ARGS: <host> <remote-user> <id-file> 
-cat >> ".ssh/config" <<EOF
+cat >> ".ssh/config" <<EOF >/dev/null
 Host $1
      User $2
      IdentityFile $3

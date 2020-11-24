@@ -40,6 +40,3 @@ fi
 sudo rm -rf "$HOME/BRRB-linux"
 sudo rm -rf "$HOME/LCD-show"
 
-# SHOW METADATA
-jq '.' /brrb.json
-

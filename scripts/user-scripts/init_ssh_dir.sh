@@ -32,7 +32,7 @@ cd "$HERE"
 cd "$HOME" || exit 1
 
 create_ssh_config(){
-cat > .ssh/config <<EOF
+tee .ssh/config <<EOF >/dev/null
 Host *
     ServerAliveInterval 300
     ServerAliveCountMax 2
