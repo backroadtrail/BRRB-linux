@@ -222,7 +222,7 @@ install_vscode(){
         brew update
         brew tap homebrew/cask
         brew cask install visual-studio-code
-    elif is_mac; then
+    elif is_pi; then
         wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
         install_pkgs ./vscode.deb
         rm vscode.deb
