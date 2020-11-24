@@ -1,4 +1,5 @@
-#!/usr/bin/env sbcl --script
+#!/usr/bin/sbcl --script
+
 ;;;; test.lisp
 
 ;;;; Copyright 2020 OpsResearch LLC
@@ -18,5 +19,6 @@
 ;;;; You should have received a copy of the GNU Affero General Public License
 ;;;; along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 
- (ql:quickload "hello-lisp")
- (hello-lisp:hello-world)
+(load "~/quicklisp/setup.lisp")
+(ql:quickload "hello-lisp")
+(hello-lisp:hello-world)
