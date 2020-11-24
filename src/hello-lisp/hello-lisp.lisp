@@ -19,5 +19,9 @@
 
 (in-package #:hello-lisp)
 
+(defun hello-world()
+    (print "Hello World!")
+)
+
 
 

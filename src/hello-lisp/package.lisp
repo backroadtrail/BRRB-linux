@@ -20,4 +20,5 @@
 (defpackage #:hello-lisp
   (:use #:cl)
   (:export
+  	#:hello-world
     ))

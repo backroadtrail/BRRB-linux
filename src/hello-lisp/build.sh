@@ -19,3 +19,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
+
+(cd "$HOME/quicklisp/local-projects"; ln -s "$HOME/BRRB-linux/src/hello-lisp" .)

@@ -20,4 +20,4 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-
+(cd "$HOME/quicklisp/local-projects"; rm hello-lisp")

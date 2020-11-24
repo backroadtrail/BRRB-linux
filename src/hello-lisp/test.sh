@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sbcl --script
 
 # test.sh
 
@@ -19,3 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
+
+sbcl <<EOF
+ (ql:quickload "hello-lisp")
+ (hello-lisp:hello-world)
+EOF
