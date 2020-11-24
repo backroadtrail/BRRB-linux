@@ -30,9 +30,11 @@ source "funct.sh"
 
 cd "$HOME" || exit 1
 
+cat >> .emacs <<EOF
+(add-to-list 
+EOF
 
-
-echo "Installed Slime for '$USER'."
+echo "Configured Slime for '$USER'."
 
 
 

@@ -49,8 +49,8 @@ disk="$1"
 image_dir="$2"
 
 # METADATA
-version="$(jq -r '.version' /media/pi/rootfs/brrb.json)"
-display="$(jq -r '.display' /media/pi/rootfs/brrb.json)"
+version="$(jq -r '.version' "/media/pi/rootfs/$BRRB_METADATA")"
+display="$(jq -r '.display' "/media/pi/rootfs/$BRRB_METADATA")"
 
 export image_base="brrb-${version}-${display}"
 

@@ -98,7 +98,7 @@ do_install(){
 
 do_update(){
     if [  $# -eq 1 ]; then
-        echo INSTALL "$@"
+        echo UPDATE "$@"
     else
         echo "Invalid number of arguments !!!"
         usage_update

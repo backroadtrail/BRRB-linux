@@ -79,9 +79,10 @@ install_lepow() {
 }
 
 create_metadata_file(){
-if [ ! -f "$BRRB_METADATA_FILE" ]; then
+if [ ! -f "$BRRB_METADATA" ]; then
 
-sudo tee "$BRRB_METADATA_FILE" << EOF
+sudo mkdir -p "$BRRB_HOME"
+sudo tee "$BRRB_METADATA" << EOF
 {
     "name": "$BRRB_NAME",
     "descr": "$BRRB_DESC",
@@ -102,7 +103,7 @@ install_base() {
 }
 
 update_base() {
-    echo "Update Base isn't implemented!"
+    echo "Update-base isn't implemented!"
 }
 
 validate_base() {
@@ -117,7 +118,7 @@ validate_base() {
 
 config_home_base() { # ARGS: <user-name>
     echo "config_home_base: $1"
-    run_user_script "$1" install-quicklisp.sh 
+    run_user_script "$1" configure-quicklisp.sh 
 }
 
 # WORKSTATION PACKAGES
@@ -125,11 +126,11 @@ install_workstation(){
     install_base
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     validate_workstation
-    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
 }
 
 update_workstation() {
-    echo "Update Workstation isn't implemented!"
+    echo "Update-workstation isn't implemented!"
 }
 
 validate_workstation() {
@@ -147,12 +148,13 @@ install_development(){
     install_workstation
     install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     install_vscode
+    install_slime
     validate_development
-    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+    sudo jq ".development.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
 }
 
 update_development() {
-    echo "Update Development isn't implemented!"
+    echo "Update-development isn't implemented!"
 }
 
 validate_development() {
@@ -161,7 +163,7 @@ validate_development() {
 
 config_home_development() { # ARGS: <user-name>
     echo "config_home_development: $1"
-    run_user_script "$1" install-slime.sh 
+    run_user_script "$1" configure-slime.sh 
 }
 
 # HAM RADIO PACKAGES
@@ -169,11 +171,11 @@ install_ham(){
     install_workstation
     install_pkgs "${BRRB_HAM_PKGS[@]}"
     validate_ham
-    sudo jq ".ham.version = \"$BRRB_VERSION\"" "$BRRB_METADATA_FILE"
+    sudo jq ".ham.version = \"$BRRB_VERSION\"" "$BRRB_METADATA"
 }
 
 update_ham() {
-    echo "Update Ham isn't implemented!"
+    echo "Update-ham isn't implemented!"
 }
 
 validate_ham() {
@@ -212,6 +214,12 @@ install_vscode(){
         echo "Unknown OS '$(uname)' for install_vscode !!!"
         exit 1
     fi
+}
+
+install_slime(){
+    pushdir "$BRRB_HOME"
+    sudo git clone "https://github.com/slime/slime.git" 
+    popdir
 }
 
 

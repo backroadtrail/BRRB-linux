@@ -46,22 +46,12 @@ if ! is_pi; then
     echo "Bootstrap only works for Raspberry Pi OS !!!"
     exit 1
 fi
-# SET METADATA
-sudo tee "/brrb.json" << EOF
-{
-    "display_name": "$BRRB_DISPLAY_NAME",
-    "display_descr": "$BRRB_DISPLAY_DESC",
-    "hostname": "$BRRB_HOSTNAME",
-    "version": "$BRRB_VERSION",
-    "display": "$display"
-}
-EOF
 
 # HOSTNAME
 echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 
 install_base
-sudo jq ".display = \"$display\""
+sudo jq ".display = \"$display\"" "$BRRB_METADATA"
 config_home_base pi
 
 # DISPLAY

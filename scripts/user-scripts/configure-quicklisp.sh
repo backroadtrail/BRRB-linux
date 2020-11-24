@@ -59,7 +59,7 @@ EOF
 
 rm quicklisp.lisp
 
-echo "Installed Quicklisp for '$USER'."
+echo "Configured Quicklisp for '$USER'."
 
 
 
