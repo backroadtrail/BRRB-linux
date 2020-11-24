@@ -33,5 +33,5 @@ export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATC
 
 export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd zip g++ cmake sbcl nodejs)
 export BRRB_WORKSTATION_PKGS=(pulseaudio pulseaudio-module-bluetooth tmux mosh)
-export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager)
+export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs)
 export BRRB_HAM_PKGS=(chirp)

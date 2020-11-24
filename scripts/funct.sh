@@ -72,14 +72,14 @@ validate_base() {
     echo "validate_base"
     src="$HERE/../src"
     
-    ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-c" || exit 1;    ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-c++" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
 
 }
 
 config_home_base() { # ARGS: <user-name>
     echo "config_home_base: $1"
-    run_user_script install-quicklisp.sh "$1"
+    run_user_script "$1" install-quicklisp.sh 
 }
 
 # WORKSTATION PACKAGES
@@ -95,7 +95,7 @@ validate_workstation() {
 
 config_home_workstation() { # ARGS: <user-name>
     echo "config_home_workstation: $1"
-    run_user_script generate_ssh_keys.sh "$1"
+    run_user_script "$1" init_ssh_dir.sh 
 
 }
 
@@ -137,8 +137,12 @@ umount_safe(){
     fi
 }
 
-run_user_script(){ # ARGS: <script> <user-name>
-    sudo su "$2" -c "./user-scripts/$1"
+run_user_script(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
+    local_user=$1
+    shift
+    script=$1
+    shift
+    sudo su "$local_user" -c "./user-scripts/$script" "$@" 
 }
 
 install_vscode(){

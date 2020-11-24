@@ -30,8 +30,27 @@ source "funct.sh"
 
 cd "$HOME" || exit 1
 
+create_ssh_config(){
+cat > .ssh/config <<EOF
+Host *
+    ServerAliveInterval 300
+    ServerAliveCountMax 2
+    ForwardAgent yes
+    
+EOF
+}
+
+# KEYS
 if [ -f .ssh/id_rsa ] || [ -f .ssh/id_rsa.pub ]; then
-	echo "One or both keys exists, skipping key generation !!!"
+    echo "One or both keys exists, skipping key generation !!!"
 else
-	ssh-keygen -b 2048 -t rsa -f ".ssh/id_rsa" -q -N ""
+    ssh-keygen -b 2048 -t rsa -f ".ssh/id_rsa" -q -N ""
 fi
+
+# CONFIG
+if [ -f .ssh/config ]; then
+    echo "Found .ssh/config, skipping creation !!!"
+else
+    create_ssh_config
+fi
+

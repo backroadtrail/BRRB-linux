@@ -46,9 +46,16 @@ usage_validate(){
 }
 
 usage_config_home(){
-    echo "Usage: $0 config-home (base | workstation | development | ham) <user-name>"
+    echo "Usage: $0 config-home (base | workstation | development | ham | add-remote-ssh) <user-name>"
     exit 1
 }
+
+usage_config_home_add_remote_ssh(){
+    echo "Usage: $0 config-home add-remote-ssh <server> [-send-key] [<id-file> [<remote-user-name>]] "
+    exit 1
+}
+
+usage_config_home_add_remote_ssh
 
 do_install(){
     if [  $# -eq 1 ]; then
@@ -120,7 +127,7 @@ do_validate(){
 
 do_config_home(){
 
-    if [  $# -eq 2 ]; then
+    if [  $# -ge 2 ]; then
         echo CONFIG-HOME "$@"
     else
         echo "Invalid number of arguments !!!"
@@ -143,6 +150,18 @@ do_config_home(){
 
         ham)
             config_home_ham "$2" 
+            ;;
+        
+        add-remote-ssh)  # ARGS: add-remote-ssh <local-user-name> <server> [<id-file> [<remote-user-name>]]
+           if [  $# -ge 3 ]; then
+                shift
+                local_user=$1
+                shift
+                run_user_script "$local_user" add-remote-ssh.sh "$@"
+            else
+                echo "Invalid number of arguments !!!"
+                usage_config_home_add_remote_ssh
+            fi 
             ;;
 
         *)
