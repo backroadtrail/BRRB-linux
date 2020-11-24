@@ -20,5 +20,16 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-cd build
+# BASH BOILERPLATE
+set -euo pipefail
+IFS=$'\n\t'
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$HERE/../../scripts"
+source "config.sh"
+source "funct.sh"
+##
+
+pushd build || exit 1
 ./hello-c++
+popd || exit 1

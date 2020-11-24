@@ -20,4 +20,14 @@
 # along with Backroad Raspberry.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-(cd "$HOME/quicklisp/local-projects"; ln -s "$HOME/BRRB-linux/src/hello-lisp" .)
+# BASH BOILERPLATE
+set -euo pipefail
+IFS=$'\n\t'
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$HERE/../../scripts"
+source "config.sh"
+source "funct.sh"
+##
+
+(cd "$HOME/quicklisp/local-projects"; rm hello-lisp; ln -s "$HERE" .)

@@ -24,7 +24,7 @@
 if is_mac ;then
     install_pkgs(){
         brew update
-        brew install -y "$@"
+        brew install -f "$@"
     }
 elif is_pi ;then
     install_pkgs(){
@@ -112,7 +112,7 @@ validate_base() {
     
     ( cd "$src/hello-c" || exit 1;    ./build.sh; ./test.sh; ./clean.sh ) 
     ( cd "$src/hello-c++" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-lisp" || exit 1;  ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-lisp" || exit 1;  ./build.sh; ./test.lisp; ./clean.sh ) 
 
 }
 

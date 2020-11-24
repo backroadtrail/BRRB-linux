@@ -31,4 +31,4 @@ source "funct.sh"
 ##
 
 # SHELLCHECK
-find . -name '*.sh' -exec shellcheck -x {} \;
+find .. -name '*.sh' -exec shellcheck -x {} \;
