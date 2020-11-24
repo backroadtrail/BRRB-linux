@@ -26,8 +26,8 @@ IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
 export BRRB_VERSION_MAJOR="1"
-export BRRB_VERSION_MINOR="1"
-export BRRB_VERSION_PATCH="1"
+export BRRB_VERSION_MINOR="2"
+export BRRB_VERSION_PATCH="0"
 
 #############################
 
