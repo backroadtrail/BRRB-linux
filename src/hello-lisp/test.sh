@@ -1,4 +1,4 @@
-#!/usr/bin/env sbcl --script
+#!/usr/bin/env bash
 
 # test.sh
 
