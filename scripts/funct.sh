@@ -213,7 +213,11 @@ run_user_script(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
     shift
     script=$1
     shift
-    sudo su "$local_user" -c "./user-scripts/$script" "$@" 
+    if [ "$local_user" = "$USER" ];then
+        "./user-scripts/$script" "$@"
+    else
+        sudo su "$local_user" -c "./user-scripts/$script" "$@"
+    fi
 }
 
 install_vscode(){

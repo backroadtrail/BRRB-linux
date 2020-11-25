@@ -53,7 +53,7 @@ usage_validate(){
 }
 
 usage_config_home(){
-    echo "Usage: $0 config-home (base | workstation | development | ham | add-remote-ssh) <user-name>"
+    echo "Usage: $0 config-home (base | workstation | development | ham | add-remote-ssh) [<user-name>]"
     exit 1
 }
 
@@ -166,29 +166,36 @@ do_validate(){
 
 do_config_home(){
 
-    if [  $# -ge 2 ]; then
+    if [  $# -ge 1 ]; then
         echo CONFIG-HOME "$@"
     else
         echo "Invalid number of arguments !!!"
         usage_config_home
     fi 
 
+    # USER
+    if [  $# -ge 2 ]; then
+        user="$2"
+    else
+        user="$USER"
+    fi
+
     case $1 in
 
         base)
-            config_home_base "$2"        
+            config_home_base "$user"        
             ;;
 
         workstation)
-            config_home_workstation "$2"        
+            config_home_workstation "$user"       
             ;;
 
         development)
-            config_home_development "$2" 
+            config_home_development "$user" 
             ;;
 
         ham)
-            config_home_ham "$2" 
+            config_home_ham "$user" 
             ;;
         
         add-remote-ssh)  # ARGS: add-remote-ssh <local-user-name> <server> [<id-file> [<remote-user-name>]]
