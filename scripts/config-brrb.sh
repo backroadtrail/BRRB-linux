@@ -53,12 +53,12 @@ usage_validate(){
 }
 
 usage_config_home(){
-    echo "Usage: $0 config-home (base | workstation | development | ham | add-remote-ssh) [<user-name>]"
+    echo "Usage: $0 config-home (base | workstation | development | ham | add-ssh-host) [<user-name>]"
     exit 1
 }
 
-usage_config_home_add_remote_ssh(){
-    echo "Usage: $0 config-home add-remote-ssh <server> [-send-key] [<id-file> [<remote-user-name>]] "
+usage_config_home_add_ssh_host(){
+    echo "Usage: $0 config-home add-ssh-host <local-user> <host> [-send-key] [<remote-user> [<id-file>]] "
     exit 1
 }
 
@@ -198,15 +198,15 @@ do_config_home(){
             config_home_ham "$user" 
             ;;
         
-        add-remote-ssh)  # ARGS: add-remote-ssh <local-user-name> <server> [<id-file> [<remote-user-name>]]
+        add-ssh-host)  # ARGS: <local-user> <host> [-send-key] [<remote-user> [<id-file>]]
            if [  $# -ge 3 ]; then
                 shift
                 local_user=$1
                 shift
-                run_user_script "$local_user" add-remote-ssh.sh "$@"
+                run_user_script "$local_user" add-ssh-host.sh "$@"
             else
                 echo "Invalid number of arguments !!!"
-                usage_config_home_add_remote_ssh
+                usage_config_home_add_ssh_host
             fi 
             ;;
 
