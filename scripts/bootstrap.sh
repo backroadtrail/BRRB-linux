@@ -53,6 +53,7 @@ echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 install_base
 set_metadatum .display "$display"  
 config_home_base pi
+validate_base
 
 # DISPLAY
 case $display in

@@ -108,7 +108,6 @@ fi
 install_base() {
     echo "install_base"
     install_pkgs "${BRRB_BASE_PKGS[@]}"
-    validate_base
     create_metadata_file
     set_metadatum .base.version "$BRRB_VERSION"  
 }
