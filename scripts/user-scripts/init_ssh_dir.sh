@@ -32,6 +32,14 @@ cd "$HERE"
 cd "$HOME"
 
 create_ssh_config(){
+
+# .SSH DIR
+if [ ! -d .ssh ]; then
+	mkdir .ssh
+	chmod 755 .ssh
+fi
+
+# CONFIG
 tee .ssh/config <<EOF >/dev/null
 Host *
     ServerAliveInterval 300
