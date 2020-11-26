@@ -45,7 +45,7 @@ export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATC
 export BRRB_HOME_PI="/opt/brrb"
 export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
 export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
-export BRRB_WORKSTATION_PKGS_PI=(pulseaudio pulseaudio-module-bluetooth tmux mosh)
+export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
 export BRRB_HAM_PKGS_PI=(chirp)
 

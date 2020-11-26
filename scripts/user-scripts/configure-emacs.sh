@@ -37,7 +37,7 @@ if [ -f .emacs ]; then
 fi
 
 
-sbcl_path="$(which sbcl)"
+sbcl_path="$(command -v  sbcl)"
 
 tee .emacs <<EOF >/dev/null
 (add-to-list 'load-path "$BRRB_HOME/slime")
