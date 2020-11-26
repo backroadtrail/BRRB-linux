@@ -31,7 +31,7 @@ source "funct.sh"
 ##
 
 usage(){
-    echo "Usage: $0 <output-dir> [<rsync-opt> [<rsync-opt>... ]] [<rsync-src> [<rsync-src>... ]]"
+    echo "Usage: $0 <output-dir> [<rsync-opt>...] [<rsync-src>...]"
     echo " Backup uses rsync to synchronize /home and /media to the output directory."
     echo " The output directory is excluded from the backup."
     echo " You can add rsync options and additional sources to the command line."
@@ -62,7 +62,7 @@ if [ ! -d "$dest" ]; then
     mkdir "$dest"
 fi
 
-rsync -a --exclude "$dest" "$@" /home /media "$dest" 
+rsync -a --exclude "$output" "$@" "${BRRB_BACKUP_DIRS[@]}" "$dest" 
 
 
 

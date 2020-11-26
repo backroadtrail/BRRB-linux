@@ -1,5 +1,6 @@
 .DS_Store
 build
+workspace.code-workspace
 
 # Prerequisites
 *.d
