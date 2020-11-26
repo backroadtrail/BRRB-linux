@@ -31,24 +31,20 @@ source "funct.sh"
 ##
 
 usage(){
-    echo "Usage: $0 <output-dir> [<rsync-opt>...] [<rsync-src>...]"
-    echo " Backup uses rsync to synchronize /home and /media to the output directory."
+    echo "Usage: $0 ( copy | archive ) <output-dir> [<src-dir>...]"
+    echo " Backup archives or copies the default directories in the config file to the output directory."
     echo " The output directory is excluded from the backup."
-    echo " You can add rsync options and additional sources to the command line."
+    echo " You can add additional source directories on the command line."
     exit 1
 }
 
-
-if ! is_pi; then
-    echo "Backup only works for Raspberry Pi OS !!!"
-    exit 1
-fi
-
-if [  $# -lt 1 ]; then
+if [  $# -lt 2 ]; then
     echo "Invalid number of arguments !!!"
     usage
 fi 
 
+opt="$1"
+shift
 output="$(cd "$1"; pwd)"
 shift
 
@@ -56,14 +52,17 @@ if [ ! -d "$output" ]; then
     echo "Can't find the output directory: $output"
 fi
 
-dest="$output/$(hostname)-backup/"
+stamp="$(date '+%Y-%m-%d_%H-%M-%S.%N')"
+dest="$output/$(hostname)_$stamp"
 
-if [ ! -d "$dest" ]; then
-    mkdir "$dest"
+if [ "$opt" = 'archive' ]; then
+    tar "--exclude=$output" -czf "$dest.tgz" "${BRRB_BACKUP_DIRS[@]}" "$@"
+elif [ "$opt" = 'copy' ]; then
+    rsync -a --exclude "$output" "$@" "${BRRB_BACKUP_DIRS[@]}" "$dest.d"
+else
+    echo "Invalid option: $opt" 
+    exit 1
 fi
-
-rsync -a --exclude "$output" "$@" "${BRRB_BACKUP_DIRS[@]}" "$dest" 
-
 
 
 
