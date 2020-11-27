@@ -26,17 +26,23 @@ To bootstrap a Raspberry Pi 4 with with a generic HDMI monitor:
 To install the optional Workstation components
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
-  * ./BRRB-linux/scripts/config-brrb.sh install workstation
-  * ./BRRB-linux/scripts/config-brrb.sh configure-home workstation <user>
+  * ./BRRB-linux/scripts/config-brrb.sh workstation install
+  * ./BRRB-linux/scripts/config-brrb.sh workstation cfg-user <user-name>
 
 To install the optional software Development components
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
-  * ./BRRB-linux/scripts/config-brrb.sh install development
-  * ./BRRB-linux/scripts/config-brrb.sh configure-home development <user>
+  * ./BRRB-linux/scripts/config-brrb.sh development install
+  * ./BRRB-linux/scripts/config-brrb.sh development cfg-user <user-name>
 
-To install the optional Ham radio components
+To install the optional Ham Radio components
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
-  * ./BRRB-linux/scripts/config-brrb.sh install ham
-  * ./BRRB-linux/scripts/config-brrb.sh configure-home ham <user>
+  * ./BRRB-linux/scripts/config-brrb.sh ham-radio install
+  * ./BRRB-linux/scripts/config-brrb.sh ham-radio cfg-user <user-name>
+
+To install the optional Mesh Network components
+  * cd $HOME
+  * git clone https://github.com/backroadtrail/BRRB-linux.git
+  * ./BRRB-linux/scripts/config-brrb.sh mesh-network install
+  * ./BRRB-linux/scripts/config-brrb.sh mesh-network cfg-user <user-name>
