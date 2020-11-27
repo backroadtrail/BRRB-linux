@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# config-brrb.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.
@@ -29,26 +31,32 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-cd "$HOME"
+usage(){
+    echo "Usage: $0 install"
+    exit 1
+}
 
-if [ -f .emacs ]; then
-	echo "The file '~/.emacs' exists, skipping configuration !!!"
-	exit 0
-fi
+install(){
+    assert_bundle_is_current "base"
+    install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
+    set_metadatum .mesh-network.version "$BRRB_VERSION"
+}
 
+assert_is_pi;
 
-sbcl_path="$(command -v  sbcl)"
+if [  $# -lt 1 ]; then
+    echo "Invalid number of arguments !!!"
+    usage
+fi 
 
-tee .emacs <<EOF >/dev/null
-(add-to-list 'load-path "$BRRB_HOME/slime")
-(require 'slime-autoloads)
-(setq inferior-lisp-program "$sbcl_path")
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-EOF
+case $1 in
+    install)
+        install
+        ;;
 
-echo "Configured Emacs for '$USER'."
-
-
-
-
+    *)
+        echo "Invalid argument: $1"
+        usage
+        ;;
+esac
 

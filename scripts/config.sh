@@ -26,8 +26,8 @@ IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
 export BRRB_VERSION_MAJOR="1"
-export BRRB_VERSION_MINOR="2"
-export BRRB_VERSION_PATCH="1"
+export BRRB_VERSION_MINOR="3"
+export BRRB_VERSION_PATCH="0"
 
 #############################
 
@@ -35,22 +35,17 @@ export BRRB_HOSTNAME="brrb"
 export BRRB_NAME="Backroad Raspberry"
 export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
 
-#############################
-# DANGER ZONE BELOW
-#############################
-
 export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATCH"
 
 # RASPBERRY PI
-export BRRB_HOME_PI="/opt/brrb"
-export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
-
-export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
-export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh)
-export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
-export BRRB_HAM_PKGS_PI=(chirp)
 
 # MACOS
+
+#########################################
+#########################################
+#########################################
+
+#### MACOS ####
 export BRRB_HOME_MAC="/opt/brrb"
 export BRRB_METADATA_MAC="$BRRB_HOME_MAC/metadata.json"
 
@@ -59,19 +54,40 @@ export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck emacs f3)
 export BRRB_HAM_PKGS_MAC=(chirp)
 
-# NORMALIZATION TESTS
-is_mac(){
+is_macos(){
     [ "$(uname)" = 'Darwin' ]
 }
+
+assert_is_macos(){
+	if ! is_macos ;then
+		echo "!!! This can only be executed on MacOS !!!"
+	fi
+}
+
+
+#### PI ####
+export BRRB_HOME_PI="/opt/brrb"
+export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
+
+export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
+export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh)
+export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
+export BRRB_HAM_PKGS_PI=(chirp)
+
 is_pi(){
     [ "$(uname)" = 'Linux' ]
 }
 
-# NORMALIZED CONSTANTS
+assert_is_pi(){
+	if ! is_pi ;then
+		echo "!!! This can only be executed on Raspberry Pi OS !!!"
+	fi
+}
+
+#### OS ABSTRACTED CONSTANTS
 if is_mac ;then
 	export BRRB_HOME="$BRRB_HOME_MAC"
 	export BRRB_METADATA="$BRRB_METADATA_MAC"
-
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MAC[@]}")
 	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MAC[@]}")
@@ -79,13 +95,12 @@ if is_mac ;then
 elif is_pi ;then
 	export BRRB_HOME="$BRRB_HOME_PI"
 	export BRRB_METADATA="$BRRB_METADATA_PI"
-
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_PI[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")
 	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_PI[@]}")
 	export BRRB_HAM_PKGS=("${BRRB_HAM_PKGS_PI[@]}")
 else
-	echo "Unknown OS '$(uname)' for constant normalization !!!"
+	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
 fi
 

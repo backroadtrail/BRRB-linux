@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# post-bootstrap.sh
-
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.
@@ -25,14 +23,31 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
-assert_is_pi "$0"
+cd "$HOME"
 
-# REMOVE REPOS
-sudo rm -rf "$HOME/BRRB-linux"
-sudo rm -rf "$HOME/LCD-show"
+if [ -f .emacs ]; then
+	echo "The file '~/.emacs' exists, skipping configuration !!!"
+	exit 0
+fi
+
+sbcl_path="$(command -v  sbcl)"
+
+tee .emacs <<EOF >/dev/null
+(add-to-list 'load-path "$BRRB_HOME/slime")
+(require 'slime-autoloads)
+(setq inferior-lisp-program "$sbcl_path")
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+EOF
+
+echo "Configured Emacs for '$USER'."
+
+
+
+
 

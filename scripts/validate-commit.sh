@@ -25,10 +25,17 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+pushd "$HERE" > /dev/null
 source "config.sh"
 source "funct.sh"
 ##
 
 # SHELLCHECK
-find .. -name '*.sh' -exec shellcheck -x {} \;
+if [ $# -ge 1 ]; then
+    popd > /dev/null
+    abs_file="$(absolute_path "$1")"
+    cd "$HERE"
+    shellcheck -x "$abs_file"
+else
+    find .. -name '*.sh' -exec shellcheck -x {} \;
+fi

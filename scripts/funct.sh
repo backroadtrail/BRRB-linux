@@ -25,7 +25,8 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
-# NORMALIZED FUNCTIONS
+#### OS ABSTRACTION FUNCTIONS ####
+
 if is_mac ;then
     install_pkgs(){
         brew update
@@ -42,10 +43,23 @@ else
     exit 1
 fi
 
-set_metadatum(){ # ARGS: <datum> <value>
-    jq "$1 = \"$2\"" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
-    sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
+run_as(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
+    local_user=$1
+    shift
+    script=$1
+    shift
+    if [ "$local_user" = "$USER" ];then
+        "$script" "$@"
+    else
+        sudo su "$local_user" -c "$script" "$@"
+    fi
 }
+
+absolute_path(){
+    /bin/readlink -f "$1"
+}
+
+#### DISPLAY FUNCTIONS ####
 
 set_display_overscan() {
     if [ -f /boot/config.txt ]; then
@@ -88,6 +102,41 @@ install_lepow() {
     set_display_overscan
 }
 
+#### BRRB METADATA FUNCTIONS ####
+
+set_metadatum(){ # ARGS: <json-path> <value>
+    jq "$1 = \"$2\"" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
+    sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
+}
+
+get_metadatum(){ # ARGS: <json-path>
+    jq -r "$1" "$BRRB_METADATA"
+}
+
+is_bundle_installed(){ # ARGS: <bundle-name>
+    [ "$(get_metadatum ".$1")" = 'null' ]
+}
+
+assert_bundle_is_installed(){
+    if ! is_bundle_installed "$1"; then
+        echo "!!! The required bundle isn't installed: $1"
+        exit 1
+    fi
+}
+
+is_bundle_current(){ # ARGS: <bundle-name>
+    [ "$(get_metadatum ".$1.version")" = "$BRRB_VERSION" ]
+}
+
+assert_bundle_is_current(){
+    assert_bundle_is_installed "$1"
+    if ! is_bundle_current "$1"; then
+        echo "!!! The bundle's version isn't current: $1"
+        echo "!!! bundle: $(get_metadatum ".$1.version") current: $BRRB_VERSION"
+        exit 1
+    fi
+}
+
 create_metadata_file(){
 if [ ! -f "$BRRB_METADATA" ]; then
 
@@ -103,147 +152,3 @@ EOF
 
 fi
 }
-
-## BASE SYSTEM PACKAGES
-install_base() {
-    echo "install_base"
-    install_pkgs "${BRRB_BASE_PKGS[@]}"
-    create_metadata_file
-    set_metadatum .base.version "$BRRB_VERSION"  
-}
-
-update_base() {
-    echo "Update-base isn't implemented!"
-}
-
-validate_base() {
-    echo "validate_base"
-    src="$HERE/../src"
-    
-    ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-lisp";  ./build.sh; ./test.lisp; ./clean.sh ) 
-
-}
-
-config_home_base() { # ARGS: <user-name>
-    echo "config_home_base: $1"
-    run_user_script "$1" configure-quicklisp.sh 
-}
-
-# WORKSTATION PACKAGES
-install_workstation(){
-    install_base
-    install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
-    validate_workstation
-    set_metadatum .workstation.version "$BRRB_VERSION"  
-}
-
-update_workstation() {
-    update_base
-    echo "Update-workstation isn't implemented!"
-}
-
-validate_workstation() {
-    echo "validate_workstation"
-}
-
-config_home_workstation() { # ARGS: <user-name>
-    config_home_base "$1"
-    echo "config_home_workstation: $1"
-    run_user_script "$1" init_ssh_dir.sh 
-}
-
-# DEVELOPMENT PACKAGES
-install_development(){
-    install_workstation
-    install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
-    install_vscode
-    install_slime
-    validate_development
-    set_metadatum .development.version "$BRRB_VERSION"  
-}
-
-update_development() {
-    update_workstation
-    echo "Update-development isn't implemented!"
-}
-
-validate_development() {
-    echo "validate_development"
-}
-
-config_home_development() { # ARGS: <user-name>
-    config_home_workstation "$1"
-    echo "config_home_development: $1"
-    run_user_script "$1" configure-emacs.sh 
-}
-
-# HAM RADIO PACKAGES
-install_ham(){
-    install_workstation
-    install_pkgs "${BRRB_HAM_PKGS[@]}"
-    validate_ham
-    set_metadatum .ham.version "$BRRB_VERSION"  
-}
-
-update_ham() {
-    update_workstation
-    echo "Update-ham isn't implemented!"
-}
-
-validate_ham() {
-    echo "validate_ham"
-}
-
-config_home_ham() { # ARGS: <user-name>
-    config_home_workstation "$1"
-    echo "config_home_ham: $1"
-}
-
-umount_safe(){
-    if grep "$1" < /proc/mounts; then
-        umount "$1"
-        sleep 5
-    fi
-}
-
-run_user_script(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
-    local_user=$1
-    shift
-    script=$1
-    shift
-    if [ "$local_user" = "$USER" ];then
-        "./user-scripts/$script" "$@"
-    else
-        sudo su "$local_user" -c "./user-scripts/$script" "$@"
-    fi
-}
-
-install_vscode(){
-    if is_mac; then
-        brew update
-        brew tap homebrew/cask
-        brew cask install visual-studio-code
-    elif is_pi; then
-        wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
-        install_pkgs ./vscode.deb
-        rm vscode.deb
-    else
-        echo "Unknown OS '$(uname)' for install_vscode !!!"
-        exit 1
-    fi
-}
-
-install_slime(){
-    pushd "$BRRB_HOME"
-    if [ -d slime ]; then
-        cd slime
-        sudo git pull
-    else
-        sudo git clone "https://github.com/slime/slime.git"
-    fi 
-    popd
-}
-
-

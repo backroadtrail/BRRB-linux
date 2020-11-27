@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# post-bootstrap.sh
+# validate-release.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -25,14 +25,12 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
-assert_is_pi "$0"
-
-# REMOVE REPOS
-sudo rm -rf "$HOME/BRRB-linux"
-sudo rm -rf "$HOME/LCD-show"
+# VALIDATE FOR COMMIT FIRST
+../validate-commit.sh
 

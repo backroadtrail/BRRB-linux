@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# post-bootstrap.sh
+# config-brrb.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -30,9 +30,56 @@ source "config.sh"
 source "funct.sh"
 ##
 
-assert_is_pi "$0"
 
-# REMOVE REPOS
-sudo rm -rf "$HOME/BRRB-linux"
-sudo rm -rf "$HOME/LCD-show"
+usage(){
+    echo "Usage: $0 <topic> [arg1 [arg2] ... ]"
+    echo "Where: topic = (user | release | workstation | development | ham-radio | mesh-network)"
+    exit 1
+}
+
+if [  $# -ge 1 ]; then
+    topic="$1"
+else
+    echo "Invalid number of arguments !!!"
+    usage
+fi 
+
+case $topic in
+    user)
+        shift
+        ./user-scripts/configure "$@"    
+        ;;
+
+     release)
+        shift
+        ./release-scripts/configure "$@"    
+        ;;
+
+     workstation)
+        shift
+        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ;;
+
+     development)
+        shift
+        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ;;
+
+     ham-radio)
+        shift
+        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ;;
+
+     mesh-network)
+        shift
+        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ;;
+        
+    *)
+        echo "Invalid topic: $topic"
+        usage
+        ;;
+esac
+
+
 

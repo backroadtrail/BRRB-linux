@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# bootstrap.sh
+# config-brrb.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -25,53 +25,62 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
-assert_is_pi "$0"
-
-usage(){
-    echo "Usage: $0 <display>"
-    echo "Where: display = ( miuzei | lepow | hdmi )"
+usage{
+    echo "Usage: $0 ( install | validate )"
+    echo "Usage: $0 cfg-user <user-name>"
     exit 1
 }
 
-if [  $# -eq 1 ]; then
-    display="$1"
-else
+install() {
+    install_pkgs "${BRRB_BASE_PKGS[@]}"
+    validate
+    create_metadata_file
+    set_metadatum .base.version "$BRRB_VERSION"
+}
+
+validate(){}
+    src="$HERE/../../../src"
+    ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
+    ( cd "$src/hello-lisp";  ./build.sh; ./test.lisp; ./clean.sh ) 
+}
+
+cfg_user() { # ARGS: <user-name>
+    assert_bundle_is_current "base"
+    run_as "$1" configure-user-quicklisp.sh 
+}
+
+if [  $# -lt 1 ]; then
+    echo "Invalid number of arguments !!!"
     usage
 fi 
 
-# HOSTNAME
-echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
-
-install_base
-set_metadatum .display "$display"  
-config_home_base "$USER"
-validate_base
-
-# DISPLAY
-case $display in
-
-    miuzei)
-        install_miuzei_and_reboot        
+case $1 in
+    install)
+        install
         ;;
 
-    lepow)
-        install_lepow
-        sudo reboot
+    validate)
+        validate
         ;;
 
-    hdmi)
-        sudo reboot
+    cfg-user)   
+        if [  $# -lt 2 ]; then
+            echo "Invalid number of arguments !!!"
+            usage
+        fi 
+        cfg_user $2
         ;;
 
     *)
-        echo "Unknown display: $display"
-        exit 1
+        echo "Invalid argument: $1"
+        usage
         ;;
 esac
-
 

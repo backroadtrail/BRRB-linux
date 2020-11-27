@@ -25,20 +25,18 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
+assert_is_pi "$0"
+
 
 usage(){
     echo "Usage: $0 <disk-device> <image-directory>"
     exit 1
 }
-
-if ! is_pi; then
-    echo "Create Disk Image only works for Raspberry Pi OS !!!"
-    exit 1
-fi
 
 if [  $# -ne 2 ]; then
     usage
