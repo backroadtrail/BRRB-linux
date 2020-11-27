@@ -44,8 +44,6 @@ export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATC
 # RASPBERRY PI
 export BRRB_HOME_PI="/opt/brrb"
 export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
-export BRRB_AUTO_MOUNT_DIR_PI="/media/$USER"
-export BRRB_BACKUP_DIRS_PI=("/media" "/home")
 
 export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
 export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh)
@@ -55,8 +53,6 @@ export BRRB_HAM_PKGS_PI=(chirp)
 # MACOS
 export BRRB_HOME_MAC="/opt/brrb"
 export BRRB_METADATA_MAC="$BRRB_HOME_MAC/metadata.json"
-export BRRB_AUTO_MOUNT_DIR_MAC="/Volumes"
-export BRRB_BACKUP_DIRS_MAC=("/Volumes" "/Users")
 
 export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl node)
 export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
@@ -75,8 +71,6 @@ is_pi(){
 if is_mac ;then
 	export BRRB_HOME="$BRRB_HOME_MAC"
 	export BRRB_METADATA="$BRRB_METADATA_MAC"
-	export BRRB_AUTO_MOUNT_DIR="$BRRB_AUTO_MOUNT_DIR_MAC"
-        export BRRB_BACKUP_DIRS=("${BRRB_BACKUP_DIRS_MAC[@]}")
 
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MAC[@]}")
@@ -85,8 +79,6 @@ if is_mac ;then
 elif is_pi ;then
 	export BRRB_HOME="$BRRB_HOME_PI"
 	export BRRB_METADATA="$BRRB_METADATA_PI"
-	export BRRB_AUTO_MOUNT_DIR="$BRRB_AUTO_MOUNT_DIR_PI"
-        export BRRB_BACKUP_DIRS=("${BRRB_BACKUP_DIRS_PI[@]}")
 
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_PI[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")

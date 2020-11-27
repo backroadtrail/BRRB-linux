@@ -31,14 +31,13 @@ source "funct.sh"
 ##
 
 usage(){
-    echo "Usage: $0 ( copy | archive ) <output-dir> [<src-dir>...]"
-    echo " Backup archives or copies the default directories in the config file to the output directory."
-    echo " The output directory is excluded from the backup."
-    echo " You can add additional source directories on the command line."
+    echo "Usage: $0 ( copy | archive ) <output-dir> <src> [<src>...]"
+    echo "Archive or copy the sources to the output directory."
+    echo "The sources must be absolute paths."
     exit 1
 }
 
-if [  $# -lt 2 ]; then
+if [  $# -lt 3 ]; then
     echo "Invalid number of arguments !!!"
     usage
 fi 
@@ -56,17 +55,10 @@ stamp="$(date '+%Y-%m-%d_%H-%M-%S.%N')"
 dest="$output/$(hostname)_$stamp"
 
 if [ "$opt" = 'archive' ]; then
-    tar "--exclude=$output" -czf "$dest.tgz" "${BRRB_BACKUP_DIRS[@]}" "$@"
+    tar -czf "$dest.tgz" "$@"
 elif [ "$opt" = 'copy' ]; then
-    rsync -a --exclude "$output" "$@" "${BRRB_BACKUP_DIRS[@]}" "$dest.d"
+    rsync -a "$@" "$dest.d"
 else
     echo "Invalid option: $opt" 
     exit 1
 fi
-
-
-
-
-
-
-
