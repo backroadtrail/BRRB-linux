@@ -27,7 +27,7 @@ export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
 #### OS ABSTRACTION FUNCTIONS ####
 
-if is_mac ;then
+if is_macos ;then
     install_pkgs(){
         brew update
         brew install -f "$@"

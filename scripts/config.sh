@@ -85,7 +85,7 @@ assert_is_pi(){
 }
 
 #### OS ABSTRACTED CONSTANTS
-if is_mac ;then
+if is_macos ;then
 	export BRRB_HOME="$BRRB_HOME_MAC"
 	export BRRB_METADATA="$BRRB_METADATA_MAC"
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")

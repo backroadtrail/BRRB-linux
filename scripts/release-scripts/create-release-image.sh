@@ -30,8 +30,8 @@ source "config.sh"
 source "funct.sh"
 cd "$HERE"
 ##
-assert_is_pi "$0"
 
+assert_is_pi "$0"
 
 usage(){
     echo "Usage: $0 <disk-device> <image-directory>"

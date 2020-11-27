@@ -31,20 +31,20 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-usage{
+usage(){
     echo "Usage: $0 ( install | validate )"
     echo "Usage: $0 cfg-user <user-name>"
     exit 1
 }
 
-install() {
+do_install(){
     install_pkgs "${BRRB_BASE_PKGS[@]}"
     validate
     create_metadata_file
     set_metadatum .base.version "$BRRB_VERSION"
 }
 
-validate(){}
+validate(){
     src="$HERE/../../../src"
     ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
     ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
@@ -63,7 +63,7 @@ fi
 
 case $1 in
     install)
-        install
+        do_install
         ;;
 
     validate)
@@ -75,7 +75,7 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user $2
+        cfg_user "$2"
         ;;
 
     *)

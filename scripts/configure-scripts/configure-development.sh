@@ -31,13 +31,13 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-usage{
+usage(){
     echo "Usage: $0 install"
     echo "Usage: $0 cfg-user <user-name>"
     exit 1
 }
 
-install() {
+do_install(){
     assert_bundle_is_current "workstation"
     install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     install_vscode
@@ -45,7 +45,7 @@ install() {
     set_metadatum .development.version "$BRRB_VERSION"
 }
 
-cfg_user() { # ARGS: <user-name>
+cfg_user(){ # ARGS: <user-name>
     run_as "$1" configure-user-emacs.sh 
 }
 
@@ -82,7 +82,7 @@ fi
 
 case $1 in
     install)
-        install
+        do_install
         ;;
 
     cfg-user)   
@@ -90,7 +90,7 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user $2
+        cfg_user "$2"
         ;;
 
     *)

@@ -36,7 +36,7 @@ usage(){
     exit 1
 }
 
-install(){
+do_install(){
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
     set_metadatum .mesh-network.version "$BRRB_VERSION"
@@ -51,7 +51,7 @@ fi
 
 case $1 in
     install)
-        install
+        do_install
         ;;
 
     *)

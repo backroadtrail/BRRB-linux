@@ -31,12 +31,12 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-usage{
+usage(){
     echo "Usage: $0 install"
     exit 1
 }
 
-install() {
+do_install() {
     install_pkgs "${BRRB_HAM_RADIO_PKGS[@]}"
     set_metadatum .ham-radio.version "$BRRB_VERSION"
 }
@@ -48,7 +48,7 @@ fi
 
 case $1 in
     install)
-        install
+        do_install
         ;;
 
     *)

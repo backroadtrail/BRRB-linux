@@ -31,11 +31,10 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-usage{
+usage(){
     echo "Usage: $0 install"
     echo "Usage: $0 cfg-user <user-name>"
     echo "Usage: $0 add-ssh-host <user-name> <server> [-send-key] [<remote-user> [<id-file>]]"
-
     exit 1
 }
 
@@ -44,7 +43,7 @@ if [  $# -lt 1 ]; then
     usage
 fi 
 
-install() {
+do_install() {
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     set_metadatum .workstation.version "$BRRB_VERSION"
@@ -64,7 +63,7 @@ add-ssh-host() { # ARGS: <user-name> <server> [-send-key] [<remote-user> [<id-fi
 
 case $1 in
     install)
-        install
+        do_install
         ;;
 
     cfg-user)   
@@ -72,7 +71,7 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user $2
+        cfg_user "$2"
         ;;
     
     add-ssh-host)   
@@ -80,7 +79,7 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user $2
+        cfg_user "$2"
         ;;
 
     *)
