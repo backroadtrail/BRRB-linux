@@ -38,13 +38,16 @@ usage(){
 }
 
 do_install(){
-    install_pkgs "jq"
-    assert_update_instead "base"
-    install_pkgs "${BRRB_BASE_PKGS[@]}"
+    if [ -f "$BRRB_METADATA" ];then
+        echo "The Base bundle is already installed, update instead!"
+        exit 1
+    else
+        install_pkgs "${BRRB_BASE_PKGS[@]}"
+        create_metadata_file
+        set_metadatum .base.version "$BRRB_VERSION"
+    fi
     cfg_user "$USER"
     validate
-    create_metadata_file
-    set_metadatum .base.version "$BRRB_VERSION"
 }
 
 validate(){
