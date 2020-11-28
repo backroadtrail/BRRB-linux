@@ -44,6 +44,7 @@ if [  $# -lt 1 ]; then
 fi 
 
 do_install() {
+    assert_update_instead "mesh_network"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     set_metadatum .workstation.version "$BRRB_VERSION"

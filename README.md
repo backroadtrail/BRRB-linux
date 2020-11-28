@@ -21,27 +21,36 @@ To bootstrap a Raspberry Pi 4 with with a generic HDMI monitor:
   * ./BRRB-linux/scripts/bootstrap.sh hdmi
   * ./BRRB-linux/scripts/post-bootstrap.sh
 
-## Install optional components on Raspberry Pi OS and MacOS
+## Install the required Base bundle on Raspberry Pi OS and MacOS
 
-To install the optional Workstation components
+To install the required Base components on a system that wasn't boot-strapped.
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
   * ./BRRB-linux/scripts/config-brrb.sh workstation install
   * ./BRRB-linux/scripts/config-brrb.sh workstation cfg-user <user-name>
 
-To install the optional software Development components
+
+## Install optional bundles on Raspberry Pi OS and MacOS
+
+To install the optional Workstation bundle.
+  * cd $HOME
+  * git clone https://github.com/backroadtrail/BRRB-linux.git
+  * ./BRRB-linux/scripts/config-brrb.sh workstation install
+  * ./BRRB-linux/scripts/config-brrb.sh workstation cfg-user <user-name>
+
+To install the optional software Development bundle.
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
   * ./BRRB-linux/scripts/config-brrb.sh development install
   * ./BRRB-linux/scripts/config-brrb.sh development cfg-user <user-name>
 
-To install the optional Ham Radio components
+To install the optional Ham Radio bundle.
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
   * ./BRRB-linux/scripts/config-brrb.sh ham-radio install
   * ./BRRB-linux/scripts/config-brrb.sh ham-radio cfg-user <user-name>
 
-To install the optional Mesh Network components
+To install the optional Mesh Network bundle.
   * cd $HOME
   * git clone https://github.com/backroadtrail/BRRB-linux.git
   * ./BRRB-linux/scripts/config-brrb.sh mesh-network install

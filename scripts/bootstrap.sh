@@ -49,8 +49,6 @@ echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 
 ./configure.sh base install
 set_metadatum .display "$display"  
-./configure.sh base cfg-user "$USER"
-validate_base
 
 # DISPLAY
 case $display in

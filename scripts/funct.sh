@@ -124,6 +124,13 @@ assert_bundle_is_installed(){
     fi
 }
 
+assert_update_instead(){
+    if is_bundle_installed "$1"; then
+        echo "!!! The bundle is already installed, update instead: $1"
+        exit 1
+    fi
+}
+
 is_bundle_current(){ # ARGS: <bundle-name>
     [ "$(get_metadatum ".$1.version")" = "$BRRB_VERSION" ]
 }

@@ -37,6 +37,8 @@ usage(){
 }
 
 do_install() {
+    assert_update_instead "ham_radio"
+    assert_bundle_is_current "workstation"
     install_pkgs "${BRRB_HAM_RADIO_PKGS[@]}"
     set_metadatum .ham_radio.version "$BRRB_VERSION"
 }
