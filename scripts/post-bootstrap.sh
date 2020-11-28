@@ -30,7 +30,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-assert_is_pi "$0"
+assert_is_raspi "$0"
 
 # REMOVE REPOS
 sudo rm -rf "$HOME/BRRB-linux"

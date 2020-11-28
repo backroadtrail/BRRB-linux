@@ -30,7 +30,7 @@ source "config.sh"
 source "funct.sh"
 ##
 
-assert_is_pi "$0"
+assert_is_raspi "$0"
 
 usage(){
     echo "Usage: $0 <display>"
