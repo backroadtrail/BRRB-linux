@@ -52,7 +52,7 @@ export BRRB_METADATA_MAC="$BRRB_HOME_MAC/metadata.json"
 export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl node)
 export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck emacs f3)
-export BRRB_HAM_PKGS_MAC=(chirp)
+export BRRB_HAM_RADIO_PKGS_MAC=(chirp)
 
 is_macos(){
     [ "$(uname)" = 'Darwin' ]
@@ -64,22 +64,22 @@ assert_is_macos(){
 	fi
 }
 
-
-#### PI ####
+#### RASPI ####
 export BRRB_HOME_PI="/opt/brrb"
 export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
 
 export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
 export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh)
 export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
-export BRRB_HAM_PKGS_PI=(chirp)
+export BRRB_HAM_RADIO_PKGS_PI=(chirp)
+export BRRB_MESH_NETWORK_PKGS_PI=(bison flex gpsdlib-dev sysv-rc-conf)
 
-is_pi(){
+is_raspi(){
     [ "$(uname)" = 'Linux' ]
 }
 
-assert_is_pi(){
-	if ! is_pi ;then
+assert_is_raspi(){
+	if ! is_raspi ;then
 		echo "!!! This can only be executed on Raspberry Pi OS !!!"
 	fi
 }
@@ -91,14 +91,15 @@ if is_macos ;then
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MAC[@]}")
 	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MAC[@]}")
-	export BRRB_HAM_PKGS=("${BRRB_HAM_PKGS_MAC[@]}")
-elif is_pi ;then
+	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_PKGS_MAC[@]}")
+elif is_raspi ;then
 	export BRRB_HOME="$BRRB_HOME_PI"
 	export BRRB_METADATA="$BRRB_METADATA_PI"
 	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_PI[@]}")
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")
 	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_PI[@]}")
-	export BRRB_HAM_PKGS=("${BRRB_HAM_PKGS_PI[@]}")
+	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_KGS_PI[@]}")
+	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_KGS_PI[@]}")
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
