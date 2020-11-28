@@ -31,6 +31,8 @@ source "funct.sh"
 cd "$HERE"
 ##
 
+assert_is_raspi "$0"
+
 usage(){
     echo "Usage: $0 install"
     exit 1
@@ -39,10 +41,31 @@ usage(){
 do_install(){
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
-    set_metadatum .mesh-network.version "$BRRB_VERSION"
+    install-olsrd
+    project_root="$(absolute_path "$HERE/../../")"
+    sudo cp -f "$project_root/files/raspi/etc/olsrd/olsrd.conf" /etc/olsrd/
+    sudo cp -f "$project_root/files/raspi/etc/init.d/olsrd" /etc/init.d/
+    sudo chmod 755 /etc/init.d/olsrd
+    sudo sysv-rc-conf --level 2345 olsrd on
+    set_metadatum .mesh_network.version "$BRRB_VERSION"
 }
 
-assert_is_pi;
+install-olsrd(){
+    pushd /var/tmp > /dev/null
+    rm -rf olsrd
+    git clone --branch master "https://github.com/backroadtrail/olsrd.git"
+    (
+        cd olsrd
+        make
+        sudo make install
+        make libs
+        sudo make libs_install
+        sudo mv /usr/local/sbin/olsrd /usr/sbin/
+        sudo mv /usr/local/lib/olsrd_* /usr/lib/
+    )
+    rm -rf olsrd
+    popd > /dev/null
+}
 
 if [  $# -lt 1 ]; then
     echo "Invalid number of arguments !!!"

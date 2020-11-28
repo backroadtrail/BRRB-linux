@@ -32,7 +32,7 @@ if is_macos ;then
         brew update
         brew install -f "$@"
     }
-elif is_pi ;then
+elif is_raspi ;then
     install_pkgs(){
         sudo apt-get update
         sudo apt-get full-upgrade -y
@@ -114,7 +114,7 @@ get_metadatum(){ # ARGS: <json-path>
 }
 
 is_bundle_installed(){ # ARGS: <bundle-name>
-    [ "$(get_metadatum ".$1")" = 'null' ]
+    [ ! "$(get_metadatum ".$1")" = 'null' ]
 }
 
 assert_bundle_is_installed(){
