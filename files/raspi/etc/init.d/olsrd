@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+  start)
+        pidof olsrd > /dev/null && exit 0
+        echo "Starting OLSRD"
+        start-stop-daemon --start --quiet --pidfile /var/run/olsrd.pid --exec /usr/sbin/olsrd -- -d 0 -f /etc/olsrd/olsrd.conf &
+        while ! pidof olsrd > /dev/null ; do
+          sleep 1
+        done
+        echo $(pidof olsrd) > /var/run/olsrd.pid
+        ;;
+  stop)
+        pidof olsrd  > /dev/null || exit 0
+        echo "Stopping OSLRD"
+        start-stop-daemon --stop --quiet --pidfile /var/run/olsrd.pid --exec /usr/sbin/olsrd 
+        while pidof olsrd > /dev/null ; do
+          sleep 1
+        done
+        rm -f /var/run/olsrd.pid
+        ;;
+  restart)
+        echo "Restarting OSLRD"
+        $0 stop
+        $0 start
+        ;;
+  *)
+        echo "Usage: /etc/init.d/oslrd (start | stop | restart)" >&2
+        exit 1
+        ;;
+esac
