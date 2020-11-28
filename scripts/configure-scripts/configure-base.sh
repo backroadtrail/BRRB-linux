@@ -38,8 +38,8 @@ usage(){
 }
 
 do_install(){
-    assert_update_instead "base"
     install_pkgs "${BRRB_BASE_PKGS[@]}"
+    assert_update_instead "base"
     cfg_user "$USER"
     validate
     create_metadata_file
