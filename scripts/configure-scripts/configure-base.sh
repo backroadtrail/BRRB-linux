@@ -38,8 +38,9 @@ usage(){
 }
 
 do_install(){
-    install_pkgs "${BRRB_BASE_PKGS[@]}"
+    install_pkgs "jq"
     assert_update_instead "base"
+    install_pkgs "${BRRB_BASE_PKGS[@]}"
     cfg_user "$USER"
     validate
     create_metadata_file
