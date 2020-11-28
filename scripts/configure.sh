@@ -33,7 +33,7 @@ source "funct.sh"
 
 usage(){
     echo "Usage: $0 <topic> [arg1 [arg2] ... ]"
-    echo "Where: topic = (user | release | workstation | development | ham-radio | mesh-network)"
+    echo "Where: topic = (base | workstation | development | ham-radio | mesh-network)"
     exit 1
 }
 
@@ -45,34 +45,29 @@ else
 fi 
 
 case $topic in
-    user)
+     base)
         shift
-        ./user-scripts/configure "$@"    
-        ;;
-
-     release)
-        shift
-        ./release-scripts/configure "$@"    
+        ./configure-scripts/configure-base.sh "$@"    
         ;;
 
      workstation)
         shift
-        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ./configure-scripts/configure-workstation.sh "$@"    
         ;;
 
      development)
         shift
-        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ./configure-scripts/configure-development.sh "$@"    
         ;;
 
      ham-radio)
         shift
-        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ./configure-scripts/configure-ham-radio.sh "$@"    
         ;;
 
      mesh-network)
         shift
-        ./bundle-scripts/configure-mesh-network.sh "$@"    
+        ./configure-scripts/configure-mesh-network.sh "$@"    
         ;;
         
     *)

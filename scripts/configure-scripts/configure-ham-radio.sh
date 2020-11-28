@@ -38,7 +38,7 @@ usage(){
 
 do_install() {
     install_pkgs "${BRRB_HAM_RADIO_PKGS[@]}"
-    set_metadatum .ham-radio.version "$BRRB_VERSION"
+    set_metadatum .ham_radio.version "$BRRB_VERSION"
 }
 
 if [  $# -lt 1 ]; then
