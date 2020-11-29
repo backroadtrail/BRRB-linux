@@ -59,7 +59,7 @@ validate(){
 
 cfg_user() { # ARGS: <user-name>
     assert_bundle_is_current "base"
-    run_as "$1" configure-user-quicklisp.sh 
+    run_as "$1" "$HERE/configure-user-quicklisp.sh"  
 }
 
 if [  $# -lt 1 ]; then
