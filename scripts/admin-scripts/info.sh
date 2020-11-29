@@ -31,4 +31,6 @@ source "funct.sh"
 cd "$HERE"
 ##
 
+echo "Current Version = $BRRB_VERSION"
+
 jq . "$BRRB_METADATA"
