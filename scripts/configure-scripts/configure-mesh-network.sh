@@ -34,7 +34,7 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: $0 install"
+    echo "Usage: $0 ( install | configure | enable | disable )"
     exit 1
 }
 
@@ -47,8 +47,24 @@ do_install(){
     sudo cp -f "$project_root/files/raspi/etc/olsrd/olsrd.conf" /etc/olsrd/
     sudo cp -f "$project_root/files/raspi/etc/init.d/olsrd" /etc/init.d/
     sudo chmod 755 /etc/init.d/olsrd
-    sudo sysv-rc-conf --level 2345 olsrd on
     set_metadatum .mesh_network.version "$BRRB_VERSION"
+}
+
+do_enable(){
+    assert_bundle_is_current "mesh_network"
+    sudo sysv-rc-conf --level 2345 olsrd on
+    sudo /etc/init.d/olsrd start
+}
+
+do_disable(){
+    assert_bundle_is_current "mesh_network"
+    sudo sysv-rc-conf --level 2345 olsrd off
+    sudo /etc/init.d/olsrd stop
+}
+
+do_configure(){
+    assert_bundle_is_current "mesh_network"
+    echo TBD
 }
 
 install-olsrd(){
@@ -65,7 +81,6 @@ install-olsrd(){
         sudo mv /usr/local/lib/olsrd_* /usr/lib/
     )
     rm -rf olsrd
-    sudo /etc/init.d/olsrd start
     popd > /dev/null
 }
 
@@ -77,6 +92,18 @@ fi
 case $1 in
     install)
         do_install
+        ;;
+
+    configure)
+        do_configure
+        ;;
+
+    enable)
+        do_enable
+        ;;
+
+    disable)
+        do_disable
         ;;
 
     *)
