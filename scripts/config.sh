@@ -37,10 +37,6 @@ export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicle
 
 export BRRB_VERSION="V$BRRB_VERSION_MAJOR.$BRRB_VERSION_MINOR.$BRRB_VERSION_PATCH"
 
-# RASPBERRY PI
-
-# MACOS
-
 #########################################
 #########################################
 #########################################
