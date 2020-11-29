@@ -4,7 +4,7 @@ set -e
 case "$1" in
   start)
         if pidof olsrd; then
-            echo "OSLRD is already running!"
+            echo "OLSRD is already running!"
             exit 0
         fi
         rm -f /var/run/olsrd.pid
@@ -17,23 +17,23 @@ case "$1" in
         ;;
   stop)
         if ! pidof olsrd; then
-            echo "OSLRD is not running!"
+            echo "OLSRD is not running!"
             rm -f /var/run/olsrd.pid
             exit 0
         fi
         pidof olsrd  > /dev/null || exit 0
-        echo "Stopping OSLRD"
+        echo "Stopping OLSRD"
         start-stop-daemon --stop --quiet --pidfile /var/run/olsrd.pid --exec /usr/sbin/olsrd
         sleep 1
         rm -f /var/run/olsrd.pid
         ;;
   restart)
-        echo "Restarting OSLRD"
+        echo "Restarting OLSRD"
         $0 stop
         $0 start
         ;;
   *)
-        echo "Usage: /etc/init.d/oslrd (start | stop | restart)" >&2
+        echo "Usage: /etc/init.d/olsrd (start | stop | restart)" >&2
         exit 1
         ;;
 esac
