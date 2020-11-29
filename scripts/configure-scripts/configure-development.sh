@@ -47,6 +47,7 @@ do_install(){
 }
 
 cfg_user(){ # ARGS: <user-name>
+    assert_bundle_is_current "development"
     run_as "$1" "$HERE/configure-user-emacs.sh"
 }
 
