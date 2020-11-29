@@ -47,7 +47,7 @@ do_install(){
 }
 
 cfg_user(){ # ARGS: <user-name>
-    run_as "$1" configure-user-emacs.sh 
+    run_as "$1" "$HERE/configure-user-emacs.sh"s 
 }
 
 install_vscode(){
