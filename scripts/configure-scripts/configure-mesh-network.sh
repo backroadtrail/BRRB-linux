@@ -65,6 +65,7 @@ install-olsrd(){
         sudo mv /usr/local/lib/olsrd_* /usr/lib/
     )
     rm -rf olsrd
+    sudo /etc/init.d/olsrd start
     popd > /dev/null
 }
 
