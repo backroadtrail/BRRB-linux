@@ -52,7 +52,7 @@ do_install() {
 
 cfg_user() { # ARGS: <user-name>
     assert_bundle_is_current "workstation"
-    run_as "$1" "$HERE/configure-user-init_ssh_dir.sh" 
+    run_as "$1" "$HERE/configure-user-init-ssh-dir.sh" 
 }
 
 add-ssh-host() { # ARGS: <user-name> <server> [-send-key] [<remote-user> [<id-file>]]
