@@ -99,7 +99,7 @@ elif is_raspi ;then
 	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")
 	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_PI[@]}")
 	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_KGS_PI[@]}")
-	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_KGS_PI[@]}")
+	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_PKGS_PI[@]}")
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
