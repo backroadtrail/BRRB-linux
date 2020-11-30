@@ -9,7 +9,7 @@ Backroad Raspberry is a meshed smart node for off-grid vehicles.
   * `git clone https://github.com/backroadtrail/BRRB-linux.git`
   * `./BRRB-linux/scripts/release-scripts/build-vehicle-node.sh`
 
-  ### After reboot:
+  ### Then after reboot:
   * `./BRRB-linux/scripts/release-scripts/build-vehicle-node.sh`
 
 
@@ -18,5 +18,5 @@ Backroad Raspberry is a meshed smart node for off-grid vehicles.
   * `git clone https://github.com/backroadtrail/BRRB-linux.git`
   * `./BRRB-linux/scripts/release-scripts/build-development-workstation.sh`
 
-  ### After reboot:
+  ### Then after reboot:
   * `./BRRB-linux/scripts/release-scripts/build-development-workstation.sh`
