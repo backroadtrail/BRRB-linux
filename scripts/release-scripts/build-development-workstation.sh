@@ -31,7 +31,7 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-if [ -f "BRRB_METADATA" ]; then
+if [ -f "$BRRB_METADATA" ]; then
 	../configure.sh workstation install
 	../configure.sh workstation cfg-user "$USER"
 	../configure.sh development install

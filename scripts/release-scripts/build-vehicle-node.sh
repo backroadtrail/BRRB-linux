@@ -31,7 +31,7 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-if [ -f "BRRB_METADATA" ]; then
+if [ -f "$BRRB_METADATA" ]; then
 	../configure.sh mesh-network install
 	set_metadatum .build_type "vehicle-node"
 	cd "$HOME"
