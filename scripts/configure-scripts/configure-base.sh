@@ -58,7 +58,8 @@ validate(){
 
 cfg_user() { # ARGS: <user-name>
     assert_bundle_is_current "base"
-    run_as "$1" "$HERE/configure-user-quicklisp.sh"  
+    run_as "$1" "$HERE/configure-user-quicklisp.sh"
+    val_user  "$1"
 }
 
 val_user(){ # ARGS: <user-name>
@@ -94,7 +95,7 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user "$2"
+        val_user "$2"
         ;;
 
     *)
