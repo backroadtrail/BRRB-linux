@@ -1,7 +1,7 @@
 # Backroad Raspberry - Linux System
 Backroad Raspberry is a meshed smart node for off-grid vehicles.
 
-First install a fresh image of Raspberry Pi OS
+## First install a fresh image of Raspberry Pi OS
 
 ## Bootstrap new Vehicle Node
   * `cd $HOME`
