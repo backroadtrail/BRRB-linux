@@ -32,8 +32,8 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: $0 install"
-    echo "Usage: $0 cfg-user <user-name>"
+    echo "Usage: configure.sh development install"
+    echo "Usage: configure.sh development cfg-user <user-name>"
     exit 1
 }
 

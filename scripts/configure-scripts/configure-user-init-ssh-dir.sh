@@ -51,7 +51,11 @@ fi
 if [ -f .ssh/id_rsa ] || [ -f .ssh/id_rsa.pub ]; then
     echo "One or both keys exists, skipping key generation !!!"
 else
-    ssh-keygen -b 2048 -t rsa -f ".ssh/id_rsa" -q -N ""
+    if [ $# -ge 1 ]; then
+        ssh-keygen -b 2048 -t rsa -f ".ssh/id_rsa" -q -N "$1"
+    else
+        ssh-keygen -b 2048 -t rsa -f ".ssh/id_rsa" -q
+    fi
 fi
 
 # CONFIG

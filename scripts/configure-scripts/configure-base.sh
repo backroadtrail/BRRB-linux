@@ -32,8 +32,8 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: $0 ( install | validate )"
-    echo "Usage: $0 cfg-user <user-name>"
+    echo "Usage: configure.sh base ( install | validate )"
+    echo "Usage: configure.sh base cfg-user <user-name>"
     exit 1
 }
 

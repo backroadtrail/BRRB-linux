@@ -34,7 +34,7 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: $0 ( install | configure | enable | disable )"
+    echo "Usage: configure.sh mesh-network (install | configure | enable | disable)"
     exit 1
 }
 

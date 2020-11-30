@@ -32,7 +32,7 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: $0 install"
+    echo "Usage: configure.sh ham-radio install"
     exit 1
 }
 

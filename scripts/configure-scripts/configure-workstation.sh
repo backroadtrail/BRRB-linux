@@ -32,9 +32,9 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: $0 install"
-    echo "Usage: $0 cfg-user <user-name>"
-    echo "Usage: $0 add-ssh-host <user-name> <server> [-send-key] [<remote-user> [<id-file>]]"
+    echo "Usage: configure.sh workstation install"
+    echo "Usage: configure.sh workstation cfg-user <user-name> [<ssh-passphrase>]"
+    echo "Usage: configure.sh workstation add-ssh-host <user-name> <server> [-send-key] [<remote-user> [<id-file>]]"
     exit 1
 }
 
@@ -59,7 +59,7 @@ add-ssh-host() { # ARGS: <user-name> <server> [-send-key] [<remote-user> [<id-fi
     assert_bundle_is_current "workstation"
     user="$1"
     shift
-    run_as "$user" configure-user-add-ssh-host.sh "$@" 
+    run_as "$user" "$HERE/configure-user-add-ssh-host.sh" "$@" 
 }
 
 case $1 in
@@ -72,7 +72,8 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user "$2"
+        shift
+        cfg_user "$@"
         ;;
     
     add-ssh-host)   
@@ -80,7 +81,8 @@ case $1 in
             echo "Invalid number of arguments !!!"
             usage
         fi 
-        cfg_user "$2"
+        shift
+        add-ssh-host "$@"
         ;;
 
     *)
