@@ -26,8 +26,8 @@ To bootstrap a Raspberry Pi 4 with with a generic HDMI monitor:
 To install the required Base components on a system that wasn't boot-strapped.
   * `cd $HOME`
   * `git clone https://github.com/backroadtrail/BRRB-linux.git`
-  * `./BRRB-linux/scripts/config-brrb.sh workstation install`
-  * `./BRRB-linux/scripts/config-brrb.sh workstation cfg-user <user-name>`
+  * `./BRRB-linux/scripts/config-brrb.sh base install`
+  * `./BRRB-linux/scripts/config-brrb.sh base cfg-user <user-name>`
 
 
 ## Install optional bundles on Raspberry Pi OS and MacOS
