@@ -33,7 +33,7 @@ cd "$HERE"
 
 usage(){
     echo "Usage: configure.sh base ( install | validate )"
-    echo "Usage: configure.sh base cfg-user <user-name>"
+    echo "Usage: configure.sh base (cfg-user | val_user) vi<user-name>"
     exit 1
 }
 
@@ -46,7 +46,6 @@ do_install(){
         create_metadata_file
         set_metadatum .base.version "$BRRB_VERSION"
     fi
-    cfg_user "$USER"
     validate
 }
 
@@ -61,6 +60,12 @@ cfg_user() { # ARGS: <user-name>
     assert_bundle_is_current "base"
     run_as "$1" "$HERE/configure-user-quicklisp.sh"  
 }
+
+val_user(){ # ARGS: <user-name>
+    src="$HERE/../../src"
+    ( cd "$src/hello-lisp";  ./build.sh; ./test.lisp; ./clean.sh ) 
+}
+
 
 if [  $# -lt 1 ]; then
     echo "Invalid number of arguments !!!"
@@ -77,6 +82,14 @@ case $1 in
         ;;
 
     cfg-user)   
+        if [  $# -lt 2 ]; then
+            echo "Invalid number of arguments !!!"
+            usage
+        fi 
+        cfg_user "$2"
+        ;;
+    
+    val-user)   
         if [  $# -lt 2 ]; then
             echo "Invalid number of arguments !!!"
             usage
