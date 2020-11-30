@@ -53,7 +53,6 @@ validate(){
     src="$HERE/../../src"
     ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
     ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
-    ( cd "$src/hello-lisp";  ./build.sh; ./test.lisp; ./clean.sh ) 
 }
 
 cfg_user() { # ARGS: <user-name>
