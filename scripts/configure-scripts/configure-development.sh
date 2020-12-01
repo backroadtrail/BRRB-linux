@@ -52,11 +52,11 @@ cfg_user(){ # ARGS: <user-name>
 }
 
 install_vscode(){
-    if is_mac; then
+    if is_macos; then
         brew update
         brew tap homebrew/cask
         brew cask install visual-studio-code
-    elif is_pi; then
+    elif is_raspi; then
         wget -O vscode.deb "https://aka.ms/linux-armhf-deb"
         install_pkgs ./vscode.deb
         rm vscode.deb
