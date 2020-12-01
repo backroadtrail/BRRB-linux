@@ -30,7 +30,7 @@ export BRRB_NAME="Backroad Raspberry"
 export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
 
 get_version(){
-	if gitdesc="$(git describe 2>&1 /dev/null)"; then
+	if gitdesc="$(git describe 2> /dev/null)"; then
 		if [[ "$gitdesc" != *-* ]]; then
 			echo "$gitdesc"
 		else
