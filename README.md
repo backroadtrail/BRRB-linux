@@ -18,3 +18,4 @@ Backroad Raspberry is a meshed smart node for off-grid vehicles.
   * `./BRRB-linux/scripts/release-scripts/build-development-workstation.sh`
   * ***Then after reboot:***
   * `./BRRB-linux/scripts/release-scripts/build-development-workstation.sh`
+  * ***Then answer SSH passphrase question.***
