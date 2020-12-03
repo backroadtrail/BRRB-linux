@@ -32,7 +32,7 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: configure.sh base ( install | validate )"
+    echo "Usage: configure.sh base ( install | update | validate )"
     echo "Usage: configure.sh base (cfg-user | val_user) vi<user-name>"
     exit 1
 }
@@ -46,6 +46,13 @@ do_install(){
         create_metadata_file
         set_metadatum .base.version "$BRRB_VERSION"
     fi
+    validate
+}
+
+do_update(){
+ 
+    install_pkgs "${BRRB_BASE_PKGS[@]}"
+    set_metadatum .base.version "$BRRB_VERSION"
     validate
 }
 
@@ -75,6 +82,10 @@ fi
 case $1 in
     install)
         do_install
+        ;;
+
+    update)
+        do_update
         ;;
 
     validate)
