@@ -60,6 +60,7 @@ is_macos(){
 assert_is_macos(){
 	if ! is_macos ;then
 		echo "!!! This can only be executed on MacOS !!!"
+OS		exit 1
 	fi
 }
 
@@ -80,6 +81,7 @@ is_raspi(){
 assert_is_raspi(){
 	if ! is_raspi ;then
 		echo "!!! This can only be executed on Raspberry Pi OS !!!"
+		exit 1
 	fi
 }
 
