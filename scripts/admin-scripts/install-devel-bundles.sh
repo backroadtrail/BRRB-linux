@@ -31,9 +31,28 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-is_bundle_installed "base" || ../configure.sh base install
+# BASE
+if [ ! -f "$BRRB_METADATA" ]; then
+    ../configure.sh base install
+elif ! is_bundle_installed "base"; then
+    ../configure.sh base install
+elif ! is_bundle_current "base"; then
+    ../configure.sh base upgrade
+fi
 ../configure.sh base cfg-user "$USER"
-is_bundle_installed "workstation" ||../configure.sh workstation install
+
+# WORKSTATION
+if ! is_bundle_installed "development"; then
+    ../configure.sh development install
+elif ! is_bundle_current "development"; then
+    ../configure.sh development upgrade
+fi
 ../configure.sh workstation cfg-user "$USER"
-is_bundle_installed "development" ||../configure.sh development install
+
+#DEVELOPMENT
+if ! is_bundle_installed "development"; then
+    ../configure.sh development install
+elif ! is_bundle_current "development"; then
+    ../configure.sh development upgrade
+fi
 ../configure.sh development cfg-user "$USER"
