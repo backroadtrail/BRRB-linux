@@ -44,69 +44,36 @@ get_version(){
 export BRRB_VERSION
 BRRB_VERSION="$(get_version)"
 
-#### MACOS ####
-export BRRB_HOME_MACOS="/opt/brrb"
-export BRRB_METADATA_MACOS="$BRRB_HOME_MACOS/metadata.json"
-export BRRB_TEMP_DIR_MACOS="/tmp"
-export BRRB_OLSRD_CONFIG_MACOS="/etc/oslrd/olsrd.conf"
-
-export BRRB_BASE_PKGS_MACOS=(jq dcfldd rlwrap zip cmake sbcl node)
-export BRRB_WORKSTATION_PKGS_MACOS=(tmux mosh)
-export BRRB_DEVELOPMENT_PKGS_MACOS=(shellcheck emacs f3)
-export BRRB_HAM_RADIO_PKGS_MACOS=(chirp)
-
 is_macos(){
     [ "$(uname)" = 'Darwin' ]
 }
-
-assert_is_macos(){
-	if ! is_macos ;then
-		echo "!!! This can only be executed on MacOS !!!"
-OS		exit 1
-	fi
-}
-
-#### RASPI ####
-export BRRB_HOME_RASPI="/opt/brrb"
-export BRRB_METADATA_RASPI="$BRRB_HOME_RASPI/metadata.json"
-export BRRB_TEMP_DIR_RASPI="/var/tmp"
-export BRRB_OLSRD_CONFIG_RASPI="/etc/oslrd/olsrd.conf"
-
-export BRRB_BASE_PKGS_RASPI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
-export BRRB_WORKSTATION_PKGS_RASPI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
-export BRRB_DEVELOPMENT_PKGS_RASPI=(shellcheck rpi-imager emacs f3)
-export BRRB_HAM_RADIO_PKGS_RASPI=(chirp)
-export BRRB_MESH_NETWORK_PKGS_RASPI=(bison flex libgps-dev sysv-rc-conf)
 
 is_raspi(){
     [ "$(uname)" = 'Linux' ]
 }
 
-assert_is_raspi(){
-	if ! is_raspi ;then
-		echo "!!! This can only be executed on Raspberry Pi OS !!!"
-		exit 1
-	fi
-}
+#### COMMON CONSTANTS
+export BRRB_HOME="/opt/brrb"
+export BRRB_METADATA="$BRRB_HOME/metadata.json"
+export BRRB_TEMP_DIR="/var/tmp"
+export BRRB_OLSRD_CONFIG_DIR="/etc/oslrd"
+export BRRB_OLSRD_CONFIG_FILE="$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
+export BRRB_INIT_DIR="/etc/init.d"
+export BRRB_INIT_SCRIPT="$BRRB_INIT_DIR/olsrd"
 
 #### OS ABSTRACTED CONSTANTS
 if is_macos ;then
-	export BRRB_HOME="$BRRB_HOME_MACOS"
-	export BRRB_METADATA="$BRRB_METADATA_MACOS"
-	export BRRB_OLSRD_CONFIG="$BRRB_OLSRD_CONFIG_MACOS"
-	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MACOS[@]}")
-	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MACOS[@]}")
-	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MACOS[@]}")
-	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_PKGS_MACOS[@]}")
+	export BRRB_BASE_PKGS=(jq dcfldd rlwrap zip cmake sbcl node)
+	export BRRB_WORKSTATION_PKGS=(tmux mosh)
+	export BRRB_DEVELOPMENT_PKGS=(shellcheck emacs f3)
+	export BRRB_HAM_RADIO_PKGS=(chirp)
+
 elif is_raspi ;then
-	export BRRB_HOME="$BRRB_HOME_RASPI"
-	export BRRB_METADATA="$BRRB_METADATA_RASPI"
-	export BRRB_OLSRD_CONFIG="$BRRB_OLSRD_CONFIG_RASPI"
-	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_RASPI[@]}")
-	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_RASPI[@]}")
-	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_RASPI[@]}")
-	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_KGS_RASPI[@]}")
-	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_PKGS_RASPI[@]}")
+	export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
+	export BRRB_WORKSTATION_PKGS=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
+	export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs f3)
+	export BRRB_HAM_RADIO_PKGS=(chirp)
+	export BRRB_MESH_NETWORK_PKGS=(bison flex libgps-dev sysv-rc-conf)
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1

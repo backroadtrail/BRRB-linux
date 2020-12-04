@@ -52,6 +52,22 @@ else
     exit 1
 fi
 
+assert_is_raspi(){
+	if ! is_raspi ;then
+		echo "!!! This can only be executed on Raspberry Pi OS !!!"
+		exit 1
+	fi
+}
+
+assert_is_macos(){
+	if ! is_macos ;then
+		echo "!!! This can only be executed on MacOS !!!"
+OS		exit 1
+	fi
+}
+
+
+
 run_as(){ # ARGS: <user-name> <script> [arg1 [arg2] ...]
     local_user=$1
     shift
