@@ -31,9 +31,9 @@ source "funct.sh"
 cd "$HERE"
 ##
 
-../configure.sh base install
+is_bundle_installed "base" || ../configure.sh base install
 ../configure.sh base cfg-user "$USER"
-../configure.sh workstation install
+is_bundle_installed "workstation" ||../configure.sh workstation install
 ../configure.sh workstation cfg-user "$USER"
-../configure.sh development install
+is_bundle_installed "development" ||../configure.sh development install
 ../configure.sh development cfg-user "$USER"
