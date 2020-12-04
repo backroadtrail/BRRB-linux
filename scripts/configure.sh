@@ -47,27 +47,27 @@ fi
 case $topic in
      base)
         shift
-        ./configure-scripts/configure-base.sh "$@"    
+        ./configure.d/configure-base.sh "$@"    
         ;;
 
      workstation)
         shift
-        ./configure-scripts/configure-workstation.sh "$@"    
+        ./configure.d/configure-workstation.sh "$@"    
         ;;
 
      development)
         shift
-        ./configure-scripts/configure-development.sh "$@"    
+        ./configure.d/configure-development.sh "$@"    
         ;;
 
      ham-radio)
         shift
-        ./configure-scripts/configure-ham-radio.sh "$@"    
+        ./configure.d/configure-ham-radio.sh "$@"    
         ;;
 
      mesh-network)
         shift
-        ./configure-scripts/configure-mesh-network.sh "$@"    
+        ./configure.d/configure-mesh-network.sh "$@"    
         ;;
         
     *)

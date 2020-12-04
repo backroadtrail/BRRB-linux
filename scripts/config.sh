@@ -45,13 +45,15 @@ export BRRB_VERSION
 BRRB_VERSION="$(get_version)"
 
 #### MACOS ####
-export BRRB_HOME_MAC="/opt/brrb"
-export BRRB_METADATA_MAC="$BRRB_HOME_MAC/metadata.json"
+export BRRB_HOME_MACOS="/opt/brrb"
+export BRRB_METADATA_MACOS="$BRRB_HOME_MACOS/metadata.json"
+export BRRB_TEMP_DIR_MACOS="/tmp"
+export BRRB_OLSRD_CONFIG_MACOS="/etc/oslrd/olsrd.conf"
 
-export BRRB_BASE_PKGS_MAC=(jq dcfldd rlwrap zip cmake sbcl node)
-export BRRB_WORKSTATION_PKGS_MAC=(tmux mosh)
-export BRRB_DEVELOPMENT_PKGS_MAC=(shellcheck emacs f3)
-export BRRB_HAM_RADIO_PKGS_MAC=(chirp)
+export BRRB_BASE_PKGS_MACOS=(jq dcfldd rlwrap zip cmake sbcl node)
+export BRRB_WORKSTATION_PKGS_MACOS=(tmux mosh)
+export BRRB_DEVELOPMENT_PKGS_MACOS=(shellcheck emacs f3)
+export BRRB_HAM_RADIO_PKGS_MACOS=(chirp)
 
 is_macos(){
     [ "$(uname)" = 'Darwin' ]
@@ -65,14 +67,16 @@ OS		exit 1
 }
 
 #### RASPI ####
-export BRRB_HOME_PI="/opt/brrb"
-export BRRB_METADATA_PI="$BRRB_HOME_PI/metadata.json"
+export BRRB_HOME_RASPI="/opt/brrb"
+export BRRB_METADATA_RASPI="$BRRB_HOME_RASPI/metadata.json"
+export BRRB_TEMP_DIR_RASPI="/var/tmp"
+export BRRB_OLSRD_CONFIG_RASPI="/etc/oslrd/olsrd.conf"
 
-export BRRB_BASE_PKGS_PI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
-export BRRB_WORKSTATION_PKGS_PI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
-export BRRB_DEVELOPMENT_PKGS_PI=(shellcheck rpi-imager emacs f3)
-export BRRB_HAM_RADIO_PKGS_PI=(chirp)
-export BRRB_MESH_NETWORK_PKGS_PI=(bison flex libgps-dev sysv-rc-conf)
+export BRRB_BASE_PKGS_RASPI=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
+export BRRB_WORKSTATION_PKGS_RASPI=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
+export BRRB_DEVELOPMENT_PKGS_RASPI=(shellcheck rpi-imager emacs f3)
+export BRRB_HAM_RADIO_PKGS_RASPI=(chirp)
+export BRRB_MESH_NETWORK_PKGS_RASPI=(bison flex libgps-dev sysv-rc-conf)
 
 is_raspi(){
     [ "$(uname)" = 'Linux' ]
@@ -87,20 +91,22 @@ assert_is_raspi(){
 
 #### OS ABSTRACTED CONSTANTS
 if is_macos ;then
-	export BRRB_HOME="$BRRB_HOME_MAC"
-	export BRRB_METADATA="$BRRB_METADATA_MAC"
-	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MAC[@]}")
-	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MAC[@]}")
-	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MAC[@]}")
-	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_PKGS_MAC[@]}")
+	export BRRB_HOME="$BRRB_HOME_MACOS"
+	export BRRB_METADATA="$BRRB_METADATA_MACOS"
+	export BRRB_OLSRD_CONFIG="$BRRB_OLSRD_CONFIG_MACOS"
+	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_MACOS[@]}")
+	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_MACOS[@]}")
+	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_MACOS[@]}")
+	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_PKGS_MACOS[@]}")
 elif is_raspi ;then
-	export BRRB_HOME="$BRRB_HOME_PI"
-	export BRRB_METADATA="$BRRB_METADATA_PI"
-	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_PI[@]}")
-	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_PI[@]}")
-	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_PI[@]}")
-	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_KGS_PI[@]}")
-	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_PKGS_PI[@]}")
+	export BRRB_HOME="$BRRB_HOME_RASPI"
+	export BRRB_METADATA="$BRRB_METADATA_RASPI"
+	export BRRB_OLSRD_CONFIG="$BRRB_OLSRD_CONFIG_RASPI"
+	export BRRB_BASE_PKGS=("${BRRB_BASE_PKGS_RASPI[@]}")
+	export BRRB_WORKSTATION_PKGS=("${BRRB_WORKSTATION_PKGS_RASPI[@]}")
+	export BRRB_DEVELOPMENT_PKGS=("${BRRB_DEVELOPMENT_PKGS_RASPI[@]}")
+	export BRRB_HAM_RADIO_PKGS=("${BRRB_HAM_RADIO_KGS_RASPI[@]}")
+	export BRRB_MESH_NETWORK_PKGS=("${BRRB_MESH_NETWORK_PKGS_RASPI[@]}")
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
