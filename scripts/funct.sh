@@ -32,8 +32,17 @@ if is_macos ;then
         brew update
         brew install -f "$@"
     }
+    upgrade_pkgs(){
+        brew update
+        brew install -f "$@"
+    }
 elif is_raspi ;then
     install_pkgs(){
+        sudo apt-get update
+        sudo apt-get full-upgrade -y
+        sudo apt-get install -y "$@"
+    }
+    upgrade_pkgs(){
         sudo apt-get update
         sudo apt-get full-upgrade -y
         sudo apt-get install -y "$@"
@@ -132,9 +141,16 @@ assert_bundle_is_installed(){
     fi
 }
 
-assert_update_instead(){
+assert_install_ok(){
     if is_bundle_installed "$1"; then
-        echo "!!! The bundle is already installed, update instead: $1"
+        echo "!!! The bundle is already installed, upgrade it instead: $1"
+        exit 1
+    fi
+}
+
+assert_upgrade_ok(){
+    if ! is_bundle_installed "$1"; then
+        echo "!!! The bundle is alrnoteady installed, install it instead: $1"
         exit 1
     fi
 }

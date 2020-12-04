@@ -38,7 +38,7 @@ usage(){
 }
 
 do_install(){
-    assert_update_instead "development"
+    assert_install_ok "development"
     assert_bundle_is_current "workstation"
     install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     install_vscode

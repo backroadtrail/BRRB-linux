@@ -39,7 +39,7 @@ usage(){
 }
 
 do_install(){
-    assert_update_instead "mesh_network"
+    assert_install_ok "mesh_network"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
     install-olsrd

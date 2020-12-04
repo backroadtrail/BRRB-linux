@@ -32,14 +32,14 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: configure.sh base ( install | update | validate )"
+    echo "Usage: configure.sh base ( install | upgrade | validate )"
     echo "Usage: configure.sh base (cfg-user | val_user) vi<user-name>"
     exit 1
 }
 
 do_install(){
     if [ -f "$BRRB_METADATA" ];then
-        echo "The Base bundle is already installed, update instead!"
+        echo "The Base bundle is already installed, upgrade instead!"
         exit 1
     else
         install_pkgs "${BRRB_BASE_PKGS[@]}"
@@ -49,14 +49,14 @@ do_install(){
     validate
 }
 
-do_update(){
- 
-    install_pkgs "${BRRB_BASE_PKGS[@]}"
-    set_metadatum .base.version "$BRRB_VERSION"
+do_upgrade(){
+    assert_upgrade_ok "base"
+    upgrade_pkgs "${BRRB_BASE_PKGS[@]}"
     validate
+    set_metadatum .base.version "$BRRB_VERSION"
 }
 
-validate(){
+do_validate(){
     src="$HERE/../../src"
     ( cd "$src/hello-c";    ./build.sh; ./test.sh; ./clean.sh ) 
     ( cd "$src/hello-c++";  ./build.sh; ./test.sh; ./clean.sh ) 
@@ -84,12 +84,12 @@ case $1 in
         do_install
         ;;
 
-    update)
-        do_update
+    upgrade)
+        do_upgrade
         ;;
 
     validate)
-        validate
+        do_validate
         ;;
 
     cfg-user)   
