@@ -32,7 +32,7 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: configure.sh workstation install"
+    echo "Usage: configure.sh workstation (install | upgrade)"
     echo "Usage: configure.sh workstation cfg-user <user-name> [<ssh-passphrase>]"
     echo "Usage: configure.sh workstation add-ssh-host <user-name> <server> [-send-key] [<remote-user> [<id-file>]]"
     exit 1
@@ -47,6 +47,12 @@ do_install() {
     assert_install_ok "workstation"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
+    set_metadatum .workstation.version "$BRRB_VERSION"
+}
+
+do_upgrade() {
+    assert_upgrade_ok "workstation"
+    upgrade_pkgs "${BRRB_WORKSTATION_PKGS[@]}"
     set_metadatum .workstation.version "$BRRB_VERSION"
 }
 
@@ -65,6 +71,10 @@ add-ssh-host() { # ARGS: <user-name> <server> [-send-key] [<remote-user> [<id-fi
 case $1 in
     install)
         do_install
+        ;;
+
+   upgrade)
+        do_upgrade
         ;;
 
     cfg-user)   

@@ -52,7 +52,7 @@ do_install(){
 do_upgrade(){
     assert_upgrade_ok "base"
     upgrade_pkgs "${BRRB_BASE_PKGS[@]}"
-    validate
+    do_validate
     set_metadatum .base.version "$BRRB_VERSION"
 }
 

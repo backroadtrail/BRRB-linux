@@ -32,7 +32,7 @@ cd "$HERE"
 ##
 
 usage(){
-    echo "Usage: configure.sh development install"
+    echo "Usage: configure.sh development (install | upgrade)"
     echo "Usage: configure.sh development cfg-user <user-name>"
     exit 1
 }
@@ -43,6 +43,12 @@ do_install(){
     install_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     install_vscode
     install_slime
+    set_metadatum .development.version "$BRRB_VERSION"
+}
+
+do_upgrade() {
+    assert_upgrade_ok "development"
+    upgrade_pkgs "${BRRB_DEVELOPMENT_PKGS[@]}"
     set_metadatum .development.version "$BRRB_VERSION"
 }
 
@@ -85,6 +91,10 @@ fi
 case $1 in
     install)
         do_install
+        ;;
+
+    upgrade)
+        do_upgrade
         ;;
 
     cfg-user)   
