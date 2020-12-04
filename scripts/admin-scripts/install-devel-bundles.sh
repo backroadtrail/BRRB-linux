@@ -42,10 +42,10 @@ fi
 ../configure.sh base cfg-user "$USER"
 
 # WORKSTATION
-if ! is_bundle_installed "development"; then
-    ../configure.sh development install
-elif ! is_bundle_current "development"; then
-    ../configure.sh development upgrade
+if ! is_bundle_installed "workstation"; then
+    ../configure.sh workstation install
+elif ! is_bundle_current "workstation"; then
+    ../configure.sh workstation upgrade
 fi
 ../configure.sh workstation cfg-user "$USER"
 
