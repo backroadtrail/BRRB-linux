@@ -46,7 +46,7 @@ do_install(){
         create_metadata_file
         set_metadatum .base.version "$BRRB_VERSION"
     fi
-    validate
+    do_validate
 }
 
 do_upgrade(){
