@@ -142,6 +142,11 @@ set_metadatum(){ # ARGS: <json-path> <value>
     sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
 }
 
+del_metadatum(){ # ARGS: <json-path>
+    jq "del($1)" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
+    sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
+}
+
 get_metadatum(){ # ARGS: <json-path>
     jq -r "$1" "$BRRB_METADATA"
 }

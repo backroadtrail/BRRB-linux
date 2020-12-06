@@ -35,40 +35,90 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh mesh-network (install | enable | disable)"
-    echo "Usage: configure.sh mesh-network cfg-interface <interface> <net-mask> <ip-address>"
+    echo "Usage: configure.sh mesh-network del-interface <interface-name>"
+    echo "Usage: configure.sh mesh-network add-interface <interface-name> <net-mask> <ip-address>"
     exit 1
+}
+
+cache_config_files(){
+    #SAVE ORIGINALS
+    sudo cp "$BRRB_OLSRD_CONFIG_DIR/olsrd.config" "$BRRB_OLSRD_CONFIG_DIR/olsrd.config.original"
+    sudo cp "$BRRB_OLSRD_DEFAULT_DIR/olsrd" "$BRRB_OLSRD_CONFIG_DIR/olsrd.original"
+    #CACHE BRRB FILES
+    sudo cp "$HERE/../../files/raspi/etc/olsrd/olsrd.brrb.config" "$BRRB_OLSRD_CONFIG_DIR"
+    sudo cp "$HERE/../../files/raspi/etc/default/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR"
+}
+
+copy_config_files(){
+    sudo cp -y "$BRRB_OLSRD_CONFIG_DIR/olsrd.brrb.config" "$BRRB_OLSRD_CONFIG_DIR/olsrd.config"
+    sudo cp -y "$BRRB_OLSRD_DEFAULT_DIR/olsrd.brrb" "$BRRB_OLSRD_CONFIG_DIR/olsrd"
 }
 
 do_install(){
     assert_install_ok "mesh_network"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
-
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
-    
-    if [ -f "$BRRB_OLSRD_CONFIG_FILE" ]; then
-        sudo mv "$BRRB_OLSRD_CONFIG_FILE" "$BRRB_OLSRD_CONFIG_FILE.original"
-        echo "Moved the existing config to: $BRRB_OLSRD_CONFIG_FILE.original"
-    fi
-    sudo cp "$HERE/../../files/raspi/etc/olsrd.brrb.config" "$BRRB_OLSRD_CONFIG_FILE"
+    cache_config_files
     set_metadatum .mesh_network.version "$BRRB_VERSION"
 }
 
-cfg_interface(){ #ARGS: <interface> <net-mask> <ip-address>
-    set_metadatum .mesh_network.interface "$1"
-    set_metadatum .mesh_network.net_mask "$2"
-    set_metadatum .mesh_network.ip_address "$3"
+do_upgrade() {
+    assert_upgrade_ok "mesh_network"
+    upgrade_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
+    set_metadatum .mesh_network.version "$BRRB_VERSION"
+}
 
-    sudo systemctl stop dhcpcd || echo "DHCP already stopped."
-    sudo iwconfig "$1" mode Ad-Hoc
-    sudo iwconfig "$1" essid "BRRB-MESH-V1"
-    sudo ifconfig "$1" "$3" netmask "$2" up
-    sudo systemctl start dhcpcd
+add_interface(){ #ARGS: <name> <net-mask> <ip-address>
+    name="$1"
+    set_metadatum ".mesh_network.interface.$name.net_mask" "$2"
+    set_metadatum ".mesh_network.interface.$name.ip_address" "$3"
+}
+
+del_interface(){ #ARGS: <name>
+    name="$1"
+    del_metadatum ".mesh_network.interface.$name"
+}
+
+append_daemon_opts(){ #ARGS: <interface-name> ...
+
+    opts="DAEMON_OPTS=\"-d $DEBUGLEVEL" 
+    for name in "$@"; do
+        opts="$opts -i $name"
+    done
+    opts="$opts\""
+}
+
+enable_interface(){ #ARGS: <interface-name>
+    name="$1"
+    echo "Name: $name"
+    net_mask="$(get_metadatum ".mesh_network.interface.$name.net_mask")"
+    ip_address="$(get_metadatum ".mesh_network.interface.$name.ip_address")"
+
+    if [ "$net_mask" = "null" ] || [ "$ip_address" = "null" ]; then
+        echo "You must add an interface first!"
+        exit -1
+    fi
+    sudo iwconfig "$name" mode Ad-Hoc
+    sudo iwconfig "$name" essid "BRRB-MESH-V1"
+    sudo ifconfig "$name" "$ip_address" netmask "$net_mask" up
 }
 
 do_enable(){
     assert_bundle_is_current "mesh_network"
+    sudo systemctl stop dhcpcd || echo "DHCP already stopped."
+    sudo systemctl stop olsrd  || echo "OLSRD already stopped."
+    
+    copy_config_files
+    append_daemon_opts
+    names="$(get_metadatum ".mesh_network.interface.{}")"
+    append_daemon_opts "${names[@]}"
+    for name in "${names[@]}"; do
+        enable_interface "$name"
+    done
+
+    sudo systemctl start dhcpcd
     sudo systemctl enable olsrd
     sudo systemctl start olsrd
 }
@@ -77,6 +127,7 @@ do_disable(){
     assert_bundle_is_current "mesh_network"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
+    sudo rm -f "$BRRB_OLSRD_DEFAULT_FILE"
 }
 
 if [  $# -lt 1 ]; then
@@ -89,13 +140,17 @@ case $1 in
         do_install
         ;;
 
-    cfg-interface)
+    upgrade)
+        do_upgrade
+        ;;
+
+    set-interface)
         if [  $# -lt 4 ]; then
             echo "Invalid number of arguments !!!"
             usage
         fi 
         shift
-        cfg-interface
+        set_interface "$@"
         ;;
 
     enable)

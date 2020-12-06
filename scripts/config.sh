@@ -56,10 +56,8 @@ is_raspi(){
 export BRRB_HOME="/opt/brrb"
 export BRRB_METADATA="$BRRB_HOME/metadata.json"
 export BRRB_TEMP_DIR="/var/tmp"
-export BRRB_OLSRD_CONFIG_DIR="/etc/olsrd"
-export BRRB_OLSRD_CONFIG_FILE="$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
-export BRRB_INIT_DIR="/etc/init.d"
-export BRRB_INIT_SCRIPT="$BRRB_INIT_DIR/olsrd"
+export BRRB_OLSRD_CONFIG_DIR="/etc/olsrd/olsrd"
+export BRRB_OLSRD_DEFAULT_DIR="/etc/default"
 
 #### OS ABSTRACTED CONSTANTS
 if is_macos ;then
