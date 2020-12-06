@@ -2,9 +2,6 @@
 build
 workspace.code-workspace
 
-# Prerequisites
-*.d
-
 # Compiled Object files
 *.slo
 *.lo
