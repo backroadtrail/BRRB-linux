@@ -41,7 +41,6 @@ usage(){
 }
 
 cache_config_files(){
-    echo cache_config_files
     #SAVE ORIGINALS
     sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf.original"
     sudo cp -f "$BRRB_OLSRD_DEFAULT_DIR/olsrd" "$BRRB_OLSRD_CONFIG_DIR/olsrd.original"
@@ -51,7 +50,6 @@ cache_config_files(){
 }
 
 copy_config_files(){
-    echo copy_config_files
     sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.brrb.conf" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
     sudo cp -f "$BRRB_OLSRD_DEFAULT_DIR/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR/olsrd"
 }
@@ -84,10 +82,8 @@ del_interface(){ #ARGS: <name>
 }
 
 append_daemon_opts(){ #ARGS: <interface-name> ...
-
     opts='DAEMON_OPTS="-d $DEBUGLEVEL' 
     for name in "$@"; do
-        echo "append_daemon_opts - Name: $name"
         opts="$opts -i $name"
     done
     opts="$opts\""
@@ -97,7 +93,6 @@ append_daemon_opts(){ #ARGS: <interface-name> ...
 
 enable_interface(){ #ARGS: <interface-name>
     name="$1"
-    echo "enable_interface - Name: $name"
     net_mask="$(get_metadatum ".mesh_network.interface.$name.net_mask")"
     ip_address="$(get_metadatum ".mesh_network.interface.$name.ip_address")"
 
@@ -112,6 +107,13 @@ do_enable(){
     sudo systemctl stop olsrd  || echo "OLSRD already stopped."
     
     copy_config_files
+    sudo rfkill unblock wifi
+    sudo rfkill unblock all
+
+    if ! get_metadatum ".mesh_network.interface | to_entries[].key" > /dev/null; then
+        echo "You must add an interface first!"
+        exit -1    
+    fi
 
     names=()
     for name in $(get_metadatum ".mesh_network.interface | to_entries[].key"); do
