@@ -28,19 +28,14 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
-source "configure.d/configure-mesh-network-funct.sh"
 cd "$HERE"
 ##
 
 assert_is_raspi "$0"
 
 usage(){
-    cat <<EOF
-Usage: configure.sh mesh-network (install | enable | disable)
-       configure.sh mesh-network configure [<interface> [<ip-address>]]
-Defaults: <interface>  = "wlan"
-          <ip-address> = "10.0.0.1"
-EOF
+    echo "Usage: configure.sh mesh-network (install | enable | disable)"
+    echo "Usage: configure.sh mesh-network cfg-interface <interface> <net-mask> <ip-address>"
     exit 1
 }
 
@@ -48,67 +43,40 @@ do_install(){
     assert_install_ok "mesh_network"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
-    install-olsrd
-    project_root="$(absolute_path "$HERE/../../")"
-    sudo mkdir -p "$BRRB_OLSRD_CONFIG_DIR"
-    sudo cp -f "$project_root/files/raspi/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_FILE"
-    sudo cp -f "$project_root/files/raspi/etc/init.d/olsrd" "$BRRB_INIT_SCRIPT"
-    sudo chmod 755 "$BRRB_INIT_SCRIPT"
+
+    sudo systemctl disable olsrd
+    sudo systemctl stop olsrd
+    
+    if [ -f "$BRRB_OLSRD_CONFIG_FILE" ]; then
+        sudo mv "$BRRB_OLSRD_CONFIG_FILE" "$BRRB_OLSRD_CONFIG_FILE.original"
+        echo "Moved the existing config to: $BRRB_OLSRD_CONFIG_FILE.original"
+    fi
+    sudo cp "$HERE/../../files/raspi/etc/olsrd.brrb.config" "$BRRB_OLSRD_CONFIG_FILE"
     set_metadatum .mesh_network.version "$BRRB_VERSION"
+}
+
+cfg_interface(){ #ARGS: <interface> <net-mask> <ip-address>
+    set_metadatum .mesh_network.interface "$1"
+    set_metadatum .mesh_network.net_mask "$2"
+    set_metadatum .mesh_network.ip_address "$3"
+
+    sudo systemctl stop dhcpcd || echo "DHCP already stopped."
+    sudo iwconfig "$1" mode Ad-Hoc
+    sudo iwconfig "$1" essid "BRRB-MESH-V1"
+    sudo ifconfig "$1" "$3" netmask "$2" up
+    sudo systemctl start dhcpcd
 }
 
 do_enable(){
     assert_bundle_is_current "mesh_network"
-    sudo sysv-rc-conf --level 2345 olsrd on
-    sudo "$BRRB_INIT_SCRIPT" start
+    sudo systemctl enable olsrd
+    sudo systemctl start olsrd
 }
 
 do_disable(){
     assert_bundle_is_current "mesh_network"
-    sudo sysv-rc-conf --level 2345 olsrd off
-    sudo "$BRRB_INIT_SCRIPT" stop
-}
-
-do_configure(){ # ARGS: [<interface> [<ip-address>]]
-    assert_bundle_is_current "mesh_network"
-    
-    if [ -f "$BRRB_OLSRD_CONFIG_FILE" ]; then
-        sudo mv "$BRRB_OLSRD_CONFIG_FILE" "$BRRB_OLSRD_CONFIG_FILE.bak"
-        echo "Moved the existing config to: $BRRB_OLSRD_CONFIG_FILE.bak"
-    fi
-
-    if [ $# -ge 1 ]; then
-        BRRB_OLSRD_INTERFACE="$1"
-    else
-        BRRB_OLSRD_INTERFACE="wlan0"
-    fi
-
-    if [ $# -ge 2 ]; then
-        BRRB_OLSRD_MAIN_IP="$2"
-    else
-        BRRB_OLSRD_MAIN_IP="10.0.0.1"
-    fi
-    
-
-    write_config_top "$BRRB_OLSRD_CONFIG_FILE"
-    append_config_interface "$BRRB_OLSRD_CONFIG_FILE"
-}
-
-install-olsrd(){
-    pushd /var/tmp > /dev/null
-    rm -rf olsrd
-    git clone --branch master "https://github.com/backroadtrail/olsrd.git"
-    (
-        cd olsrd
-        make
-        sudo make install
-        make libs
-        sudo make libs_install
-        sudo mv /usr/local/sbin/olsrd /usr/sbin/
-        sudo mv /usr/local/lib/olsrd_* /usr/lib/
-    )
-    rm -rf olsrd
-    popd > /dev/null
+    sudo systemctl disable olsrd
+    sudo systemctl stop olsrd
 }
 
 if [  $# -lt 1 ]; then
@@ -121,9 +89,13 @@ case $1 in
         do_install
         ;;
 
-    configure)
+    cfg-interface)
+        if [  $# -lt 4 ]; then
+            echo "Invalid number of arguments !!!"
+            usage
+        fi 
         shift
-        do_configure "$@"
+        cfg-interface
         ;;
 
     enable)
