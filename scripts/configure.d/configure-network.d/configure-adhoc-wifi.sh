@@ -41,18 +41,21 @@ usage(){
 save_originals(){
     sudo cp -f "$BRRB_DEFAULT_DIR/isc-dhcp-server" "$BRRB_DEFAULT_DIR/isc-dhcp-server.original"
     sudp cp -f "$BRRB_DHCP_DIR/dhcpd.conf" "$BRRB_DHCP_DIR/dhcpd.conf.original"
+    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
 }
 
 restore_originals(){
     sudo rm -f "$BRRB_INTERFACES_DIR/wlan0"
     sudo cp -f "$BRRB_DEFAULT_DIR/isc-dhcp-server.original" "$BRRB_DEFAULT_DIR/isc-dhcp-server"
     sudp cp -f "$BRRB_DHCP_DIR/dhcpd.conf.original" "$BRRB_DHCP_DIR/dhcpd.conf"
+    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original" "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
 }
 
 copy_config_files(){
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/default/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcp/dhcpd.conf" "$BRRB_DHCP_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
 }
 
 do_install(){
@@ -62,6 +65,8 @@ do_install(){
     save_originals
     sudo systemctl disable isc-dhcp-server
     sudo systemctl stop isc-dhcp-server
+    sudo systemctl disable dnsmasq
+    sudo systemctl stop dnsmasq
     set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
 }
 
@@ -75,6 +80,7 @@ do_enable(){
     assert_bundle_is_current "network.adhoc_wifi"
     copy_config_files
     sudo systemctl enable isc-dhcp-server
+    sudo systemctl enable dnsmasq
     # A reboot is needed
 }
 
@@ -82,6 +88,8 @@ do_disable(){
     assert_bundle_is_current "network.adhoc_wifi"
     sudo systemctl disable isc-dhcp-server
     sudo systemctl stop isc-dhcp-server
+    sudo systemctl disable dnsmasq
+    sudo systemctl stop dnsmasq
     restore_config_files
     # A reboot is needed
 }

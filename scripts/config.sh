@@ -44,6 +44,7 @@ export BRRB_TEMP_DIR="/var/tmp"
 export BRRB_OLSRD_CONFIG_DIR="/etc/olsrd"
 export BRRB_DEFAULT_DIR="/etc/default"
 export BRRB_DHCP_DIR="/etc/dhcp"
+export BRRB_DNSMASQ_DIR="/etc"
 export BRRB_INTERFACES_DIR="/etc/network/interfaces.d"
 
 #### OS ABSTRACTED CONSTANTS
@@ -59,7 +60,7 @@ elif is_raspi ;then
 	export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs f3)
 	export BRRB_HAM_RADIO_PKGS=(chirp)
 	export BRRB_MESH_OLSRD_PKGS=(olsrd olsrd-gui olsrd-plugins)
-	export BRRB_ADHOC_WIFI_PKGS=(isc-dhcp-server)
+	export BRRB_ADHOC_WIFI_PKGS=(isc-dhcp-server dnsmasq)
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
