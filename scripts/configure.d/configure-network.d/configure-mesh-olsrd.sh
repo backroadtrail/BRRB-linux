@@ -45,8 +45,8 @@ cache_config_files(){
     sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf.original"
     sudo cp -f "$BRRB_OLSRD_DEFAULT_DIR/olsrd" "$BRRB_OLSRD_CONFIG_DIR/olsrd.original"
     #CACHE BRRB FILES
-    sudo cp "$HERE/../../files/raspi/etc/olsrd/olsrd.brrb.conf" "$BRRB_OLSRD_CONFIG_DIR"
-    sudo cp "$HERE/../../files/raspi/etc/default/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR"
+    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.brrb.conf" "$BRRB_OLSRD_CONFIG_DIR"
+    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR"
 }
 
 copy_config_files(){

@@ -29,21 +29,6 @@ export BRRB_HOSTNAME="brrb"
 export BRRB_NAME="Backroad Raspberry"
 export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
 
-get_version(){
-	if gitdesc="$(git describe 2> /dev/null)"; then
-		if [[ "$gitdesc" != *-* ]]; then
-			echo "$gitdesc"
-		else
-			echo "development"
-		fi
-	else		
-		echo "development"
-	fi
-}
-
-export BRRB_VERSION
-BRRB_VERSION="$(get_version)"
-
 is_macos(){
     [ "$(uname)" = 'Darwin' ]
 }
@@ -77,6 +62,25 @@ else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
 fi
+
+#### COMPUTED CONSTANTS
+get_version(){
+	if gitdesc="$(git describe 2> /dev/null)"; then
+		if [[ "$gitdesc" != *-* ]]; then
+			echo "$gitdesc"
+		else
+			echo "development"
+		fi
+	else		
+		echo "development"
+	fi
+}
+
+export BRRB_VERSION
+BRRB_VERSION="$(get_version)"
+
+export BRRB_PROJECT_ROOT
+BRRB_PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
 
 
