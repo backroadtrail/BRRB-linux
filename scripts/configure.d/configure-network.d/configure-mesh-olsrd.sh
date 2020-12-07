@@ -25,7 +25,7 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE/.."
+cd "$HERE/../.."
 source "config.sh"
 source "funct.sh"
 cd "$HERE"
@@ -34,9 +34,9 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh mesh-network (install | enable | disable)"
-    echo "Usage: configure.sh mesh-network del-interface <interface-name>"
-    echo "Usage: configure.sh mesh-network add-interface <interface-name> <net-mask> <ip-address>"
+    echo "Usage: configure.sh network mesh-olsrd (install | upgrade | enable | disable)"
+    echo "Usage: configure.sh network mesh-olsrd del-interface <interface-name>"
+    echo "Usage: configure.sh network mesh-olsrd add-interface <interface-name> <net-mask> <ip-address>"
     exit 1
 }
 
@@ -55,30 +55,30 @@ copy_config_files(){
 }
 
 do_install(){
-    assert_install_ok "mesh_network"
+    assert_install_ok "mesh_olsrd"
     assert_bundle_is_current "base"
-    install_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
+    install_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     cache_config_files
-    set_metadatum .mesh_network.version "$BRRB_VERSION"
+    set_metadatum .network.mesh_olsrd.version "$BRRB_VERSION"
 }
 
 do_upgrade() {
-    assert_upgrade_ok "mesh_network"
-    upgrade_pkgs "${BRRB_MESH_NETWORK_PKGS[@]}"
-    set_metadatum .mesh_network.version "$BRRB_VERSION"
+    assert_upgrade_ok "mesh_olsrd"
+    upgrade_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
+    set_metadatum .network.mesh_olsrd.version "$BRRB_VERSION"
 }
 
 add_interface(){ #ARGS: <name> <net-mask> <ip-address>
     name="$1"
-    set_metadatum ".mesh_network.interface.$name.net_mask" "$2"
-    set_metadatum ".mesh_network.interface.$name.ip_address" "$3"
+    set_metadatum ".network.mesh_olsrd.interface.$name.net_mask" "$2"
+    set_metadatum ".network.mesh_olsrd.interface.$name.ip_address" "$3"
 }
 
 del_interface(){ #ARGS: <name>
     name="$1"
-    del_metadatum ".mesh_network.interface.$name"
+    del_metadatum ".network.mesh_olsrd.interface.$name"
 }
 
 append_daemon_opts(){ #ARGS: <interface-name> ...
@@ -94,8 +94,8 @@ append_daemon_opts(){ #ARGS: <interface-name> ...
 
 enable_interface(){ #ARGS: <interface-name>
     name="$1"
-    net_mask="$(get_metadatum ".mesh_network.interface.$name.net_mask")"
-    ip_address="$(get_metadatum ".mesh_network.interface.$name.ip_address")"
+    net_mask="$(get_metadatum ".network.mesh_olsrd.interface.$name.net_mask")"
+    ip_address="$(get_metadatum ".network.mesh_olsrd.interface.$name.ip_address")"
 
     sudo iwconfig "$name" mode Ad-Hoc
     sudo iwconfig "$name" essid "BRRB-MESH-V1"
@@ -103,7 +103,7 @@ enable_interface(){ #ARGS: <interface-name>
 }
 
 do_enable(){
-    assert_bundle_is_current "mesh_network"
+    assert_bundle_is_current "mesh_olsrd"
     sudo systemctl stop dhcpcd || echo "DHCP already stopped."
     sudo systemctl stop olsrd  || echo "OLSRD already stopped."
     
@@ -111,13 +111,13 @@ do_enable(){
     sudo rfkill unblock wifi
     sudo rfkill unblock all
 
-    if ! get_metadatum ".mesh_network.interface | to_entries[].key" > /dev/null; then
+    if ! get_metadatum ".network.mesh_olsrd.interface | to_entries[].key" > /dev/null; then
         echo "You must add an interface first!"
         exit -1    
     fi
 
     names=()
-    for name in $(get_metadatum ".mesh_network.interface | to_entries[].key"); do
+    for name in $(get_metadatum ".network.mesh_olsrd.interface | to_entries[].key"); do
         names+=("$name")
     done
 
@@ -137,7 +137,7 @@ do_enable(){
 }
 
 do_disable(){
-    assert_bundle_is_current "mesh_network"
+    assert_bundle_is_current "mesh_olsrd"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     sudo rm -f "$BRRB_OLSRD_DEFAULT_FILE"

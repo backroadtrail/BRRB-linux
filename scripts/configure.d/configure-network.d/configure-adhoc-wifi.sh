@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# configure-adhoc-wifi.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.
@@ -23,26 +25,66 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE/.."
+cd "$HERE/../.."
 source "config.sh"
 source "funct.sh"
 cd "$HERE"
 ##
-#source: https://github.com/gnab/rtl8812au
 
 assert_is_raspi "$0"
 
-cd "$HOME"
-git clone --branch raspi "https://github.com/backroadtrail/rtl8812au.git"
-cd rtl8812au
-VER="$(grep '#define DRIVERVERSION' include/rtw_version.h | awk '{print $3}' | tr -d v\")"
-sudo rsync -rvhP ./ "/usr/src/8812au-${VER}"
-sudo dkms add -m 8812au -v "$VER"
-sudo dkms build -m 8812au -v "$VER"
-sudo dkms install -m 8812au -v "$VER"
-sudo dkms status
-sudo modprobe 8812au
-#sudo echo 8812au | sudo tee -a /etc/modules > /dev/null
+usage(){
+    echo "Usage: configure.sh network adhoc-wifi (install | upgrade | enable | disable)"
+    exit 1
+}
 
-cd "$HOME"
-rm -rf rtl8812au
+do_install(){
+    assert_install_ok "adhoc_wifi"
+    assert_bundle_is_current "base"
+    install_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
+    set_metadatum .network.adhoc_wifi.version "$BRRB_VERSION"
+}
+
+do_upgrade() {
+    assert_upgrade_ok "adhoc_wifi"
+    upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
+    set_metadatum .network.adhoc_wifi.version "$BRRB_VERSION"
+}
+
+
+do_enable(){
+    assert_bundle_is_current "adhoc_wifi"
+}
+
+do_disable(){
+    assert_bundle_is_current "adhoc_wifi"
+}
+
+if [  $# -lt 1 ]; then
+    echo "Invalid number of arguments !!!"
+    usage
+fi 
+
+case $1 in
+    install)
+        do_install
+        ;;
+
+    upgrade)
+        do_upgrade
+        ;;
+
+    enable)
+        do_enable
+        ;;
+
+    disable)
+        do_disable
+        ;;
+
+    *)
+        echo "Invalid argument: $1"
+        usage
+        ;;
+esac
+

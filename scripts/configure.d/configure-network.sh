@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# config-brrb.sh
+
 # Copyright 2020 OpsResearch LLC
 #
 # This file is part of Backroad Raspberry.
@@ -28,21 +30,33 @@ source "config.sh"
 source "funct.sh"
 cd "$HERE"
 ##
-#source: https://github.com/gnab/rtl8812au
 
 assert_is_raspi "$0"
 
-cd "$HOME"
-git clone --branch raspi "https://github.com/backroadtrail/rtl8812au.git"
-cd rtl8812au
-VER="$(grep '#define DRIVERVERSION' include/rtw_version.h | awk '{print $3}' | tr -d v\")"
-sudo rsync -rvhP ./ "/usr/src/8812au-${VER}"
-sudo dkms add -m 8812au -v "$VER"
-sudo dkms build -m 8812au -v "$VER"
-sudo dkms install -m 8812au -v "$VER"
-sudo dkms status
-sudo modprobe 8812au
-#sudo echo 8812au | sudo tee -a /etc/modules > /dev/null
+usage(){
+    echo "Usage: configure.sh network (mesh | adhoc-wifi)"
+}
 
-cd "$HOME"
-rm -rf rtl8812au
+if [  $# -ge 1 ]; then
+    topic="$1"
+else
+    echo "Invalid number of arguments !!!"
+    usage
+fi 
+
+case $topic in
+     mesh-olsrd)
+        shift
+        ./configure-network.d/configure-mesh-olsrd.sh "$@"    
+        ;;
+
+     adhoc-wifi)
+        shift
+        ./configure-network.d/configure-adhoc-wifi.sh "$@"    
+        ;;
+        
+    *)
+        echo "Invalid topic: $topic"
+        usage
+        ;;
+esac

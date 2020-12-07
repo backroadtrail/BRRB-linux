@@ -71,7 +71,8 @@ elif is_raspi ;then
 	export BRRB_WORKSTATION_PKGS=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
 	export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs f3)
 	export BRRB_HAM_RADIO_PKGS=(chirp)
-	export BRRB_MESH_NETWORK_PKGS=(olsrd olsrd-gui olsrd-plugins)
+	export BRRB_MESH_OLSRD_PKGS=(olsrd olsrd-gui olsrd-plugins)
+	export BRRB_ADHOC_WIFI_PKGS=()
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1

@@ -33,7 +33,7 @@ source "funct.sh"
 
 usage(){
     echo "Usage: $0 <topic> [arg1 [arg2] ... ]"
-    echo "Where: topic = (base | workstation | development | ham-radio | mesh-network)"
+    echo "Where: topic = (base | workstation | development | ham-radio | network)"
     exit 1
 }
 
@@ -65,9 +65,9 @@ case $topic in
         ./configure.d/configure-ham-radio.sh "$@"    
         ;;
 
-     mesh-network)
+     network)
         shift
-        ./configure.d/configure-mesh-network.sh "$@"    
+        ./configure.d/configure-network.sh "$@"    
         ;;
         
     *)
