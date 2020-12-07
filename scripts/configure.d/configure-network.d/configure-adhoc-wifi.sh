@@ -50,33 +50,38 @@ restore_originals(){
 }
 
 copy_config_files(){
-    sudo cp -f "$BRRB_BRRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
-    sudo cp -f "$BRRB_BRRRB_PROJECT_ROOT/files/raspi/etc/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
-    sudo cp -f "$BRRB_BRRRB_PROJECT_ROOT/files/raspi/etc/dhcp/dhcpd.conf" "$BRRB_DHCP_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcp/dhcpd.conf" "$BRRB_DHCP_DIR"
 }
 
 do_install(){
-    assert_install_ok "adhoc_wifi"
+    assert_install_ok "network.adhoc_wifi"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
     save_originals
-    set_metadatum .network.adhoc_wifi.version "$BRRB_VERSION"
+    sudo systemctl disable isc-dhcp-server
+    sudo systemctl stop isc-dhcp-server
+    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
-    assert_upgrade_ok "adhoc_wifi"
+    assert_upgrade_ok "network.adhoc_wifi"
     upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
-    set_metadatum .network.adhoc_wifi.version "$BRRB_VERSION"
+    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
 }
 
-
 do_enable(){
-    assert_bundle_is_current "adhoc_wifi"
+    assert_bundle_is_current "network.adhoc_wifi"
     copy_config_files
+    sudo systemctl enable isc-dhcp-server
+    sudo systemctl start isc-dhcp-server
 }
 
 do_disable(){
-    assert_bundle_is_current "adhoc_wifi"
+    assert_bundle_is_current "network.adhoc_wifi"
+    sudo systemctl disable isc-dhcp-server
+    sudo systemctl stop isc-dhcp-server
     restore_config_files
 }
 

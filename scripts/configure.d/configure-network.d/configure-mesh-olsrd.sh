@@ -62,24 +62,24 @@ do_install(){
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     save_originals
-    set_metadatum .network.mesh_olsrd.version "$BRRB_VERSION"
+    set_metadatum "network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
     assert_upgrade_ok "mesh_olsrd"
     upgrade_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
-    set_metadatum .network.mesh_olsrd.version "$BRRB_VERSION"
+    set_metadatum "network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
 add_interface(){ #ARGS: <name> <net-mask> <ip-address>
     name="$1"
-    set_metadatum ".network.mesh_olsrd.interface.$name.net_mask" "$2"
-    set_metadatum ".network.mesh_olsrd.interface.$name.ip_address" "$3"
+    set_metadatum "network.mesh_olsrd.interface.$name.net_mask" "$2"
+    set_metadatum "network.mesh_olsrd.interface.$name.ip_address" "$3"
 }
 
 del_interface(){ #ARGS: <name>
     name="$1"
-    del_metadatum ".network.mesh_olsrd.interface.$name"
+    del_metadatum "network.mesh_olsrd.interface.$name"
 }
 
 append_daemon_opts(){ #ARGS: <interface-name> ...
@@ -95,8 +95,8 @@ append_daemon_opts(){ #ARGS: <interface-name> ...
 
 enable_interface(){ #ARGS: <interface-name>
     name="$1"
-    net_mask="$(get_metadatum ".network.mesh_olsrd.interface.$name.net_mask")"
-    ip_address="$(get_metadatum ".network.mesh_olsrd.interface.$name.ip_address")"
+    net_mask="$(get_metadatum "network.mesh_olsrd.interface.$name.net_mask")"
+    ip_address="$(get_metadatum "network.mesh_olsrd.interface.$name.ip_address")"
 
     sudo iwconfig "$name" mode Ad-Hoc
     sudo iwconfig "$name" essid "BRRB-MESH-V1"
@@ -118,7 +118,7 @@ do_enable(){
     fi
 
     names=()
-    for name in $(get_metadatum ".network.mesh_olsrd.interface | to_entries[].key"); do
+    for name in $(get_metadatum "network.mesh_olsrd.interface | to_entries[].key"); do
         names+=("$name")
     done
 
