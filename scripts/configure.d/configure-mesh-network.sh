@@ -82,6 +82,7 @@ del_interface(){ #ARGS: <name>
 }
 
 append_daemon_opts(){ #ARGS: <interface-name> ...
+    # shellcheck disable=SC2016
     opts='DAEMON_OPTS="-d $DEBUGLEVEL' 
     for name in "$@"; do
         opts="$opts -i $name"
