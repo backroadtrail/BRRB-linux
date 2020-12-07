@@ -35,8 +35,6 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh network mesh-olsrd (install | upgrade | enable | disable)"
-    echo "Usage: configure.sh network mesh-olsrd del-interface <interface-name>"
-    echo "Usage: configure.sh network mesh-olsrd add-interface <interface-name> <net-mask> <ip-address>"
     exit 1
 }
 
@@ -46,13 +44,15 @@ save_originals(){
 }
 
 restore_originals(){
+    sudo rm -f "$BRRB_INTERFACES_DIR/wlan1"
     sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf.original" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
     sudo cp -f "$BRRB_DEFAULT_DIR/olsrd.original" "$BRRB_DEFAULT_DIR/olsrd"
 }
 
 copy_config_files(){
-    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR"
-    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd" "$BRRB_DEFAULT_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan1" "$BRRB_INTERFACES_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd" "$BRRB_DEFAULT_DIR"
 }
 
 do_install(){
@@ -71,70 +71,16 @@ do_upgrade() {
     set_metadatum "network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
-add_interface(){ #ARGS: <name> <net-mask> <ip-address>
-    name="$1"
-    set_metadatum "network.mesh_olsrd.interface.$name.net_mask" "$2"
-    set_metadatum "network.mesh_olsrd.interface.$name.ip_address" "$3"
-}
-
-del_interface(){ #ARGS: <name>
-    name="$1"
-    del_metadatum "network.mesh_olsrd.interface.$name"
-}
-
-append_daemon_opts(){ #ARGS: <interface-name> ...
-    # shellcheck disable=SC2016
-    opts='DAEMON_OPTS="-d $DEBUGLEVEL' 
-    for name in "$@"; do
-        opts="$opts -i $name"
-    done
-    opts="$opts\""
-
-    sudo tee -a "$BRRB_OLSRD_DEFAULT_DIR/olsrd" <<< "$opts" > /dev/null
-}
-
-enable_interface(){ #ARGS: <interface-name>
-    name="$1"
-    net_mask="$(get_metadatum "network.mesh_olsrd.interface.$name.net_mask")"
-    ip_address="$(get_metadatum "network.mesh_olsrd.interface.$name.ip_address")"
-
-    sudo iwconfig "$name" mode Ad-Hoc
-    sudo iwconfig "$name" essid "BRRB-MESH-V1"
-    sudo ifconfig "$name" "$ip_address" netmask "$net_mask" up
-}
-
 do_enable(){
     assert_bundle_is_current "mesh_olsrd"
     sudo systemctl stop dhcpcd || echo "DHCP already stopped."
     sudo systemctl stop olsrd  || echo "OLSRD already stopped."
     
     copy_config_files
-    sudo rfkill unblock wifi
-    sudo rfkill unblock all
-
-    if ! get_metadatum ".network.mesh_olsrd.interface | to_entries[].key" > /dev/null; then
-        echo "You must add an interface first!"
-        exit -1    
-    fi
-
-    names=()
-    for name in $(get_metadatum "network.mesh_olsrd.interface | to_entries[].key"); do
-        names+=("$name")
-    done
-
-    if [ ${#names[@]} -lt 1 ]; then
-        echo "You must add an interface first!"
-        exit -1    
-    fi
-
-    append_daemon_opts "${names[@]}"
-    for name in "${names[@]}"; do
-        enable_interface "$name"
-    done
 
     sudo systemctl start dhcpcd
     sudo systemctl enable olsrd
-    sudo systemctl start olsrd
+    # A reboot is needed
 }
 
 do_disable(){
@@ -142,6 +88,7 @@ do_disable(){
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     restore_originals
+    # A reboot is needed
 }
 
 if [  $# -lt 1 ]; then
@@ -156,24 +103,6 @@ case $1 in
 
     upgrade)
         do_upgrade
-        ;;
-
-    add-interface)
-        if [  $# -lt 4 ]; then
-            echo "Invalid number of arguments !!!"
-            usage
-        fi 
-        shift
-        add_interface "$@"
-        ;;
-
-    del-interface)
-        if [  $# -lt 2 ]; then
-            echo "Invalid number of arguments !!!"
-            usage
-        fi 
-        shift
-        del_interface "$@"
         ;;
 
     enable)

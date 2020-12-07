@@ -1,4 +1,4 @@
- Defaults for isc-dhcp-server (sourced by /etc/init.d/isc-dhcp-server)
+#Defaults for isc-dhcp-server (sourced by /etc/init.d/isc-dhcp-server)
 
 # Path to dhcpd's config file (default: /etc/dhcp/dhcpd.conf).
 #DHCPDv4_CONF=/etc/dhcp/dhcpd.conf

@@ -51,7 +51,7 @@ restore_originals(){
 
 copy_config_files(){
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/default/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcp/dhcpd.conf" "$BRRB_DHCP_DIR"
 }
 
@@ -75,7 +75,7 @@ do_enable(){
     assert_bundle_is_current "network.adhoc_wifi"
     copy_config_files
     sudo systemctl enable isc-dhcp-server
-    sudo systemctl start isc-dhcp-server
+    # A reboot is needed
 }
 
 do_disable(){
@@ -83,6 +83,7 @@ do_disable(){
     sudo systemctl disable isc-dhcp-server
     sudo systemctl stop isc-dhcp-server
     restore_config_files
+    # A reboot is needed
 }
 
 if [  $# -lt 1 ]; then
