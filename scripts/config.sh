@@ -67,7 +67,7 @@ if is_macos ;then
 	export BRRB_HAM_RADIO_PKGS=(chirp)
 
 elif is_raspi ;then
-	export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs)
+	export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs build-essential dkms)
 	export BRRB_WORKSTATION_PKGS=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
 	export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs f3)
 	export BRRB_HAM_RADIO_PKGS=(chirp)
