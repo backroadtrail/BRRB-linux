@@ -41,7 +41,9 @@ sudo rsync -rvhP ./ "/usr/src/rtl88x2bu-${VER}"
 sudo dkms add -m rtl88x2bu -v "${VER}"
 sudo dkms build -m rtl88x2bu -v "${VER}"
 sudo dkms install -m rtl88x2bu -v "${VER}"
+sudo dkms status
 sudo modprobe 88x2bu
+#sudo echo 88x2bu | sudo tee -a /etc/modules > /dev/null
 
 cd "$HOME"
-#rm -rf rtl88x2bu
+rm -rf rtl88x2bu

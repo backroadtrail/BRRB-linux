@@ -35,19 +35,14 @@ assert_is_raspi "$0"
 cd "$HOME"
 git clone --branch raspi "https://github.com/backroadtrail/rtl8812au.git"
 cd rtl8812au
-make
-sudo insmod 8812au.ko
-sudo cp 8812au.ko "/lib/modules/$(uname -r)/kernel/drivers/net/wireless"
-sudo depmod
-
-DRIVER_VERSION="$(grep '#define DRIVERVERSION' include/rtw_version.h | awk '{print $3}' | tr -d v\")"
-sudo mkdir -p "/usr/src/8812au-$DRIVER_VERSION"
-sudo cp -r ./* "/usr/src/8812au-$DRIVER_VERSION"
-sudo dkms add -m 8812au -v "$DRIVER_VERSION"
-sudo dkms build -m 8812au -v "$DRIVER_VERSION"
-sudo dkms install -m 8812au -v "$DRIVER_VERSION"
+VER=="$(grep '#define DRIVERVERSION' include/rtw_version.h | awk '{print $3}' | tr -d v\")"
+sudo rsync -rvhP ./ "/usr/src/8812au-${VER}"
+sudo dkms add -m 8812au -v "$VER"
+sudo dkms build -m 8812au -v "$VER"
+sudo dkms install -m 8812au -v "$VER"
 sudo dkms status
-sudo echo 8812au | sudo tee -a /etc/modules
+sudo modprobe 8812au
+#sudo echo 8812au | sudo tee -a /etc/modules > /dev/null
 
 cd "$HOME"
-#rm -rf rtl8812au
+rm -rf rtl8812au
