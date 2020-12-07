@@ -40,18 +40,19 @@ usage(){
     exit 1
 }
 
-cache_config_files(){
-    #SAVE ORIGINALS
+save_originals(){
     sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf.original"
-    sudo cp -f "$BRRB_OLSRD_DEFAULT_DIR/olsrd" "$BRRB_OLSRD_CONFIG_DIR/olsrd.original"
-    #CACHE BRRB FILES
-    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.brrb.conf" "$BRRB_OLSRD_CONFIG_DIR"
-    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR"
+    sudo cp -f "$BRRB_DEFAULT_DIR/olsrd" "$BRRB_DEFAULT_DIR/olsrd.original"
+}
+
+restore_originals(){
+    sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf.original" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
+    sudo cp -f "$BRRB_DEFAULT_DIR/olsrd.original" "$BRRB_DEFAULT_DIR/olsrd"
 }
 
 copy_config_files(){
-    sudo cp -f "$BRRB_OLSRD_CONFIG_DIR/olsrd.brrb.conf" "$BRRB_OLSRD_CONFIG_DIR/olsrd.conf"
-    sudo cp -f "$BRRB_OLSRD_DEFAULT_DIR/olsrd.brrb" "$BRRB_OLSRD_DEFAULT_DIR/olsrd"
+    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR"
+    sudo cp "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd" "$BRRB_DEFAULT_DIR"
 }
 
 do_install(){
@@ -60,7 +61,7 @@ do_install(){
     install_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
-    cache_config_files
+    save_originals
     set_metadatum .network.mesh_olsrd.version "$BRRB_VERSION"
 }
 
@@ -140,7 +141,7 @@ do_disable(){
     assert_bundle_is_current "mesh_olsrd"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
-    sudo rm -f "$BRRB_OLSRD_DEFAULT_FILE"
+    restore_originals
 }
 
 if [  $# -lt 1 ]; then
