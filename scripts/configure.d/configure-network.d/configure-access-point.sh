@@ -36,6 +36,10 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh network access-point (install | upgrade | enable | disable)"
+    echo "Usage: configure.sh network access-point lan <net-mask> <ip-address>"
+    echo "Usage: configure.sh network access-point dhcp <low-ip> <high-ip>"
+    echo "Usage: configure.sh network access-point wifi <essid> <password>"
+    echo "Usage: configure.sh network access-point dns <lan-domain> <ap-name>"
     exit 1
 }
 
@@ -101,6 +105,22 @@ do_disable(){
     # A reboot is needed
 }
 
+do_lan(){
+    assert_bundle_is_current "network.access_point"
+}
+
+do_wifi(){
+    assert_bundle_is_current "network.access_point"
+}
+
+do_dns(){
+    assert_bundle_is_current "network.access_point"
+}
+
+do_dhcp(){
+    assert_bundle_is_current "network.access_point"
+}
+
 if [  $# -lt 1 ]; then
     echo "Invalid number of arguments !!!"
     usage
@@ -121,6 +141,42 @@ case $1 in
 
     disable)
         do_disable
+        ;;
+
+    lan)
+        if [  $# -lt 3 ]; then
+          echo "Invalid number of arguments !!!"
+            usage
+        fi
+        shift
+        do_lan
+        ;;
+
+    dhcp)
+        if [  $# -lt 3 ]; then
+          echo "Invalid number of arguments !!!"
+            usage
+        fi
+        shift
+        do_dhcp
+        ;;
+    
+    wifi)
+        if [  $# -lt 3 ]; then
+          echo "Invalid number of arguments !!!"
+            usage
+        fi
+        shift
+        do_wifi
+        ;;
+
+   dns)
+        if [  $# -lt 3 ]; then
+          echo "Invalid number of arguments !!!"
+            usage
+        fi
+        shift
+        do_dns
         ;;
 
     *)

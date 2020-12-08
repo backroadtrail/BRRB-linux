@@ -38,8 +38,6 @@ if [ -f "$BRRB_METADATA" ]; then
 	../configure.sh network access-point enable
 	set_metadatum .build_type "vehicle-node"
 	sudo reboot
-	cd "$HOME"
-	./BRRB-linux/scripts/post-bootstrap.sh
 else
 	../bootstrap.sh miuzei
 fi

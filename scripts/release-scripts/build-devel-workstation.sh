@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# post-bootstrap.sh
+# config-brrb.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -25,14 +25,18 @@ set -euo pipefail
 IFS=$'\n\t'
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$HERE"
+cd "$HERE/.."
 source "config.sh"
 source "funct.sh"
+cd "$HERE"
 ##
 
-assert_is_raspi "$0"
-
-# REMOVE REPOS
-sudo rm -rf "$HOME/BRRB-linux"
-sudo rm -rf "$HOME/LCD-show"
-
+if [ -f "$BRRB_METADATA" ]; then
+	../configure.sh workstation install
+	../configure.sh workstation cfg-user "$USER"
+	../configure.sh development install
+	../configure.sh development cfg-user "$USER"
+	set_metadatum .build_type "devel-workstation"
+else
+	../bootstrap.sh hdmi
+fi
