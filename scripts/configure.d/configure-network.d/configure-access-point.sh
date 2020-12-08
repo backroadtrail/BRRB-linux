@@ -117,6 +117,7 @@ do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
         echo "Modified:  'dnsmasq.conf'."
     else
         echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
+        after='null'
     fi
 
     sed_file "$BRRB_FILES_DIR/etc/dhcpcd.conf" \
@@ -127,6 +128,7 @@ do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
         echo "Modified:  'dhcpcd.conf'."
     else
         echo "Enable the access point to activate the changes to 'dhcpcd.conf'."
+        after='null'
     fi
 }
 
@@ -143,6 +145,7 @@ do_wifi(){ #ARGS: <interface> <ssid> <password>
         echo "Modified: 'hostapd.conf'."
     else
         echo "Enable the access point to activate the changes to 'hostapd.conf'."
+        after='null'
     fi
 }
 
@@ -158,6 +161,7 @@ do_dns(){ #ARGS: <lan-domain> <brrb-name>
         echo "Modified:  'dnsmasq.conf'."
     else
         echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
+        after='null'
     fi
 }
 
@@ -181,10 +185,12 @@ fi
 case $1 in
     install)
         do_install
+        after='null'
         ;;
 
     upgrade)
         do_upgrade
+        after='null'
         ;;
 
     enable)
@@ -193,6 +199,7 @@ case $1 in
 
     disable)
         do_disable
+        after='null'
         ;;
 
     lan)
@@ -231,7 +238,7 @@ esac
 if [ "$after" = 'boot' ]; then
     echo "Rebooting activate the change!"
     sudo reboot
-else
+elif [ "$after" = 'noboot' ]; then
     echo "You should reboot to activate the changes!"
 fi
 
