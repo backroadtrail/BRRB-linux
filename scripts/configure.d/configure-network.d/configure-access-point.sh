@@ -46,7 +46,6 @@ save_originals(){
 restore_originals(){
     sudo rm -f "$BRRB_DHCPCD_DIR/dhcpcd.conf"
     sudo rm -f "$BRRB_HOSTAPD_DIR/hostapd.conf"
-    sudo rm -f "$BRRB_INTERFACES_DIR/wlan0"
     sudo rm -f "$BRRB_DNSMASQ_DIR/routed-ap.conf"
     sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original" "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
 }
@@ -54,7 +53,6 @@ restore_originals(){
 copy_config_files(){
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/sysctl.d/routed-ap.conf" "$BRRB_SYSCTL_DIR"
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
 }
@@ -62,7 +60,7 @@ copy_config_files(){
 do_install(){
     assert_install_ok "network.access_point"
     assert_bundle_is_current "base"
-    install_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
+    install_pkgs "${BRRB_ACCESS_POINT_PKGS[@]}"
     save_originals
     sudo rfkill unblock wlan
     sudo systemctl unmask dnsmasq
@@ -74,7 +72,7 @@ do_install(){
 
 do_upgrade() {
     assert_upgrade_ok "network.access_point"
-    upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
+    upgrade_pkgs "${BRRB_ACCESS_POINT_PKGS[@]}"
     set_metadatum ".network.access_point.version" "$BRRB_VERSION"
 }
 
