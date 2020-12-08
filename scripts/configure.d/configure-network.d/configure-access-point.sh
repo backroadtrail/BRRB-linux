@@ -111,17 +111,40 @@ do_lan(){ #ARGS: <ip-address> <low-ip> <high-ip>
       "s|dhcp-range=.*|dhcp-range=$2,$3,255.255.255.0,24h|" \
       "s|address=/(.*)/.*|address=/\\1/$1|"
 
+    if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
+        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+    fi
+
     sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" \
       "s| static ip_address=.*| static ip_address=$1/24|"
     
+    if [ -f  "$BRRB_DHCPCD_DIR/dhcpcd.conf" ]; then
+        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
+    fi
 }
 
-do_wifi(){ #ARGS: <essid> <password>
+do_wifi(){ #ARGS: <ssid> <password>
     assert_bundle_is_current "network.access_point"
+
+    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" \
+      "s|ssid=.*|ssid=$1|" \
+      "s|wpa_passphrase=.*|wpa_passphrase=$2|"
+
+    if [ -f "$BRRB_HOSTAPD_DIR/hostapd.conf" ]; then
+        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
+    fi
 }
 
 do_dns(){ #ARGS: <lan-domain> <brrb-name>
     assert_bundle_is_current "network.access_point"
+
+    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" \
+      "s|domain=.*|domain=$1|" \
+      "s|address=/.*/(.*)|address=/$2.$1/\\1|"
+
+    if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
+        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+    fi
 }
 
 if [  $# -lt 1 ]; then
