@@ -34,7 +34,7 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh network (mesh | adhoc-wifi | access-point)"
+    echo "Usage: configure.sh network (mesh | access-point)"
     exit 1
 }
 
@@ -51,11 +51,6 @@ case $topic in
         ./configure-network.d/configure-mesh-olsrd.sh "$@"    
         ;;
 
-     adhoc-wifi)
-        shift
-        ./configure-network.d/configure-adhoc-wifi.sh "$@"    
-        ;;
-        
      access-point)
         shift
         ./configure-network.d/configure-access-point.sh "$@"    
