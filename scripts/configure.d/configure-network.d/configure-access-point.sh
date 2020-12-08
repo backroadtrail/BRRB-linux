@@ -179,6 +179,7 @@ case $1 in
 
     disable)
         do_disable
+        sudo reboot
         ;;
 
     reset)
