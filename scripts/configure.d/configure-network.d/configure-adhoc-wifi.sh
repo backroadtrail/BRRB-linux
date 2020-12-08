@@ -60,6 +60,7 @@ do_install(){
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
     save_originals
+    sudo systemctl unmask isc-dhcp-server
     sudo systemctl disable isc-dhcp-server
     sudo systemctl stop isc-dhcp-server
     set_metadatum ".network.adhoc_wifi.version" "$BRRB_VERSION"

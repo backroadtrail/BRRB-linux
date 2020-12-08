@@ -30,7 +30,6 @@ source "config.sh"
 source "funct.sh"
 cd "$HERE"
 ##
-# Source: https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md
 
 assert_is_raspi "$0"
 
