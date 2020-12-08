@@ -39,7 +39,7 @@ usage(){
 }
 
 save_originals(){
-    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
+    sudo cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
 }
 
 restore_originals(){
@@ -59,13 +59,13 @@ do_install(){
     save_originals
     sudo systemctl disable dnsmasq
     sudo systemctl stop dnsmasq
-    set_metadatum "network.access_point.version" "$BRRB_VERSION"
+    set_metadatum ".network.access_point.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
     assert_upgrade_ok "network.access_point"
     upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
-    set_metadatum "network.access_point.version" "$BRRB_VERSION"
+    set_metadatum ".network.access_point.version" "$BRRB_VERSION"
 }
 
 do_enable(){

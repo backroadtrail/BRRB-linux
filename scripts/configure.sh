@@ -76,5 +76,7 @@ case $topic in
         ;;
 esac
 
+echo " !!! SUCCESS !!! "
+
 
 

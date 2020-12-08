@@ -62,13 +62,13 @@ do_install(){
     save_originals
     sudo systemctl disable isc-dhcp-server
     sudo systemctl stop isc-dhcp-server
-    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
+    set_metadatum ".network.adhoc_wifi.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
     assert_upgrade_ok "network.adhoc_wifi"
     upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
-    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
+    set_metadatum ".network.adhoc_wifi.version" "$BRRB_VERSION"
 }
 
 do_enable(){
