@@ -204,3 +204,18 @@ EOF
 
 fi
 }
+
+sed_file(){ #ARGS: <file> <sed-expression> ...
+    source="$1"
+    shift
+    file1="$(mktemp)"
+    file2="$(mktemp)"
+    cat "$source" > "$file1"
+    for expr in "$@"; do
+        echo "Expr: '$expr'"
+        sed -E -e "$expr" "$file1" > "$file2"
+        cat "$file2" > "$file1"
+    done
+    cp "$file1" "$source.new"
+    rm -f "$file1" "$file2"
+}

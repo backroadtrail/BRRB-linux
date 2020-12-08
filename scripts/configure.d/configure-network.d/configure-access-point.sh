@@ -36,10 +36,9 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh network access-point (install | upgrade | enable | disable)"
-    echo "Usage: configure.sh network access-point lan <net-mask> <ip-address>"
-    echo "Usage: configure.sh network access-point dhcp <low-ip> <high-ip>"
+    echo "Usage: configure.sh network access-point lan <ip-address> <low-ip> <high-ip>"
     echo "Usage: configure.sh network access-point wifi <essid> <password>"
-    echo "Usage: configure.sh network access-point dns <lan-domain> <ap-name>"
+    echo "Usage: configure.sh network access-point dns <lan-domain> <brrb-name>"
     exit 1
 }
 
@@ -105,19 +104,23 @@ do_disable(){
     # A reboot is needed
 }
 
-do_lan(){
+do_lan(){ #ARGS: <ip-address> <low-ip> <high-ip>
+    assert_bundle_is_current "network.access_point"
+
+    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" \
+      "s|dhcp-range=.*|dhcp-range=$2,$3,255.255.255.0,24h|" \
+      "s|address=/(.*)/.*|address=/\\1/$1|"
+
+    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" \
+      "s| static ip_address=.*| static ip_address=$1/24|"
+    
+}
+
+do_wifi(){ #ARGS: <essid> <password>
     assert_bundle_is_current "network.access_point"
 }
 
-do_wifi(){
-    assert_bundle_is_current "network.access_point"
-}
-
-do_dns(){
-    assert_bundle_is_current "network.access_point"
-}
-
-do_dhcp(){
+do_dns(){ #ARGS: <lan-domain> <brrb-name>
     assert_bundle_is_current "network.access_point"
 }
 
@@ -144,30 +147,21 @@ case $1 in
         ;;
 
     lan)
-        if [  $# -lt 3 ]; then
+        if [  $# -lt 4 ]; then
           echo "Invalid number of arguments !!!"
             usage
         fi
         shift
-        do_lan
+        do_lan "$@"
         ;;
 
-    dhcp)
-        if [  $# -lt 3 ]; then
-          echo "Invalid number of arguments !!!"
-            usage
-        fi
-        shift
-        do_dhcp
-        ;;
-    
     wifi)
         if [  $# -lt 3 ]; then
           echo "Invalid number of arguments !!!"
             usage
         fi
         shift
-        do_wifi
+        do_wifi "$@"
         ;;
 
    dns)
@@ -176,7 +170,7 @@ case $1 in
             usage
         fi
         shift
-        do_dns
+        do_dns "$@"
         ;;
 
     *)
