@@ -138,16 +138,28 @@ install_lepow() {
 #### BRRB METADATA FUNCTIONS ####
 
 set_metadatum(){ # ARGS: <json-path> <value>
+    if [ ! -f "$BRRB_METADATA" ]; then
+        echo "Can't read: $BRRB_METADATA"
+        exit 1
+    fi
     jq "$1 = \"$2\"" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
     sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
 }
 
 del_metadatum(){ # ARGS: <json-path>
+    if [ ! -f "$BRRB_METADATA" ]; then
+        echo "Can't read: $BRRB_METADATA"
+        exit 1
+    fi
     jq "del($1)" "$BRRB_METADATA" | sudo tee "$BRRB_METADATA.tmp" >/dev/null
     sudo mv "$BRRB_METADATA.tmp" "$BRRB_METADATA"
 }
 
 get_metadatum(){ # ARGS: <json-path>
+    if [ ! -f "$BRRB_METADATA" ]; then
+        echo "Can't read: $BRRB_METADATA"
+        exit 1
+    fi
     jq -r "$1" "$BRRB_METADATA"
 }
 
@@ -215,6 +227,6 @@ sed_file(){ #ARGS: <file> <sed-expression> ...
         sed -E -e "$expr" "$file1" > "$file2"
         cat "$file2" > "$file1"
     done
-    cp "$file1" "$source"
+    sudo cp "$file1" "$source"
     rm -f "$file1" "$file2"
 }

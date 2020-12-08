@@ -35,7 +35,7 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh network access-point [-noboot] (install | upgrade | enable | disable)"
+    echo "Usage: configure.sh network access-point (install | upgrade | enable | disable | reset)"
     echo "Usage: configure.sh network access-point lan <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     echo "Usage: configure.sh network access-point wifi <interface> <essid> <password>"
     echo "Usage: configure.sh network access-point dns <lan-domain> <brrb-name>"
@@ -46,18 +46,25 @@ save_originals(){
     sudo cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
 }
 
+reset_config_files(){
+    sudo cp -f "$BRRB_PROJECT_FILES_DIR/etc/dhcpcd.conf"             "$BRRB_FILES_DIR/etc/dhcpcd.conf"
+    sudo cp -f "$BRRB_PROJECT_FILES_DIR/etc/hostapd/hostapd.conf"    "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf"
+    sudo cp -f "$BRRB_PROJECT_FILES_DIR/etc/sysctl.d/routed-ap.conf" "$BRRB_FILES_DIR/etc/sysctl.d/routed-ap.conf"
+    sudo cp -f "$BRRB_PROJECT_FILES_DIR/etc/dnsmasq.conf"            "$BRRB_FILES_DIR/etc/dnsmasq.conf"
+}
+
 rm_config_files(){
     sudo rm -f "$BRRB_DHCPCD_DIR/dhcpcd.conf"
     sudo rm -f "$BRRB_HOSTAPD_DIR/hostapd.conf"
     sudo rm -f "$BRRB_SYSCTL_DIR/routed-ap.conf"
-    sudp rm -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
+    sudo rm -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
 }
 
 cp_config_files(){
-    sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
-    sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
-    sudo cp -f "$BRRB_FILES_DIR/etc/sysctl.d/routed-ap.conf" "$BRRB_SYSCTL_DIR"
-    sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf"                "$BRRB_DHCPCD_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf"       "$BRRB_HOSTAPD_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/sysctl.d/routed-ap.conf"    "$BRRB_SYSCTL_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf"               "$BRRB_DNSMASQ_DIR"
 }
 
 do_install(){
@@ -106,18 +113,15 @@ do_disable(){
 do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     assert_bundle_is_current "network.access_point"
 
-    bare_ip="$(echo "$1" | sed -E -e 's|(.*)/|\\1|')"
+    bare_ip="$(echo "$1" | sed -E -e 's|^(.*)/.*|\1|')"
 
     sed_file "$BRRB_FILES_DIR/etc/dnsmasq.conf" \
-      "s|dhcp-range=.*|dhcp-range=$2,$3,$4,24h|" \
-      "s|address=/(.*)/.*|address=/\\1/$bare_ip|"
+      "s|^dhcp-range=.*|dhcp-range=$2,$3,$4,24h|" \
+      "s|^address=/(.*)/.*|address=/\\1/$bare_ip|"
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
-        echo "Modified:  'dnsmasq.conf'."
-    else
-        echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
-        after='null'
+        sudo systemctl restart dnsmasq
     fi
 
     sed_file "$BRRB_FILES_DIR/etc/dhcpcd.conf" \
@@ -125,10 +129,6 @@ do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     
     if [ -f  "$BRRB_DHCPCD_DIR/dhcpcd.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
-        echo "Modified:  'dhcpcd.conf'."
-    else
-        echo "Enable the access point to activate the changes to 'dhcpcd.conf'."
-        after='null'
     fi
 }
 
@@ -136,16 +136,13 @@ do_wifi(){ #ARGS: <interface> <ssid> <password>
     assert_bundle_is_current "network.access_point"
 
     sed_file "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" \
-      "s|interface=.*|interface=$1|" \
-      "s|ssid=.*|ssid=$2|" \
-      "s|wpa_passphrase=.*|wpa_passphrase=$3|"
+      "s|^interface=.*|interface=$1|" \
+      "s|^ssid=.*|ssid=$2|" \
+      "s|^wpa_passphrase=.*|wpa_passphrase=$3|"
 
     if [ -f "$BRRB_HOSTAPD_DIR/hostapd.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
-        echo "Modified: 'hostapd.conf'."
-    else
-        echo "Enable the access point to activate the changes to 'hostapd.conf'."
-        after='null'
+        sudo systemctl restart hostap
     fi
 }
 
@@ -153,29 +150,14 @@ do_dns(){ #ARGS: <lan-domain> <brrb-name>
     assert_bundle_is_current "network.access_point"
 
     sed_file "$BRRB_FILES_DIR/etc/dnsmasq.conf" \
-      "s|domain=.*|domain=$1|" \
-      "s|address=/.*/(.*)|address=/$2.$1/\\1|"
+      "s|^domain=.*|domain=$1|" \
+      "s|^address=/.*/(.*)|address=/$2.$1/\\1|"
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
-        echo "Modified:  'dnsmasq.conf'."
-    else
-        echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
-        after='null'
+        sudo systemctl restart dnsmasq
     fi
 }
-
-if [  $# -lt 1 ]; then
-    echo "Invalid number of arguments !!!"
-    usage
-fi 
-
-if [  "$1" = '-noboot' ]; then
-    after='noboot'
-    shift
-else
-    after='boot'
-fi
 
 if [  $# -lt 1 ]; then
     echo "Invalid number of arguments !!!"
@@ -185,12 +167,10 @@ fi
 case $1 in
     install)
         do_install
-        after='null'
         ;;
 
     upgrade)
         do_upgrade
-        after='null'
         ;;
 
     enable)
@@ -199,7 +179,11 @@ case $1 in
 
     disable)
         do_disable
-        after='null'
+        ;;
+
+    reset)
+        do_disable
+        reset_config_files
         ;;
 
     lan)
@@ -234,11 +218,3 @@ case $1 in
         usage
         ;;
 esac
-
-if [ "$after" = 'boot' ]; then
-    echo "Rebooting activate the change!"
-    sudo reboot
-elif [ "$after" = 'noboot' ]; then
-    echo "You should reboot to activate the changes!"
-fi
-
