@@ -35,6 +35,7 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh network (mesh | adhoc-wifi | access-point)"
+    exit 1
 }
 
 if [  $# -ge 1 ]; then
