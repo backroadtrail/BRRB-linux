@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# configure-adhoc-wifi.sh
+# configure-access-point.sh
 
 # Copyright 2020 OpsResearch LLC
 #
@@ -34,55 +34,52 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh network adhoc-wifi (install | upgrade | enable | disable)"
+    echo "Usage: configure.sh network access-point (install | upgrade | enable | disable)"
     exit 1
 }
 
 save_originals(){
-    sudo cp -f "$BRRB_DEFAULT_DIR/isc-dhcp-server" "$BRRB_DEFAULT_DIR/isc-dhcp-server.original"
-    sudp cp -f "$BRRB_DHCP_DIR/dhcpd.conf" "$BRRB_DHCP_DIR/dhcpd.conf.original"
+    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
 }
 
 restore_originals(){
     sudo rm -f "$BRRB_INTERFACES_DIR/wlan0"
-    sudo cp -f "$BRRB_DEFAULT_DIR/isc-dhcp-server.original" "$BRRB_DEFAULT_DIR/isc-dhcp-server"
-    sudp cp -f "$BRRB_DHCP_DIR/dhcpd.conf.original" "$BRRB_DHCP_DIR/dhcpd.conf"
+    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original" "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
 }
 
 copy_config_files(){
     sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan0" "$BRRB_INTERFACES_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/default/isc-dhcp-server" "$BRRB_DEFAULT_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcp/dhcpd.conf" "$BRRB_DHCP_DIR"
+    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
 }
 
 do_install(){
-    assert_install_ok "network.adhoc_wifi"
+    assert_install_ok "network.access_point"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
     save_originals
-    sudo systemctl disable isc-dhcp-server
-    sudo systemctl stop isc-dhcp-server
-    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
+    sudo systemctl disable dnsmasq
+    sudo systemctl stop dnsmasq
+    set_metadatum "network.access_point.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
-    assert_upgrade_ok "network.adhoc_wifi"
+    assert_upgrade_ok "network.access_point"
     upgrade_pkgs "${BRRB_ADHOC_WIFI_PKGS[@]}"
-    set_metadatum "network.adhoc_wifi.version" "$BRRB_VERSION"
+    set_metadatum "network.access_point.version" "$BRRB_VERSION"
 }
 
 do_enable(){
-    assert_bundle_is_current "network.adhoc_wifi"
+    assert_bundle_is_current "network.access_point"
     copy_config_files
-    sudo systemctl enable isc-dhcp-server
-    sudo systemctl start isc-dhcp-server
+    sudo systemctl enable dnsmasq
+    sudo systemctl start dnsmasq
     # A reboot is needed
 }
 
 do_disable(){
-    assert_bundle_is_current "network.adhoc_wifi"
-    sudo systemctl disable isc-dhcp-server
-    sudo systemctl stop isc-dhcp-server
+    assert_bundle_is_current "network.access_point"
+    sudo systemctl disable dnsmasq
+    sudo systemctl stop dnsmasq
     restore_config_files
     # A reboot is needed
 }

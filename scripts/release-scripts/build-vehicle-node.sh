@@ -34,9 +34,10 @@ cd "$HERE"
 if [ -f "$BRRB_METADATA" ]; then
 	../configure.sh network mesh-olsrd install
 	../configure.sh network mesh-olsrd enable
-	../configure.sh network adhoc-wifi install
-	../configure.sh network adhoc-wifi enable
+	../configure.sh network access-point install
+	../configure.sh network access-point enable
 	set_metadatum .build_type "vehicle-node"
+	sudo reboot
 	cd "$HOME"
 	./BRRB-linux/scripts/post-bootstrap.sh
 else

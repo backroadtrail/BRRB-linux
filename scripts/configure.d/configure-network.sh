@@ -30,11 +30,12 @@ source "config.sh"
 source "funct.sh"
 cd "$HERE"
 ##
+# Source: https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md
 
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh network (mesh | adhoc-wifi)"
+    echo "Usage: configure.sh network (mesh | adhoc-wifi | access-point)"
 }
 
 if [  $# -ge 1 ]; then
@@ -53,6 +54,11 @@ case $topic in
      adhoc-wifi)
         shift
         ./configure-network.d/configure-adhoc-wifi.sh "$@"    
+        ;;
+        
+     access-point)
+        shift
+        ./configure-network.d/configure-access-point.sh "$@"    
         ;;
         
     *)
