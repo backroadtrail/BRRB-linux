@@ -36,8 +36,8 @@ assert_is_raspi "$0"
 
 usage(){
     echo "Usage: configure.sh network access-point (install | upgrade | enable | disable)"
-    echo "Usage: configure.sh network access-point lan <ip-address> <low-ip> <high-ip>"
-    echo "Usage: configure.sh network access-point wifi <essid> <password>"
+    echo "Usage: configure.sh network access-point lan <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
+    echo "Usage: configure.sh network access-point wifi <interface> <essid> <password>"
     echo "Usage: configure.sh network access-point dns <lan-domain> <brrb-name>"
     exit 1
 }
@@ -46,18 +46,18 @@ save_originals(){
     sudo cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf" "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original"
 }
 
-restore_originals(){
+rm_config_files(){
     sudo rm -f "$BRRB_DHCPCD_DIR/dhcpcd.conf"
     sudo rm -f "$BRRB_HOSTAPD_DIR/hostapd.conf"
-    sudo rm -f "$BRRB_DNSMASQ_DIR/routed-ap.conf"
-    sudp cp -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf.original" "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
+    sudo rm -f "$BRRB_SYSCTL_DIR/routed-ap.conf"
+    sudp rm -f "$BRRB_DNSMASQ_DIR/dnsmasq.conf"
 }
 
-copy_config_files(){
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/sysctl.d/routed-ap.conf" "$BRRB_SYSCTL_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+cp_config_files(){
+    sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/sysctl.d/routed-ap.conf" "$BRRB_SYSCTL_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
 }
 
 do_install(){
@@ -67,6 +67,8 @@ do_install(){
     save_originals
     sudo rfkill unblock wlan
     sudo systemctl unmask dnsmasq
+    sudo systemctl disable dnsmasq
+    sudo systemctl stop dnsmasq
     sudo systemctl unmask hostapd
     sudo systemctl disable dnsmasq
     sudo systemctl stop dnsmasq
@@ -81,14 +83,14 @@ do_upgrade() {
 
 do_enable(){
     assert_bundle_is_current "network.access_point"
-    copy_config_files
+    cp_config_files
     sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
     sudo netfilter-persistent save
     sudo systemctl enable hostapd
     sudo systemctl start hostapd
     sudo systemctl enable dnsmasq
     sudo systemctl start dnsmasq
-    # A reboot is needed
+    sudo reboot
 }
 
 do_disable(){
@@ -99,51 +101,65 @@ do_disable(){
     sudo systemctl stop dnsmasq 
     sudo iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     sudo netfilter-persistent save
-   
-    restore_config_files
-    # A reboot is needed
+    rm_config_files
+    sudo reboot
 }
 
-do_lan(){ #ARGS: <ip-address> <low-ip> <high-ip>
+do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     assert_bundle_is_current "network.access_point"
 
-    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" \
-      "s|dhcp-range=.*|dhcp-range=$2,$3,255.255.255.0,24h|" \
-      "s|address=/(.*)/.*|address=/\\1/$1|"
+    bare_ip="$(echo "$1" | sed -E -e 's|(.*)/|\\1|')"
+
+    sed_file "$BRRB_FILES_DIR/etc/dnsmasq.conf" \
+      "s|dhcp-range=.*|dhcp-range=$2,$3,$4,24h|" \
+      "s|address=/(.*)/.*|address=/\\1/$bare_ip|"
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
-        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+        sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+        echo "You need to reboot to activate the changes to 'dnsmasq.conf'."
+    else
+        echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
     fi
 
-    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" \
-      "s| static ip_address=.*| static ip_address=$1/24|"
+    sed_file "$BRRB_FILES_DIR/etc/dhcpcd.conf" \
+      "s| static ip_address=.*| static ip_address=$1|"
     
     if [ -f  "$BRRB_DHCPCD_DIR/dhcpcd.conf" ]; then
-        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
+        sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
+        echo "You need to reboot to activate the changes to 'dhcpcd.conf'."
+    else
+        echo "Enable the access point to activate the changes to 'dhcpcd.conf'."
     fi
 }
 
-do_wifi(){ #ARGS: <ssid> <password>
+do_wifi(){ #ARGS: <interface> <ssid> <password>
     assert_bundle_is_current "network.access_point"
 
-    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" \
-      "s|ssid=.*|ssid=$1|" \
-      "s|wpa_passphrase=.*|wpa_passphrase=$2|"
+    sed_file "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" \
+      "s|interface=.*|interface=$1|" \
+      "s|ssid=.*|ssid=$2|" \
+      "s|wpa_passphrase=.*|wpa_passphrase=$3|"
 
     if [ -f "$BRRB_HOSTAPD_DIR/hostapd.conf" ]; then
-        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
+        sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
+        echo "You need to reboot to activate the changes to 'hostapd.conf'."
+    else
+        echo "Enable the access point to activate the changes to 'hostapd.conf'."
     fi
 }
 
 do_dns(){ #ARGS: <lan-domain> <brrb-name>
     assert_bundle_is_current "network.access_point"
 
-    sed_file "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" \
+    sed_file "$BRRB_FILES_DIR/etc/dnsmasq.conf" \
       "s|domain=.*|domain=$1|" \
       "s|address=/.*/(.*)|address=/$2.$1/\\1|"
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
-        sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+        sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
+        echo "You need to reboot to activate the changes to 'dnsmasq.conf'."
+    else
+        echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
     fi
 }
 
@@ -170,7 +186,7 @@ case $1 in
         ;;
 
     lan)
-        if [  $# -lt 4 ]; then
+        if [  $# -lt 5 ]; then
           echo "Invalid number of arguments !!!"
             usage
         fi
@@ -179,7 +195,7 @@ case $1 in
         ;;
 
     wifi)
-        if [  $# -lt 3 ]; then
+        if [  $# -lt 4 ]; then
           echo "Invalid number of arguments !!!"
             usage
         fi

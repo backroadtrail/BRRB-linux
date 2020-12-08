@@ -38,14 +38,16 @@ usage(){
 }
 
 do_install(){
-    if [ -f "$BRRB_METADATA" ];then
+    if [ -f "$BRRB_METADATA" ] || [ -d "$BRRB_FILES_DIR" ];then
         echo "The Base bundle is already installed, upgrade instead!"
         exit 1
     else
         install_pkgs "${BRRB_BASE_PKGS[@]}"
         create_metadata_file
+        cp -r "$BRRB_PROJECT_FILES_DIR" "$BRRB_FILES_DIR"
         set_metadatum .base.version "$BRRB_VERSION"
     fi
+
     do_validate
 }
 

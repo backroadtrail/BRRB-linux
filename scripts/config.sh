@@ -39,6 +39,7 @@ is_raspi(){
 
 #### COMMON CONSTANTS
 export BRRB_HOME="/opt/brrb"
+export BRRB_FILES_DIR="$BRRB_HOME/files"
 export BRRB_METADATA="$BRRB_HOME/metadata.json"
 export BRRB_TEMP_DIR="/var/tmp"
 export BRRB_OLSRD_CONFIG_DIR="/etc/olsrd"
@@ -50,27 +51,30 @@ export BRRB_SYSCTL_DIR="/etc/sysctl.d"
 export BRRB_HOSTAPD_DIR="/etc/hostapd"
 export BRRB_INTERFACES_DIR="/etc/network/interfaces.d"
 
+export BRRB_REPO_ROOT
+BRRB_REPO_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
+
 #### OS ABSTRACTED CONSTANTS
 if is_macos ;then
+	export BRRB_PROJECT_FILES_DIR="$BRRB_REPO_ROOT/files/macos"
 	export BRRB_BASE_PKGS=(jq dcfldd rlwrap zip cmake sbcl node)
 	export BRRB_WORKSTATION_PKGS=(tmux mosh)
 	export BRRB_DEVELOPMENT_PKGS=(shellcheck emacs f3)
 	export BRRB_HAM_RADIO_PKGS=(chirp)
 
 elif is_raspi ;then
+	export BRRB_PROJECT_FILES_DIR="$BRRB_REPO_ROOT/files/raspi"
 	export BRRB_BASE_PKGS=(exfat-fuse exfat-utils jq dcfldd rlwrap zip g++ cmake sbcl nodejs build-essential dkms)
 	export BRRB_WORKSTATION_PKGS=(claws-mail pulseaudio pulseaudio-module-bluetooth tmux mosh ssh-askpass)
 	export BRRB_DEVELOPMENT_PKGS=(shellcheck rpi-imager emacs f3)
 	export BRRB_HAM_RADIO_PKGS=(chirp)
 	export BRRB_MESH_OLSRD_PKGS=(olsrd olsrd-gui olsrd-plugins)
-	export BRRB_ADHOC_WIFI_PKGS=(isc-dhcp-server)
 	export BRRB_ACCESS_POINT_PKGS=(hostapd dnsmasq dnsutils netfilter-persistent iptables-persistent)
 else
 	echo "Unknown OS '$(uname)' to abstract constants !!!"
 	exit 1
 fi
 
-#### COMPUTED CONSTANTS
 get_version(){
 	if gitdesc="$(git describe 2> /dev/null)"; then
 		if [[ "$gitdesc" != *-* ]]; then
@@ -86,8 +90,6 @@ get_version(){
 export BRRB_VERSION
 BRRB_VERSION="$(get_version)"
 
-export BRRB_PROJECT_ROOT
-BRRB_PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
 
 

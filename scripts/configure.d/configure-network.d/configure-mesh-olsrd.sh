@@ -50,9 +50,9 @@ restore_originals(){
 }
 
 copy_config_files(){
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/network/interfaces.d/wlan1" "$BRRB_INTERFACES_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR"
-    sudo cp -f "$BRRB_PROJECT_ROOT/files/raspi/etc/default/olsrd" "$BRRB_DEFAULT_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/network/interfaces.d/olsrd" "$BRRB_INTERFACES_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/olsrd/olsrd.conf" "$BRRB_OLSRD_CONFIG_DIR"
+    sudo cp -f "$BRRB_FILES_DIR/etc/default/olsrd" "$BRRB_DEFAULT_DIR"
 }
 
 do_install(){
