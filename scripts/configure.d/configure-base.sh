@@ -44,7 +44,7 @@ do_install(){
     else
         install_pkgs "${BRRB_BASE_PKGS[@]}"
         create_metadata_file
-        cp -r "$BRRB_PROJECT_FILES_DIR" "$BRRB_FILES_DIR"
+        sudo cp -r "$BRRB_PROJECT_FILES_DIR" "$BRRB_FILES_DIR"
         set_metadatum .base.version "$BRRB_VERSION"
     fi
 

@@ -35,7 +35,7 @@ cd "$HERE"
 assert_is_raspi "$0"
 
 usage(){
-    echo "Usage: configure.sh network access-point (install | upgrade | enable | disable)"
+    echo "Usage: configure.sh network access-point [-noboot] (install | upgrade | enable | disable)"
     echo "Usage: configure.sh network access-point lan <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     echo "Usage: configure.sh network access-point wifi <interface> <essid> <password>"
     echo "Usage: configure.sh network access-point dns <lan-domain> <brrb-name>"
@@ -90,7 +90,6 @@ do_enable(){
     sudo systemctl start hostapd
     sudo systemctl enable dnsmasq
     sudo systemctl start dnsmasq
-    sudo reboot
 }
 
 do_disable(){
@@ -102,7 +101,6 @@ do_disable(){
     sudo iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     sudo netfilter-persistent save
     rm_config_files
-    sudo reboot
 }
 
 do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
@@ -116,7 +114,7 @@ do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
-        echo "You need to reboot to activate the changes to 'dnsmasq.conf'."
+        echo "Modified:  'dnsmasq.conf'."
     else
         echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
     fi
@@ -126,7 +124,7 @@ do_lan(){ #ARGS: <brrb-ip/bits> <low-ip> <high-ip> <mask:n.n.n.n>"
     
     if [ -f  "$BRRB_DHCPCD_DIR/dhcpcd.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dhcpcd.conf" "$BRRB_DHCPCD_DIR"
-        echo "You need to reboot to activate the changes to 'dhcpcd.conf'."
+        echo "Modified:  'dhcpcd.conf'."
     else
         echo "Enable the access point to activate the changes to 'dhcpcd.conf'."
     fi
@@ -142,7 +140,7 @@ do_wifi(){ #ARGS: <interface> <ssid> <password>
 
     if [ -f "$BRRB_HOSTAPD_DIR/hostapd.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/hostapd/hostapd.conf" "$BRRB_HOSTAPD_DIR"
-        echo "You need to reboot to activate the changes to 'hostapd.conf'."
+        echo "Modified: 'hostapd.conf'."
     else
         echo "Enable the access point to activate the changes to 'hostapd.conf'."
     fi
@@ -157,11 +155,23 @@ do_dns(){ #ARGS: <lan-domain> <brrb-name>
 
     if [ -f  "$BRRB_DNSMASQ_DIR/dnsmasq.conf" ]; then
         sudo cp -f "$BRRB_FILES_DIR/etc/dnsmasq.conf" "$BRRB_DNSMASQ_DIR"
-        echo "You need to reboot to activate the changes to 'dnsmasq.conf'."
+        echo "Modified:  'dnsmasq.conf'."
     else
         echo "Enable the access point to activate the changes to 'dnsmasq.conf'."
     fi
 }
+
+if [  $# -lt 1 ]; then
+    echo "Invalid number of arguments !!!"
+    usage
+fi 
+
+if [  "$1" = '-noboot' ]; then
+    after='noboot'
+    shift
+else
+    after='boot'
+fi
 
 if [  $# -lt 1 ]; then
     echo "Invalid number of arguments !!!"
@@ -217,4 +227,11 @@ case $1 in
         usage
         ;;
 esac
+
+if [ "$after" = 'boot' ]; then
+    echo "Rebooting activate the change!"
+    sudo reboot
+else
+    echo "You should reboot to activate the changes!"
+fi
 
