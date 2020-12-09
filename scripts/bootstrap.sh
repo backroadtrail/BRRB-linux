@@ -50,7 +50,7 @@ echo "$BRRB_HOSTNAME" | sudo tee /etc/hostname
 ./configure.sh base install
 set_metadatum .display "$display"
 ./configure.sh base cfg-user "$USER"
-
+../drivers/install-rtl88x2bu.sh
 
 # DISPLAY
 case $display in
