@@ -76,15 +76,7 @@ else
 fi
 
 get_version(){
-	if gitdesc="$(git describe 2> /dev/null)"; then
-		if [[ "$gitdesc" != *-* ]]; then
-			echo "$gitdesc"
-		else
-			echo "development"
-		fi
-	else		
-		echo "development"
-	fi
+	git describe 2> /dev/null || git rev-parse --abbrev-ref HEAD 2> /dev/null
 }
 
 export BRRB_VERSION
