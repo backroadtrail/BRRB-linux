@@ -77,7 +77,7 @@ fi
 
 get_version(){
 	branch="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
-	if [ $branch = 'master' ];then
+	if [ "$branch" = 'master' ];then
 		git describe 2> /dev/null
 	else
 		echo "$branch"
