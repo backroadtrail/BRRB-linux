@@ -62,13 +62,13 @@ do_install(){
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     save_originals
-    set_metadatum "network.mesh_olsrd.version" "$BRRB_VERSION"
+    set_metadatum ".network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
 do_upgrade() {
     assert_upgrade_ok "mesh_olsrd"
     upgrade_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
-    set_metadatum "network.mesh_olsrd.version" "$BRRB_VERSION"
+    set_metadatum ".network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
 do_enable(){
