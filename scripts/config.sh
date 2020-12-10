@@ -76,7 +76,12 @@ else
 fi
 
 get_version(){
-	git describe 2> /dev/null || git rev-parse --abbrev-ref HEAD 2> /dev/null
+	branch="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
+	if [ $branch = 'master' ];then
+		git describe 2> /dev/null
+	else
+		echo "$branch"
+	fi
 }
 
 export BRRB_VERSION
