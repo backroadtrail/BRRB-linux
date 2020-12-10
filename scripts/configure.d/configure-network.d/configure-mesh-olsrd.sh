@@ -56,7 +56,7 @@ copy_config_files(){
 }
 
 do_install(){
-    assert_install_ok "mesh_olsrd"
+    assert_install_ok "network.mesh_olsrd"
     assert_bundle_is_current "base"
     install_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
     sudo systemctl disable olsrd
@@ -66,13 +66,13 @@ do_install(){
 }
 
 do_upgrade() {
-    assert_upgrade_ok "mesh_olsrd"
+    assert_upgrade_ok "network.mesh_olsrd"
     upgrade_pkgs "${BRRB_MESH_OLSRD_PKGS[@]}"
     set_metadatum ".network.mesh_olsrd.version" "$BRRB_VERSION"
 }
 
 do_enable(){
-    assert_bundle_is_current "mesh_olsrd"
+    assert_bundle_is_current "network.mesh_olsrd"
     sudo systemctl stop dhcpcd || echo "DHCP already stopped."
     sudo systemctl stop olsrd  || echo "OLSRD already stopped."
     
@@ -84,7 +84,7 @@ do_enable(){
 }
 
 do_disable(){
-    assert_bundle_is_current "mesh_olsrd"
+    assert_bundle_is_current "network.mesh_olsrd"
     sudo systemctl disable olsrd
     sudo systemctl stop olsrd
     restore_originals
