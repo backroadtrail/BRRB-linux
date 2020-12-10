@@ -7,15 +7,15 @@ Backroad Raspberry is a meshed smart node for off-grid vehicles.
 ## To build a new Vehicle Node
   * `cd $HOME`
   * `git clone https://github.com/backroadtrail/BRRB-linux.git`
-  * `./BRRB-linux/scripts/release-scripts/build-vehicle-node.sh`
+  * `./BRRB-linux/scripts/release-scripts/bootstrap-vehicle-node.sh`
   * ***Then after the reboot:***
-  * `./BRRB-linux/scripts/release-scripts/build-vehicle-node.sh`
+  * `./BRRB-linux/scripts/release-scripts/bootstrap-vehicle-node.sh`
 
 
 ## To build a new Development Workstation
   * `cd $HOME`
   * `git clone https://github.com/backroadtrail/BRRB-linux.git`
-  * `./BRRB-linux/scripts/release-scripts/build-devel-workstation.sh`
+  * `./BRRB-linux/scripts/release-scripts/bootstrap-devel-workstation.sh`
   * ***Then after the reboot:***
-  * `./BRRB-linux/scripts/release-scripts/build-devel-workstation.sh`
+  * `./BRRB-linux/scripts/release-scripts/bootstrap-devel-workstation.sh`
   * ***Then answer the SSH passphrase question.***
