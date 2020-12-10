@@ -36,6 +36,7 @@ if [ -f "$BRRB_METADATA" ]; then
 	#../configure.sh network mesh-olsrd enable
 	../configure.sh network access-point install
 	#../configure.sh network access-point enable
+	rm -rf "$HOME/LCD-show"
 	set_metadatum .build_type "vehicle-node"
 	sudo reboot
 else
