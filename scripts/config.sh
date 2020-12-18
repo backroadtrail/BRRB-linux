@@ -92,7 +92,7 @@ elif is_raspi ;then
 	export BRRB_MESH_OLSRD_PKGS=(olsrd olsrd-gui olsrd-plugins)
 	export BRRB_ACCESS_POINT_PKGS=(hostapd dnsmasq dnsutils netfilter-persistent iptables-persistent)
 else
-	echo "Unknown OS '$(uname)' to abstract constants !!!"
+	echo "Unknown OS '$(uname -a)' to abstract constants !!!"
 	exit 1
 fi
 

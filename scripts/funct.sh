@@ -48,7 +48,7 @@ elif is_raspi ;then
         sudo apt-get install -y "$@"
     }
 else
-    echo "Unknown OS '$(uname)' for function normalization !!!"
+    echo "Unknown OS '$(uname -a)' for function normalization !!!"
     exit 1
 fi
 
