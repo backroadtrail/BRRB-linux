@@ -29,13 +29,34 @@ export BRRB_HOSTNAME="brrb"
 export BRRB_NAME="Backroad Raspberry"
 export BRRB_DESC="Backroad Raspberry is a meshed smart node for off-grid vehicles."
 
+is_linux(){
+    [ "$(uname)" = 'Linux' ]
+}
+
 is_macos(){
     [ "$(uname)" = 'Darwin' ]
 }
 
 is_raspi(){
-    [ "$(uname)" = 'Linux' ]
+    is_linux && grep Raspbian /etc/os-release > /dev/null
 }
+
+is_kali(){
+    is_linux && grep Kali /etc/os-release > /dev/null
+}
+
+is_ubuntu(){
+    is_linux && grep Ubuntu /etc/os-release > /dev/null
+}
+
+is_arm(){
+	uname -m | grep arm > /dev/null
+}
+
+is_x86(){
+	uname -m | grep x86 > /dev/null
+}
+
 
 #### COMMON CONSTANTS
 export BRRB_HOME="/opt/brrb"
