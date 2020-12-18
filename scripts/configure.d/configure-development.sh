@@ -58,6 +58,11 @@ cfg_user(){ # ARGS: <user-name>
 }
 
 install_vscode(){
+    if which code; then
+        echo "VSCode is installed, skipping installation."
+        return
+    fi
+    
     if is_macos; then
         brew update
         brew tap homebrew/cask
