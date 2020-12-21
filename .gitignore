@@ -1,6 +1,6 @@
 .DS_Store
 build
-workspace.code-workspace
+*.code-workspace
 
 # Compiled Object files
 *.slo
